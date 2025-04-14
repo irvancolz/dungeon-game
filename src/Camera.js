@@ -1,13 +1,11 @@
 import { OrbitControls } from "three/examples/jsm/Addons.js";
-import Experience from "./Experience";
 import * as THREE from "three";
 
 export default class Camera {
-  constructor() {
-    this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.sizes = this.experience.sizes;
-    this.canvas = this.experience.canvas;
+  constructor({ scene, sizes, canvas }) {
+    this.scene = scene;
+    this.sizes = sizes;
+    this.canvas = canvas;
 
     // Setup
     this.init();

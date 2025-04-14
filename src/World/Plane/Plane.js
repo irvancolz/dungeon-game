@@ -1,12 +1,10 @@
 import * as THREE from "three";
 import vertex from "./plane.vert.glsl";
 import fragment from "./plane.frag.glsl";
-import Experience from "../../Experience";
 
 export default class Plane {
-  constructor() {
-    this.experience = new Experience();
-    this.scene = this.experience.scene;
+  constructor(scene) {
+    this.scene = scene;
 
     this.initGeometry();
     this.initMaterial();

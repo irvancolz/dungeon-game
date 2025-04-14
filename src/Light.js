@@ -1,11 +1,9 @@
 import * as THREE from "three";
-import Experience from "./Experience";
 
 export default class Light {
-  constructor() {
-    this.experience = new Experience();
-    this.scene = this.experience.scene;
-    this.debug = this.experience.debug;
+  constructor({ scene, debug }) {
+    this.scene = scene;
+    this.debug = debug;
 
     this.config = {
       intensity: 4,

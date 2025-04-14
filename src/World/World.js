@@ -1,8 +1,9 @@
 import Plane from "./Plane/Plane";
 
 export default class World {
-  constructor() {
-    this.plane = new Plane();
+  constructor({ scene }) {
+    this.scene = scene;
+    this.plane = new Plane(scene);
   }
 
   update() {}
