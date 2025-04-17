@@ -17,26 +17,31 @@ export default class Light {
 
     // Debugger
     if (this.debug.active) {
-      const debugFolder = this.debug.ui.addFolder("Light").close();
+      const debugFolder = this.debug.ui.addFolder({
+        title: "Light",
+        expanded: false,
+      });
       debugFolder
-        .add(this.config, "intensity")
-        .min(0.01)
-        .max(10)
-        .step(0.01)
-        .onChange(() => {
+        .addBinding(this.config, "intensity", {
+          min: 0.01,
+          max: 10,
+          step: 0.01,
+        })
+        .on("change", () => {
           this.configure();
         });
 
       debugFolder
-        .add(this.config, "y")
-        .min(0.01)
-        .max(10)
-        .step(0.01)
-        .onChange(() => {
+        .addBinding(this.config, "y", {
+          min: 0.01,
+          max: 10,
+          step: 0.01,
+        })
+        .on("change", () => {
           this.configure();
         });
 
-      debugFolder.addColor(this.config, "color").onChange(() => {
+      debugFolder.addBinding(this.config, "color").on("change", () => {
         this.configure();
       });
     }
