@@ -38,7 +38,7 @@ export default class Experience {
 
     this.resources = new ResourcesLoader([]);
 
-    this.world = new World({ scene: this.scene });
+    this.world = new World({ scene: this.scene, debug: this.debug });
 
     this.states.time.on("tick", () => {
       // on tick

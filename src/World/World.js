@@ -1,9 +1,11 @@
-import Plane from "./Plane/Plane";
+import DebugFloor from "./DebugFloor";
 
 export default class World {
-  constructor({ scene }) {
+  constructor({ scene, debug }) {
     this.scene = scene;
-    this.plane = new Plane(scene);
+    this.debug = debug;
+
+    this.floor = new DebugFloor({ scene: this.scene, debug: this.debug });
   }
 
   update() {}

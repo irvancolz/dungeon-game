@@ -19,14 +19,16 @@ export default class Camera {
       0.1,
       100
     );
-    camera.position.set(0, 0, 3);
-    camera.lookAt(0, 0, 0);
+    this.target = new THREE.Vector3(0, 0.1, 0);
+    camera.position.set(0, 1, 1.45);
+    camera.lookAt(this.target);
     this.instance = camera;
     this.scene.add(camera);
   }
 
   addControls() {
     this.controls = new OrbitControls(this.instance, this.canvas);
+    this.controls.target = this.target;
     this.controls.enableDamping = true;
   }
 
