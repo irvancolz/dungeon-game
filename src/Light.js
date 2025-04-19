@@ -6,7 +6,7 @@ export default class Light {
     this.debug = debug;
 
     this.config = {
-      intensity: 4,
+      intensity: 0.4,
       color: new THREE.Color(0xffffff),
       x: 3.5,
       y: 2,
@@ -58,6 +58,9 @@ export default class Light {
     this.light.shadow.normalBias = 0.05;
     this.light.position.set(this.config.x, this.config.y, this.config.z);
     this.scene.add(this.light);
+
+    this.ambientLight = new THREE.AmbientLight();
+    this.scene.add(this.ambientLight);
   }
 
   configure() {

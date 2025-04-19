@@ -20,7 +20,7 @@ export default class Camera {
       100
     );
     this.target = new THREE.Vector3(0, 0.1, 0);
-    camera.position.set(0, 1, 1.45);
+    camera.position.set(0, 1, 1.45).setScalar(10);
     camera.lookAt(this.target);
     this.instance = camera;
     this.scene.add(camera);

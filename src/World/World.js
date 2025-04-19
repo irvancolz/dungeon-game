@@ -1,12 +1,27 @@
 import DebugFloor from "./DebugFloor";
+import Player from "./Player";
 
 export default class World {
-  constructor({ scene, debug }) {
+  constructor({ scene, debug, resources, physics }) {
     this.scene = scene;
     this.debug = debug;
+    this.resources = resources;
+    this.physics = physics;
 
-    this.floor = new DebugFloor({ scene: this.scene, debug: this.debug });
+    this.player = new Player({
+      scene: scene,
+      model: resources.player,
+      physics: physics,
+    });
+    this.floor = new DebugFloor({
+      scene: this.scene,
+      debug: this.debug,
+      physics: this.physics,
+      width: 50,
+    });
   }
 
-  update() {}
+  update() {
+    this.player.update();
+  }
 }

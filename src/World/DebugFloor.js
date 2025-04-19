@@ -1,10 +1,13 @@
+import RAPIER from "@dimforge/rapier3d";
 import DebugFloorMaterial from "../Materials/DebugFloor";
 import * as THREE from "three";
 
 export default class DebugFloor {
-  constructor({ scene, debug }) {
+  constructor({ scene, debug, physics, width }) {
     this.scene = scene;
     this.debug = debug;
+    this.physics = physics;
+    this.width = width;
 
     this.init();
     this.initDebug();
@@ -17,7 +20,10 @@ export default class DebugFloor {
       uLineColor: "#ffffff",
     };
 
-    const f = this.debug.ui.addFolder({ title: "debug floor", expanded: true });
+    const f = this.debug.ui.addFolder({
+      title: "debug floor",
+      expanded: false,
+    });
     f.addBinding(this.material.uniforms.uSize, "value", {
       min: 1,
       max: 1000,
@@ -39,8 +45,17 @@ export default class DebugFloor {
   }
 
   init() {
+    // Physics
+    this.colliderDesc = RAPIER.ColliderDesc.cuboid(
+      this.width / 2,
+      0.1,
+      this.width / 2
+    );
+    this.collider = this.physics.world.createCollider(this.colliderDesc);
+
+    // Visual
     this.material = DebugFloorMaterial();
-    this.geometry = new THREE.PlaneGeometry(4, 4);
+    this.geometry = new THREE.PlaneGeometry(this.width, this.width);
     this.geometry.rotateX(-Math.PI * 0.5);
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
