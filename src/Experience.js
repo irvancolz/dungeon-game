@@ -17,7 +17,7 @@ export default class Experience {
     }
     instance = this;
     this.debugOpt = {
-      showPhysics: false,
+      showPhysics: true,
     };
 
     this.debug = new Debugger();
@@ -74,9 +74,7 @@ export default class Experience {
         this.world.update();
       }
 
-      if (this.debugOpt.showPhysics) {
-        this.showPhysicsWorld();
-      }
+      this.showPhysicsWorld();
     });
 
     this.states.sizes.on("resize", () => {
@@ -100,5 +98,6 @@ export default class Experience {
       "color",
       new THREE.BufferAttribute(colors, 4)
     );
+    this.debugPhysics.visible = this.debugOpt.showPhysics;
   }
 }

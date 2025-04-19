@@ -9,9 +9,10 @@ export default class World {
     this.physics = physics;
 
     this.player = new Player({
-      scene: scene,
-      model: resources.player,
-      physics: physics,
+      scene: this.scene,
+      model: this.resources.player,
+      physics: this.physics,
+      debug: this.debug,
     });
     this.floor = new DebugFloor({
       scene: this.scene,
@@ -24,4 +25,6 @@ export default class World {
   update() {
     this.player.update();
   }
+
+  dispose() {}
 }

@@ -48,9 +48,9 @@ export default class DebugFloor {
     // Physics
     this.colliderDesc = RAPIER.ColliderDesc.cuboid(
       this.width / 2,
-      0.1,
+      0.01,
       this.width / 2
-    );
+    ).setFriction(1);
     this.collider = this.physics.world.createCollider(this.colliderDesc);
 
     // Visual
