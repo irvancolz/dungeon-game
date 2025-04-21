@@ -2,17 +2,19 @@ import DebugFloor from "./DebugFloor";
 import Player from "./Player";
 
 export default class World {
-  constructor({ scene, debug, resources, physics }) {
+  constructor({ scene, debug, resources, physics, states }) {
     this.scene = scene;
     this.debug = debug;
     this.resources = resources;
     this.physics = physics;
+    this.states = states;
 
     this.player = new Player({
       scene: this.scene,
       model: this.resources.player,
       physics: this.physics,
       debug: this.debug,
+      states: this.states,
     });
     this.floor = new DebugFloor({
       scene: this.scene,

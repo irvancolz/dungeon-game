@@ -32,6 +32,7 @@ export default class Experience {
       scene: this.scene,
       sizes: this.states.sizes,
       canvas: this.canvas,
+      position: this.states.playerPosition,
     });
 
     this.light = new Light({ scene: this.scene, debug: this.debug });
@@ -55,6 +56,7 @@ export default class Experience {
         debug: this.debug,
         resources: this.resources.resources,
         physics: this.physics,
+        states: this.states,
       });
     });
 
