@@ -18,6 +18,7 @@ export default class Experience {
     instance = this;
     this.debugOpt = {
       showPhysics: true,
+      showAxes: true,
     };
 
     this.debug = new Debugger();
@@ -85,7 +86,14 @@ export default class Experience {
   }
 
   addDebugger() {
-    this.debug.ui.addBinding(this.debugOpt, "showPhysics");
+    if (this.debug.active) {
+      this.debug.ui.addBinding(this.debugOpt, "showPhysics");
+      this.debug.ui.addBinding(this.debugOpt, "showAxes");
+    }
+
+    const gridHelper = new THREE.AxesHelper();
+    gridHelper.visible = this.debugOpt.showAxes;
+    this.scene.add(gridHelper);
   }
 
   showPhysicsWorld() {

@@ -6,23 +6,43 @@ export default class Player {
   constructor({ scene, model, physics, debug }) {
     this.scene = scene;
     this.model = model;
-    this.physics = physics;
+    this.physicsWorld = physics;
     this.position = new THREE.Vector3(0, 5, 0);
     this.controls = new CharacterControls();
     this.debug = debug;
-    this.baseMovement = 1;
+    this.mvSpeed = 2;
+    this.direction = new THREE.Vector3(0, 0, 0);
+    this.moveDirection = new THREE.Vector3(0, 0, 0);
+    this.moveBackward = false;
 
     this.controls.on("forward", () => {
-      this.moveForward();
+      this.move();
+      this.moveBackward = false;
     });
     this.controls.on("left", () => {
-      this.moveLeft();
+      if (this.controls.actions.backward) {
+        this.turn(-Math.PI * 0.5);
+      } else {
+        this.turn(Math.PI * 0.5);
+      }
+      this.move();
+      this.moveBackward = false;
     });
     this.controls.on("right", () => {
-      this.moveRight();
+      if (this.controls.actions.backward) {
+        this.turn(Math.PI * 0.5);
+      } else {
+        this.turn(-Math.PI * 0.5);
+      }
+      this.move();
+      this.moveBackward = false;
     });
     this.controls.on("backward", () => {
-      this.moveBackward();
+      if (!this.moveBackward) {
+        this.turn(-Math.PI);
+      }
+      this.move();
+      this.moveBackward = true;
     });
     this.controls.on("jump", () => {
       this.jump();
@@ -44,8 +64,8 @@ export default class Player {
     this.scene.add(this.character);
 
     // physics and debug physics
-    this._physics = new PlayerPhysics({
-      world: this.physics.world,
+    this.physics = new PlayerPhysics({
+      world: this.physicsWorld.world,
       position: this.position,
       height: dimension.y,
     });
@@ -57,38 +77,40 @@ export default class Player {
         title: "character",
         expanded: true,
       });
-      f.addBinding(this, "baseMovement", {
+      f.addBinding(this, "mvSpeed", {
         min: 0.01,
-        max: 3,
+        max: 30,
         step: 0.001,
       });
     }
   }
 
   update() {
-    this._physics.update();
-    this.character.position.copy(this._physics.body.translation());
+    this.physics.update();
+
+    // keep move if button pressed
+    if (this.controls.actions.forward || this.controls.actions.backward) {
+      this.move();
+    }
+
+    this.character.position.copy(this.physics.body.translation());
+    this.character.rotation.setFromVector3(this.direction);
   }
 
-  moveForward() {
-    this._physics.moveForward();
+  turn(degree) {
+    this.direction.add({ x: 0, y: degree, z: 0 });
   }
 
-  moveBackward() {
-    this._physics.moveBackward();
+  move() {
+    this.moveDirection.set(
+      Math.sin(this.direction.y),
+      0,
+      Math.cos(this.direction.y)
+    );
+    this.physics.move(this.moveDirection.multiplyScalar(this.mvSpeed));
   }
 
-  moveRight() {
-    this._physics.moveRight();
-  }
-
-  moveLeft() {
-    this._physics.moveLeft();
-  }
-
-  jump() {
-    this._physics.jump();
-  }
+  jump() {}
 
   dispose() {}
 }
