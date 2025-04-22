@@ -15,6 +15,7 @@ export default class Player {
     this.turningPower = Math.PI / 18;
     this.direction = new THREE.Vector3(0, 0, 0);
     this.moveDirection = new THREE.Vector3(0, 0, 0);
+    this.jumpPower = 9;
 
     this.controls.on("forward", () => {
       this.move();
@@ -88,6 +89,14 @@ export default class Player {
         max: Math.PI * 0.5,
         step: 0.001,
       });
+      f.addBinding(this, "jumpPower", {
+        min: 1,
+        max: 15,
+        step: 0.5,
+      });
+      f.addButton({ title: "reset player" }).on("click", () => {
+        this.physics.reset();
+      });
     }
   }
 
@@ -118,7 +127,9 @@ export default class Player {
     this.physics.move(this.moveDirection.multiplyScalar(this.mvSpeed));
   }
 
-  jump() {}
+  jump() {
+    this.physics.jump(this.jumpPower);
+  }
 
   dispose() {}
 }

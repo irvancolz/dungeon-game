@@ -29,7 +29,12 @@ export default class PlayerPhysics {
   move(direction) {
     this.body.setLinvel(direction, true);
   }
-  jump() {}
+  jump(power) {
+    this.body.applyImpulse({ x: 0, y: power, z: 0 }, true);
+  }
+  reset() {
+    this.body.setTranslation({ x: 0, y: 5, z: 0 }, true);
+  }
   update() {}
   dispose() {}
 }
