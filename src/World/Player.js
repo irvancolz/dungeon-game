@@ -15,12 +15,11 @@ export default class Player {
     this.turningPower = Math.PI / 18;
     this.direction = new THREE.Vector3(0, 0, 0);
     this.moveDirection = new THREE.Vector3(0, 0, 0);
-    this.moveBackward = false;
 
     this.controls.on("forward", () => {
       this.move();
-      this.moveBackward = false;
     });
+
     this.controls.on("left", () => {
       if (this.controls.actions.backward) {
         this.turn(-this.turningPower);
@@ -28,8 +27,8 @@ export default class Player {
         this.turn(this.turningPower);
       }
       this.move();
-      this.moveBackward = false;
     });
+
     this.controls.on("right", () => {
       if (this.controls.actions.backward) {
         this.turn(this.turningPower);
@@ -37,15 +36,15 @@ export default class Player {
         this.turn(-this.turningPower);
       }
       this.move();
-      this.moveBackward = false;
     });
+
     this.controls.on("backward", () => {
       if (!this.moveBackward) {
         this.turn(-Math.PI);
       }
       this.move();
-      this.moveBackward = true;
     });
+
     this.controls.on("jump", () => {
       this.jump();
     });
@@ -94,6 +93,7 @@ export default class Player {
 
   update() {
     this.physics.update();
+    this.moveBackward = this.controls.actions.backward;
 
     // keep move if button pressed
     if (this.controls.actions.forward || this.controls.actions.backward) {
