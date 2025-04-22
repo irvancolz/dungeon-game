@@ -8,6 +8,7 @@ export default class Camera {
     this.canvas = canvas;
     this.position = position;
     this.offset = new THREE.Vector3(0, 1, -1.45).multiplyScalar(7);
+    this.pointerControl = false;
 
     // Setup
     this.init();
@@ -16,6 +17,19 @@ export default class Camera {
     this.position.subscribe((st) => {
       this.target.copy(st);
       this.instance.position.copy(st).add(this.offset);
+    });
+
+    document.addEventListener("pointerdown", () => {
+      this.pointerControl = true;
+    });
+
+    document.addEventListener("pointerup", () => {
+      this.pointerControl = false;
+    });
+
+    document.addEventListener("pointermove", (e) => {
+      if (!this.pointerControl) return;
+      // TODO : apply custom controls
     });
   }
 
