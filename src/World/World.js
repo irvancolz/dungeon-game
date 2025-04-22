@@ -1,4 +1,5 @@
 import DebugFloor from "./DebugFloor";
+import Graves from "./Graves";
 import Player from "./Player";
 
 export default class World {
@@ -6,6 +7,7 @@ export default class World {
     this.scene = scene;
     this.debug = debug;
     this.resources = resources;
+    this.map = resources.map;
     this.physics = physics;
     this.states = states;
 
@@ -16,17 +18,36 @@ export default class World {
       debug: this.debug,
       states: this.states,
     });
+
     this.floor = new DebugFloor({
       scene: this.scene,
       debug: this.debug,
       physics: this.physics,
-      width: 50,
+      width: 200,
     });
+
+    this.addGraves();
   }
 
   update() {
     this.player.update();
   }
 
-  dispose() {}
+  addGraves() {
+    this.gravesRef = this.map.scene.children.filter((i) => {
+      return i.name.startsWith("Grave");
+    });
+
+    this.graves = new Graves({
+      positions: this.gravesRef.map((i) => i.position),
+      model: this.resources.grave,
+      scene: this.scene,
+      debug: this.debug,
+    });
+  }
+
+  dispose() {
+    this.graves.dispose();
+    this.player.dispose();
+  }
 }

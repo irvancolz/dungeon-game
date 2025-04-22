@@ -77,7 +77,7 @@ export default class Player {
     if (this.debug.active) {
       const f = this.debug.ui.addFolder({
         title: "character",
-        expanded: true,
+        expanded: false,
       });
       f.addBinding(this, "mvSpeed", {
         min: 0.01,

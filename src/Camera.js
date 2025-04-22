@@ -7,15 +7,15 @@ export default class Camera {
     this.sizes = sizes;
     this.canvas = canvas;
     this.position = position;
-    this.offset = new THREE.Vector3(0, 1, -1.45).multiplyScalar(7);
+    this.offset = new THREE.Vector3(0, 1, -2).multiplyScalar(7);
     this.pointerControl = false;
 
     // Setup
     this.init();
-    // this.addControls();
+    this.addControls();
 
     this.position.subscribe((st) => {
-      this.target.copy(st);
+      this.target.copy(st).add({ x: 0, y: 2, z: 0 });
       this.instance.position.copy(st).add(this.offset);
     });
 
@@ -38,9 +38,11 @@ export default class Camera {
       35,
       this.sizes.width / this.sizes.height,
       0.1,
-      100
+      600
     );
-    this.target = new THREE.Vector3().copy(this.position.getState());
+    this.target = new THREE.Vector3()
+      .copy(this.position.getState())
+      .add({ x: 0, y: 2, z: 0 });
     camera.position.copy(this.target).add(this.offset);
 
     camera.lookAt(this.target);
@@ -49,13 +51,13 @@ export default class Camera {
   }
 
   addControls() {
-    // this.controls = new OrbitControls(this.instance, this.canvas);
-    // this.controls.target = this.target;
-    // this.controls.enableDamping = true;
+    this.controls = new OrbitControls(this.instance, this.canvas);
+    this.controls.target = this.target;
+    this.controls.enableDamping = true;
   }
 
   update() {
-    // this.controls.update();
+    this.controls.update();
   }
 
   resize() {

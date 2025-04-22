@@ -16,16 +16,16 @@ export default class Experience {
       return instance;
     }
     instance = this;
-    this.debugOpt = {
-      showPhysics: true,
-      showAxes: true,
-    };
 
     this.debug = new Debugger();
     this.states = new States();
     this.canvas = canvas;
     this.scene = new THREE.Scene();
 
+    this.debugOpt = {
+      showPhysics: true,
+      showAxes: true,
+    };
     this.addDebugger();
 
     this.camera = new Camera({
@@ -46,6 +46,13 @@ export default class Experience {
 
     this.resources = new ResourcesLoader([
       { path: "/player_2.glb", type: "gltfModel", name: "player" },
+      { path: "/map.glb", type: "gltfModel", name: "map" },
+      { path: "/grave.glb", type: "gltfModel", name: "grave" },
+      {
+        path: "/cemeteryTexture.png",
+        type: "texture",
+        name: "cemeteryTexture",
+      },
     ]);
 
     this.physics = new WorldPhysics();
