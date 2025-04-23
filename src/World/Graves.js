@@ -27,7 +27,7 @@ export default class Graves {
       const rotation = (Math.random() - 0.5) * Math.PI;
       dummy.rotation.y = rotation;
       dummy.position.copy(this.positions[i]).multiplyScalar(4);
-      dummy.position.y = 0;
+      dummy.position.y = 0.5;
 
       dummy.updateMatrix();
 
@@ -40,7 +40,7 @@ export default class Graves {
       color: "#515756",
     };
     if (this.debug.active) {
-      const f = this.debug.ui.addFolder({ title: "graves", expanded: true });
+      const f = this.debug.ui.addFolder({ title: "graves", expanded: false });
 
       f.addBinding(debugOpt, "color").on("change", () => {
         this.material.color.set(new THREE.Color(debugOpt.color));
