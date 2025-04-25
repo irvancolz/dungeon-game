@@ -10,6 +10,7 @@ export default class CharacterControls extends EventEmitter {
       backward: false,
       jump: false,
     };
+    this.idle = true;
 
     document.addEventListener("keydown", (e) => {
       const pressed = e.code;
@@ -52,6 +53,7 @@ export default class CharacterControls extends EventEmitter {
   triggerAction() {
     for (const action in this.actions) {
       if (!this.actions[action]) continue;
+      this.idle = false;
       this.trigger(action);
     }
   }
@@ -61,6 +63,9 @@ export default class CharacterControls extends EventEmitter {
     for (const action in this.actions) {
       if (this.actions[action]) active = true;
     }
-    if (!active) this.trigger("idle");
+    if (!active) {
+      this.idle = true;
+      this.trigger("idle");
+    }
   }
 }

@@ -9,19 +9,20 @@ export default class PlayerPhysics {
     this.world = world;
     this.position = position;
     this.height = height;
+    this.floating = false;
+    this.radius = 0.5;
 
     this.init();
   }
 
   init() {
-    const radius = 0.5;
     const rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
       .setTranslation(this.position.x, this.position.y, this.position.z)
       .enabledRotations(false, false, false);
     this.body = this.world.createRigidBody(rigidBodyDesc);
     const colliderDesc = RAPIER.ColliderDesc.capsule(
-      this.height * 0.5 - radius,
-      radius
+      this.height * 0.5 - this.radius,
+      this.radius
     );
 
     this.collider = this.world.createCollider(colliderDesc, this.body);
@@ -30,11 +31,28 @@ export default class PlayerPhysics {
     this.body.setLinvel(direction, true);
   }
   jump(power) {
+    // prevent infinite jump
+    if (this.floating) return;
     this.body.applyImpulse({ x: 0, y: power, z: 0 }, true);
   }
   reset() {
     this.body.setTranslation({ x: 0, y: 5, z: 0 }, true);
   }
-  update() {}
+
+  update() {
+    const rayOrigin = this.body.translation();
+    const ray = new RAPIER.Ray(rayOrigin, { x: 0, y: -2, z: 0 });
+    const hit = this.world.castRayAndGetNormal(
+      ray,
+      1,
+      false,
+      undefined,
+      undefined,
+      undefined,
+      this.body.translation()
+    );
+
+    this.floating = hit == null;
+  }
   dispose() {}
 }

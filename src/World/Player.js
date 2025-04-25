@@ -117,7 +117,19 @@ export default class Player {
 
     this.mixer.update(this.states.time.delta * 0.001);
 
-    this.character.position.copy(this.physics.body.translation());
+    const newPos = this.physics.body.translation();
+
+    const prevY = this.character.position.y;
+    const newY = newPos.y;
+    const distY = newY - prevY;
+
+    if (distY < 0 && this.physics.floating) {
+      this.updateState("fall");
+    } else if (!this.physics.floating && this.controls.idle) {
+      this.updateState("idle");
+    }
+
+    this.character.position.copy(newPos);
     this.character.rotation.setFromVector3(this.direction);
     this.states.playerPosition.setState(this.character.position);
   }
@@ -151,8 +163,11 @@ export default class Player {
     this.animations.run = this.mixer.clipAction(
       animationList.find((anim) => anim.name == "run")
     );
+    this.animations.fall = this.mixer.clipAction(
+      animationList.find((anim) => anim.name == "fall")
+    );
 
-    // prevent error on first load
+    // revent error on first load
     this.animations.current = this.animations.idle;
 
     this.updateState("idle");
@@ -171,7 +186,7 @@ export default class Player {
 
     newAnimation.reset();
     newAnimation.play();
-    newAnimation.crossFadeFrom(oldAnimation, 1);
+    newAnimation.crossFadeFrom(oldAnimation, 0.3);
 
     this.animations.current = newAnimation;
   }
