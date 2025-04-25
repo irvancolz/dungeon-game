@@ -149,7 +149,10 @@ export default class Player {
   }
 
   jump() {
-    this.physics.jump(this.jumpPower);
+    this.updateState("jump");
+    setTimeout(() => {
+      this.physics.jump(this.jumpPower);
+    }, 100);
   }
 
   initAnimation() {
@@ -165,6 +168,9 @@ export default class Player {
     );
     this.animations.fall = this.mixer.clipAction(
       animationList.find((anim) => anim.name == "fall")
+    );
+    this.animations.jump = this.mixer.clipAction(
+      animationList.find((anim) => anim.name == "jump")
     );
 
     // revent error on first load
