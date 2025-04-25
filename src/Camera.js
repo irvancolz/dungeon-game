@@ -2,22 +2,17 @@ import { OrbitControls } from "three/examples/jsm/Addons.js";
 import * as THREE from "three";
 
 export default class Camera {
-  constructor({ scene, sizes, canvas, position }) {
+  constructor({ scene, sizes, canvas, playerPosition }) {
     this.scene = scene;
     this.sizes = sizes;
     this.canvas = canvas;
-    this.position = position;
+    this.playerPosition = playerPosition;
     this.offset = new THREE.Vector3(0, 1, -2).multiplyScalar(7);
     this.pointerControl = false;
 
     // Setup
     this.init();
     this.addControls();
-
-    this.position.subscribe((st) => {
-      this.target.copy(st).add({ x: 0, y: 2, z: 0 });
-      this.instance.position.copy(st).add(this.offset);
-    });
 
     document.addEventListener("pointerdown", () => {
       this.pointerControl = true;
@@ -41,7 +36,7 @@ export default class Camera {
       600
     );
     this.target = new THREE.Vector3()
-      .copy(this.position.getState())
+      .copy(this.playerPosition.getState())
       .add({ x: 0, y: 2, z: 0 });
     camera.position.copy(this.target).add(this.offset);
 
@@ -57,6 +52,15 @@ export default class Camera {
   }
 
   update() {
+    const playerPos = new THREE.Vector3().copy(this.playerPosition.getState());
+    const newCamPos = new THREE.Vector3().copy(playerPos).add(this.offset);
+    const dist = this.instance.position.distanceTo(newCamPos);
+
+    if (!this.pointerControl) {
+      this.target.copy(playerPos).add({ x: 0, y: 0, z: 8 });
+      this.instance.position.copy(newCamPos);
+    }
+
     this.controls.update();
   }
 

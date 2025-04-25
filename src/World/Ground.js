@@ -11,7 +11,7 @@ export default class Ground {
     this.size = size;
     this.physicsFieldSize = this.size + 1;
     this.physics = physics;
-    this.maxHeight = 0.37;
+    this.maxHeight = 0.58;
     this.material = GroundMaterial(texture, this.maxHeight);
 
     this.extractTextureMap();
@@ -49,7 +49,7 @@ export default class Ground {
     for (let y = 0; y < this.size; y++) {
       for (let x = 0; x < this.size; x++) {
         const i = y * this.size + x;
-        let height = (img.data[i * 4] / 255) * this.maxHeight;
+        let height = img.data[i * 4] / 255;
         height = smoothstep(0.01, 0.3, height);
 
         const idx = this.convertToRapierCoord(y, x);
@@ -99,7 +99,7 @@ export default class Ground {
       edgeColor: "#5d5d5d",
     };
 
-    const f = this.debug.ui.addFolder({ title: "ground", expanded: true });
+    const f = this.debug.ui.addFolder({ title: "ground", expanded: false });
     f.addBinding(this.mesh, "visible");
     f.addBinding(this.material.uniforms.uMaxHeight, "value", {
       min: 0.1,

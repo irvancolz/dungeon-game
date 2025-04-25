@@ -41,6 +41,7 @@ export default class CharacterControls extends EventEmitter {
         this.actions.jump = false;
       }
       this.triggerAction();
+      this.checkIdle();
     });
 
     document.addEventListener("click", (e) => {
@@ -53,5 +54,13 @@ export default class CharacterControls extends EventEmitter {
       if (!this.actions[action]) continue;
       this.trigger(action);
     }
+  }
+
+  checkIdle() {
+    let active = false;
+    for (const action in this.actions) {
+      if (this.actions[action]) active = true;
+    }
+    if (!active) this.trigger("idle");
   }
 }

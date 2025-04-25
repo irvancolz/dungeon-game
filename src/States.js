@@ -7,5 +7,6 @@ export default class States {
     this.time = new Time();
     this.sizes = new Sizes();
     this.playerPosition = createStore(new THREE.Vector3(0, 4, 0));
+    this.playerTarget = createStore(new THREE.Vector3(0, 4, 8));
   }
 }

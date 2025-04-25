@@ -16,6 +16,11 @@ export default class Player {
     this.direction = new THREE.Vector3(0, 0, 0);
     this.moveDirection = new THREE.Vector3(0, 0, 0);
     this.jumpPower = 9;
+    this.state = null;
+
+    this.controls.on("idle", () => {
+      this.updateState("idle");
+    });
 
     this.controls.on("forward", () => {
       this.move();
@@ -51,6 +56,7 @@ export default class Player {
     });
 
     this.init();
+    this.initAnimation();
     this.addDebug();
   }
 
@@ -77,7 +83,7 @@ export default class Player {
     if (this.debug.active) {
       const f = this.debug.ui.addFolder({
         title: "character",
-        expanded: false,
+        expanded: true,
       });
       f.addBinding(this, "mvSpeed", {
         min: 0.01,
@@ -109,6 +115,8 @@ export default class Player {
       this.move();
     }
 
+    this.mixer.update(this.states.time.delta * 0.001);
+
     this.character.position.copy(this.physics.body.translation());
     this.character.rotation.setFromVector3(this.direction);
     this.states.playerPosition.setState(this.character.position);
@@ -119,6 +127,7 @@ export default class Player {
   }
 
   move() {
+    this.updateState("run");
     this.moveDirection.set(
       Math.sin(this.direction.y),
       0,
@@ -129,6 +138,42 @@ export default class Player {
 
   jump() {
     this.physics.jump(this.jumpPower);
+  }
+
+  initAnimation() {
+    const animationList = this.model.animations;
+    this.mixer = new THREE.AnimationMixer(this.character);
+    this.animations = {};
+
+    this.animations.idle = this.mixer.clipAction(
+      animationList.find((anim) => anim.name == "idle")
+    );
+    this.animations.run = this.mixer.clipAction(
+      animationList.find((anim) => anim.name == "run")
+    );
+
+    // prevent error on first load
+    this.animations.current = this.animations.idle;
+
+    this.updateState("idle");
+  }
+
+  updateState(state) {
+    if (state == this.state) return;
+    this.state = state;
+    this.updateAnimation(state);
+  }
+
+  updateAnimation(state) {
+    const newAnimation = this.animations[state];
+
+    const oldAnimation = this.animations.current;
+
+    newAnimation.reset();
+    newAnimation.play();
+    newAnimation.crossFadeFrom(oldAnimation, 1);
+
+    this.animations.current = newAnimation;
   }
 
   dispose() {}

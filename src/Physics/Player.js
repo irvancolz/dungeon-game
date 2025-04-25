@@ -17,7 +17,7 @@ export default class PlayerPhysics {
     const radius = 0.5;
     const rigidBodyDesc = RAPIER.RigidBodyDesc.dynamic()
       .setTranslation(this.position.x, this.position.y, this.position.z)
-      .enabledRotations(false, true, false);
+      .enabledRotations(false, false, false);
     this.body = this.world.createRigidBody(rigidBodyDesc);
     const colliderDesc = RAPIER.ColliderDesc.capsule(
       this.height * 0.5 - radius,
