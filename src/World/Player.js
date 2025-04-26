@@ -128,7 +128,7 @@ export default class Player {
     const newY = newPos.y;
     const distY = newY - prevY;
 
-    if (distY < 0 && this.physics.floating) {
+    if (distY <= 0 && this.physics.floating) {
       this.updateState(this.#STATE_FALL);
     } else if (!this.physics.floating && this.controls.idle) {
       this.updateState(this.#STATE_IDLE);
@@ -144,6 +144,13 @@ export default class Player {
   }
 
   move() {
+    if (
+      this.state == this.#STATE_FALL ||
+      this.state == this.#STATE_JUMP ||
+      this.physics.floating
+    )
+      return;
+
     this.updateState(this.#STATE_RUN);
     this.moveDirection.set(
       Math.sin(this.direction.y),
@@ -154,7 +161,12 @@ export default class Player {
   }
 
   jump() {
-    if (this.physics.floating) return;
+    if (
+      this.state == this.#STATE_FALL ||
+      this.state == this.#STATE_JUMP ||
+      this.physics.floating
+    )
+      return;
     this.updateState(this.#STATE_JUMP);
     setTimeout(() => {
       this.physics.jump(this.jumpPower);
