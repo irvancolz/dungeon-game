@@ -3,6 +3,11 @@ import * as THREE from "three";
 import CharacterControls from "../Utils/CharacterControls";
 
 export default class Player {
+  #STATE_IDLE = "idle";
+  #STATE_JUMP = "jump";
+  #STATE_RUN = "run";
+  #STATE_FALL = "fall";
+
   constructor({ scene, model, physics, debug, states }) {
     this.scene = scene;
     this.model = model;
@@ -19,7 +24,7 @@ export default class Player {
     this.state = null;
 
     this.controls.on("idle", () => {
-      this.updateState("idle");
+      this.updateState(this.#STATE_IDLE);
     });
 
     this.controls.on("forward", () => {
@@ -124,9 +129,9 @@ export default class Player {
     const distY = newY - prevY;
 
     if (distY < 0 && this.physics.floating) {
-      this.updateState("fall");
+      this.updateState(this.#STATE_FALL);
     } else if (!this.physics.floating && this.controls.idle) {
-      this.updateState("idle");
+      this.updateState(this.#STATE_IDLE);
     }
 
     this.character.position.copy(newPos);
@@ -139,7 +144,7 @@ export default class Player {
   }
 
   move() {
-    this.updateState("run");
+    this.updateState(this.#STATE_RUN);
     this.moveDirection.set(
       Math.sin(this.direction.y),
       0,
@@ -149,10 +154,11 @@ export default class Player {
   }
 
   jump() {
-    this.updateState("jump");
+    if (this.physics.floating) return;
+    this.updateState(this.#STATE_JUMP);
     setTimeout(() => {
       this.physics.jump(this.jumpPower);
-    }, 100);
+    }, 200);
   }
 
   initAnimation() {
@@ -161,22 +167,22 @@ export default class Player {
     this.animations = {};
 
     this.animations.idle = this.mixer.clipAction(
-      animationList.find((anim) => anim.name == "idle")
+      animationList.find((anim) => anim.name == this.#STATE_IDLE)
     );
     this.animations.run = this.mixer.clipAction(
-      animationList.find((anim) => anim.name == "run")
+      animationList.find((anim) => anim.name == this.#STATE_RUN)
     );
     this.animations.fall = this.mixer.clipAction(
-      animationList.find((anim) => anim.name == "fall")
+      animationList.find((anim) => anim.name == this.#STATE_FALL)
     );
     this.animations.jump = this.mixer.clipAction(
-      animationList.find((anim) => anim.name == "jump")
+      animationList.find((anim) => anim.name == this.#STATE_JUMP)
     );
 
     // revent error on first load
     this.animations.current = this.animations.idle;
 
-    this.updateState("idle");
+    this.updateState(this.#STATE_IDLE);
   }
 
   updateState(state) {
