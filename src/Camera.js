@@ -7,7 +7,7 @@ export default class Camera {
     this.sizes = sizes;
     this.canvas = canvas;
     this.playerPosition = playerPosition;
-    this.offset = new THREE.Vector3(0, 1, -2).multiplyScalar(7);
+    this.offset = new THREE.Vector3(0, 0.4, -2.5).multiplyScalar(12);
     this.pointerControl = false;
 
     // Setup

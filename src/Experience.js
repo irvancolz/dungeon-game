@@ -23,7 +23,7 @@ export default class Experience {
     this.scene = new THREE.Scene();
 
     this.debugOpt = {
-      showPhysics: true,
+      showPhysics: false,
       showAxes: true,
     };
     this.addDebugger();
