@@ -12,7 +12,6 @@ export default class World {
     this.physics = physics;
     this.states = states;
     this.width = 256;
-    this.grassFieldSize = 10;
 
     this.player = new Player({
       scene: this.scene,
@@ -38,10 +37,12 @@ export default class World {
     // });
 
     this.grass = new Grass({
-      size: this.grassFieldSize,
+      size: 200,
+      radius: 30,
       scene: this.scene,
       debug: this.debug,
       states: this.states,
+      resources: this.resources,
     });
 
     // this.addGraves();

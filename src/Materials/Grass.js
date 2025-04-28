@@ -5,8 +5,9 @@ import grassFragmentShader from "../Shaders/grass/fragment.glsl";
 export default function GrassMaterial() {
   const uniforms = {
     uPlayerPosition: new THREE.Uniform(new THREE.Vector3()),
-    uTime: new THREE.Uniform(0),
     uGrassDistance: new THREE.Uniform(),
+    uColor: new THREE.Uniform(new THREE.Color("#0d9632")),
+    uMaxHeightRatio: new THREE.Uniform(),
   };
 
   const material = new THREE.ShaderMaterial({

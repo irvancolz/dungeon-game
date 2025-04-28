@@ -1,33 +1,48 @@
 #include ../includes/getRotatePivot2d.glsl
 
-attribute vec2 aCenter;
-
 uniform vec3 uPlayerPosition;
 uniform float uGrassDistance;
+uniform float uMaxHeightRatio;
+
+attribute vec2 aCenter;
 
 varying vec2 vUv;
 
-mat2 rotate2d(float _angle) {
-    return mat2(cos(_angle), -sin(_angle), sin(_angle), cos(_angle));
+vec2 keepAroundRadius(vec2 uv, vec2 center, float radius) {
+
+    float dist = distance(center, uv);
+    if(dist <= radius) {
+        return uv;
+    }
+
+    vec3 v3Center = vec3(center.x, 0, center.y);
+    vec3 v3Uv = vec3(uv.x, 0, uv.y);
+
+    return cross(v3Center, v3Uv).xz;
 }
 
 void main() {
 
-    // handle rotation
+    float heightMultiplier = uMaxHeightRatio;
+
     vec2 center = aCenter;
     center -= uPlayerPosition.xz;
 
-    float halfDistance = uGrassDistance * .5;
-    center.x = mod(center.x - halfDistance, uGrassDistance) - halfDistance;
-    center.y = mod(center.y - halfDistance, uGrassDistance) - halfDistance;
-    vec4 modelCenter = modelMatrix * vec4(center.x, 0., center.y, 1.);
+    // keep around player
+    float radius = uGrassDistance * .5;
+    center.x = mod(center.x + radius, uGrassDistance) - radius;
+    center.y = mod(center.y + radius, uGrassDistance) - radius;
 
     // Final postion
     vec4 modelPosition = modelMatrix * vec4(position, 1.);
-    modelPosition.xz += center;
 
-    float angle = atan(modelCenter.x - cameraPosition.x, modelCenter.z - cameraPosition.z);
-    modelPosition.xz = getRotatePivot2d(modelPosition.xz, angle, modelCenter.xz);
+      // make grass shorter on edge
+    // float edge = 1. - distance(modelPosition.xz, uPlayerPosition.xz) / uGrassDistance;
+    // edge = pow(abs(edge), 2.);
+    // heightMultiplier *= edge;
+
+    modelPosition.y *= heightMultiplier;
+    modelPosition.xz += center;
 
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;

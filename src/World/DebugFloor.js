@@ -55,6 +55,7 @@ export default class DebugFloor {
 
     // Visual
     this.material = DebugFloorMaterial();
+    this.material.uniforms.uSize.value = this.width;
     this.geometry = new THREE.PlaneGeometry(this.width, this.width);
     this.geometry.rotateX(-Math.PI * 0.5);
     this.mesh = new THREE.Mesh(this.geometry, this.material);

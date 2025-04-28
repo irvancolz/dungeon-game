@@ -16,7 +16,7 @@ export default class Player {
     this.position = this.states.playerPosition.getState();
     this.controls = new CharacterControls();
     this.debug = debug;
-    this.mvSpeed = 2;
+    this.mvSpeed = 6;
     this.turningPower = Math.PI / 18;
     this.direction = new THREE.Vector3(0, 0, 0);
     this.moveDirection = new THREE.Vector3(0, 0, 0);
@@ -88,7 +88,7 @@ export default class Player {
     if (this.debug.active) {
       const f = this.debug.ui.addFolder({
         title: "character",
-        expanded: true,
+        expanded: false,
       });
       f.addBinding(this, "mvSpeed", {
         min: 0.01,
