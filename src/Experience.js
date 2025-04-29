@@ -49,6 +49,7 @@ export default class Experience {
       { path: "/player_2.glb", type: "gltfModel", name: "player" },
       { path: "/map.glb", type: "gltfModel", name: "map" },
       { path: "/grave.glb", type: "gltfModel", name: "grave" },
+      { path: "/trunk_1.glb", type: "gltfModel", name: "trunk_1" },
       {
         path: "/cemeteryTexture.png",
         type: "texture",
