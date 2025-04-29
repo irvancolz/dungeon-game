@@ -4,14 +4,14 @@ import * as THREE from "three";
 import { mix, smoothstep } from "../Utils/math";
 
 export default class Ground {
-  constructor({ scene, debug, texture, size, physics }) {
+  constructor({ scene, debug, texture, size, physics, maxHeight }) {
     this.scene = scene;
     this.debug = debug;
     this.texture = texture;
     this.size = size;
     this.physicsFieldSize = this.size + 1;
     this.physics = physics;
-    this.maxHeight = 0.58;
+    this.maxHeight = maxHeight;
     this.material = GroundMaterial(texture, this.maxHeight);
 
     this.extractTextureMap();

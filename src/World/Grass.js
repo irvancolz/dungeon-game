@@ -2,10 +2,21 @@ import * as THREE from "three";
 import GrassMaterial from "../Materials/Grass";
 
 export default class Grass {
-  constructor({ size, scene, states, debug, radius, resources }) {
+  constructor({
+    size,
+    scene,
+    states,
+    debug,
+    radius,
+    resources,
+    fieldSize,
+    groundHeight,
+  }) {
     this.size = size;
     this.count = size ** 2;
     this.radius = radius;
+    this.fieldSize = fieldSize;
+    this.groundHeight = groundHeight;
 
     this.BLADE_HEIGHT = 0.6;
     this.BLADE_WIDTH = 0.1;
@@ -30,6 +41,10 @@ export default class Grass {
     this.material = GrassMaterial();
     this.material.uniforms.uGrassDistance.value = this.radius * 2;
     this.material.uniforms.uMaxHeightRatio.value = this.BLADE_HEIGHT;
+    this.material.uniforms.uFieldSize.value = this.fieldSize;
+    this.material.uniforms.uGroundHeight.value = this.groundHeight;
+    this.material.uniforms.uCemeteryTexture.value =
+      this.resources.cemeteryTexture;
   }
 
   initGeometry() {
@@ -39,12 +54,12 @@ export default class Grass {
 
     for (let i = 0; i < this.count; i++) {
       const r = Math.sqrt(Math.random()) * this.radius;
-      const angle = Math.PI * 2 * Math.random();
-      const x = Math.sin(angle) * r;
-      const y = Math.cos(angle) * r;
+      // const angle = Math.PI * 2 * Math.random();
+      // const x = Math.sin(angle) * r;
+      // const y = Math.cos(angle) * r;
 
-      // const x = (Math.random() - 0.5) * 2 * this.radius;
-      // const y = (Math.random() - 0.5) * 2 * this.radius;
+      const x = (Math.random() - 0.5) * 2 * this.radius;
+      const y = (Math.random() - 0.5) * 2 * this.radius;
 
       const center = new THREE.Vector3(x, 0, y);
 
@@ -97,7 +112,7 @@ export default class Grass {
   initDebug() {
     if (!this.debug.active) return;
     const opt = {
-      color: "#0d9632",
+      color: "#148606",
     };
     const f = this.debug.ui.addFolder({
       title: "grass",
@@ -118,7 +133,7 @@ export default class Grass {
     const playerPos = this.states.playerPosition.getState();
 
     this.material.uniforms.uPlayerPosition.value.copy(playerPos);
-    this.mesh.position.set(playerPos.x, 0, playerPos.z);
+    // this.mesh.position.set(playerPos.x, 0, playerPos.z);
   }
 
   dispose() {

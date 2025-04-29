@@ -12,6 +12,7 @@ export default class World {
     this.physics = physics;
     this.states = states;
     this.width = 256;
+    this.maxHeight = 0.58;
 
     this.player = new Player({
       scene: this.scene,
@@ -21,31 +22,34 @@ export default class World {
       states: this.states,
     });
 
-    this.floor = new DebugFloor({
-      scene: this.scene,
-      debug: this.debug,
-      physics: this.physics,
-      width: this.width,
-    });
-
-    // this.ground = new Ground({
+    // this.floor = new DebugFloor({
     //   scene: this.scene,
     //   debug: this.debug,
-    //   texture: this.resources.cemeteryTexture,
-    //   size: this.width,
     //   physics: this.physics,
+    //   width: this.width,
     // });
 
+    this.ground = new Ground({
+      scene: this.scene,
+      debug: this.debug,
+      texture: this.resources.cemeteryTexture,
+      size: this.width,
+      physics: this.physics,
+      maxHeight: this.maxHeight,
+    });
+
     this.grass = new Grass({
-      size: 200,
-      radius: 30,
+      size: 300,
+      radius: this.width * 0.5,
       scene: this.scene,
       debug: this.debug,
       states: this.states,
       resources: this.resources,
+      fieldSize: this.width,
+      groundHeight: this.maxHeight,
     });
 
-    // this.addGraves();
+    this.addGraves();
   }
 
   update() {

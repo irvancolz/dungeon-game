@@ -3,23 +3,15 @@
 uniform vec3 uPlayerPosition;
 uniform float uGrassDistance;
 uniform float uMaxHeightRatio;
+uniform float uFieldSize;
+uniform float uGroundHeight;
+uniform sampler2D uCemeteryTexture;
 
 attribute vec2 aCenter;
 
 varying vec2 vUv;
-
-vec2 keepAroundRadius(vec2 uv, vec2 center, float radius) {
-
-    float dist = distance(center, uv);
-    if(dist <= radius) {
-        return uv;
-    }
-
-    vec3 v3Center = vec3(center.x, 0, center.y);
-    vec3 v3Uv = vec3(uv.x, 0, uv.y);
-
-    return cross(v3Center, v3Uv).xz;
-}
+varying vec3 vPosition;
+varying vec2 vWorldUv;
 
 void main() {
 
@@ -30,19 +22,22 @@ void main() {
 
     // keep around player
     float radius = uGrassDistance * .5;
-    center.x = mod(center.x + radius, uGrassDistance) - radius;
-    center.y = mod(center.y + radius, uGrassDistance) - radius;
+    // center.x = mod(center.x + radius, uGrassDistance) - radius;
+    // center.y = mod(center.y + radius, uGrassDistance) - radius;
 
     // Final postion
     vec4 modelPosition = modelMatrix * vec4(position, 1.);
 
-      // make grass shorter on edge
-    // float edge = 1. - distance(modelPosition.xz, uPlayerPosition.xz) / uGrassDistance;
-    // edge = pow(abs(edge), 2.);
-    // heightMultiplier *= edge;
+    // place height based on texture
+    vec2 worldUv = (modelPosition.xz + uFieldSize * .5) / uFieldSize;
+    worldUv.x = 1. - worldUv.x;
 
-    modelPosition.y *= heightMultiplier;
-    modelPosition.xz += center;
+// i can use uv though, but as long it works for now
+    float height = texture(uCemeteryTexture, worldUv).r;
+    modelPosition.y += height * uGroundHeight;
+
+    // modelPosition.y *= heightMultiplier;
+    // modelPosition.xz += center;
 
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
@@ -51,4 +46,7 @@ void main() {
 
     // Varyings 
     vUv = uv;
+    vWorldUv = worldUv;
+    vPosition = modelPosition.xyz;
+
 }
