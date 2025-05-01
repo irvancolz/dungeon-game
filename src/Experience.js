@@ -47,15 +47,25 @@ export default class Experience {
 
     this.resources = new ResourcesLoader([
       { path: "/player_2.glb", type: "gltfModel", name: "player" },
-      { path: "/map.glb", type: "gltfModel", name: "map" },
-      { path: "/grave.glb", type: "gltfModel", name: "grave" },
       { path: "/trunk_1.glb", type: "gltfModel", name: "trunk_1" },
       {
-        path: "/cemeteryTexture.png",
-        type: "texture",
-        name: "cemeteryTexture",
+        path: "/model/fence_wooden.glb",
+        type: "gltfModel",
+        name: "model_fence_wooden",
+      },
+      {
+        path: "/model/village_map.glb",
+        type: "gltfModel",
+        name: "village_map",
       },
     ]);
+    // { path: "/map.glb", type: "gltfModel", name: "map" },
+    // { path: "/grave.glb", type: "gltfModel", name: "grave" },
+    // {
+    //   path: "/cemeteryTexture.png",
+    //   type: "texture",
+    //   name: "cemeteryTexture",
+    // },
 
     this.physics = new WorldPhysics();
 
