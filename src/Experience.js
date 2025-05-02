@@ -54,18 +54,16 @@ export default class Experience {
         name: "model_fence_wooden",
       },
       {
+        path: "/model/house_joglo.glb",
+        type: "gltfModel",
+        name: "model_house",
+      },
+      {
         path: "/model/village_map.glb",
         type: "gltfModel",
         name: "village_map",
       },
     ]);
-    // { path: "/map.glb", type: "gltfModel", name: "map" },
-    // { path: "/grave.glb", type: "gltfModel", name: "grave" },
-    // {
-    //   path: "/cemeteryTexture.png",
-    //   type: "texture",
-    //   name: "cemeteryTexture",
-    // },
 
     this.physics = new WorldPhysics();
 

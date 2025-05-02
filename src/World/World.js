@@ -6,6 +6,7 @@ import Grass from "./Grass";
 import Trunk from "./Trunk";
 import * as THREE from "three";
 import Fence from "./Fence";
+import House from "./House";
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
     this.scene = scene;
@@ -18,6 +19,7 @@ export default class World {
     this.maxHeight = 0.58;
 
     this.addFences();
+    this.addHouse();
     this.addPlayer();
 
     this.floor = new DebugFloor({
@@ -59,6 +61,23 @@ export default class World {
 
   update() {
     this.player.update();
+  }
+
+  addHouse() {
+    const housesRef = this.map.scene.children.filter((i) => {
+      return i.name.startsWith("House");
+    });
+
+    const positionRefs = housesRef.map((i) => i.position);
+    const rotationRefs = housesRef.map((i) => i.quaternion);
+
+    this.house = new House({
+      scene: this.scene,
+      model: this.resources.model_house,
+      position: positionRefs,
+      quaternion: rotationRefs,
+      physics: this.physics,
+    });
   }
 
   addPlayer() {

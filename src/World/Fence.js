@@ -14,7 +14,7 @@ export default class Fence {
 
   init() {
     this.geometry = this.model.scene.children[0].geometry;
-    this.material = new THREE.MeshBasicMaterial();
+    this.material = this.model.scene.children[0].material;
 
     this.mesh = new THREE.InstancedMesh(
       this.geometry,
