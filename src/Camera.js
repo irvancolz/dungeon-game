@@ -1,20 +1,24 @@
-import { OrbitControls } from "three/examples/jsm/Addons.js";
 import * as THREE from "three";
 
 export default class Camera {
-  constructor({ scene, sizes, canvas, playerPosition }) {
+  constructor({ scene, sizes, canvas, playerPosition, debug }) {
     this.scene = scene;
     this.sizes = sizes;
     this.canvas = canvas;
+    this.debug = debug;
     this.playerPosition = playerPosition;
-    this.offset = new THREE.Vector3(0, 0.4, -2.5).multiplyScalar(7);
+    this.angle = 90;
+    this.viewMultiplier = 0.1;
+    this.offsetMultiplier = 24;
+    this.offset = new THREE.Vector3(1, 0.457, -0.37);
     this.pointerControl = false;
 
     // Setup
     this.init();
-    this.addControls();
+    this.addDebug();
 
-    document.addEventListener("pointerdown", () => {
+    document.addEventListener("pointerdown", (e) => {
+      if (e.target.id != "canvas") return;
       this.pointerControl = true;
     });
 
@@ -24,8 +28,29 @@ export default class Camera {
 
     document.addEventListener("pointermove", (e) => {
       if (!this.pointerControl) return;
-      // TODO : apply custom controls
+      const x = (e.clientX / sizes.width - 0.5) * 2;
+      const y = (e.clientY / sizes.height - 0.5) * 2;
+
+      this.angle = ((Math.atan2(x, y) * 180) / Math.PI) * this.viewMultiplier;
+      this.calculatePosition();
     });
+  }
+
+  addDebug() {
+    if (!this.debug.active) return;
+    const f = this.debug.ui.addFolder({ title: "camera", expanded: true });
+    f.addBinding(this.offset, "y", { min: -1, max: 1, step: 0.001 }).on(
+      "change",
+      () => {
+        this.calculatePosition();
+      }
+    );
+    f.addBinding(this, "offsetMultiplier", { min: 1, max: 50, step: 0.5 }).on(
+      "change",
+      () => {
+        this.calculatePosition();
+      }
+    );
   }
 
   init() {
@@ -35,37 +60,38 @@ export default class Camera {
       0.1,
       600
     );
-    this.target = new THREE.Vector3()
-      .copy(this.playerPosition.getState())
-      .add({ x: 0, y: 2, z: 0 });
-    camera.position.copy(this.target).add(this.offset);
+    this.target = new THREE.Vector3().copy(this.playerPosition.getState());
+
+    camera.position.copy(this.target);
 
     camera.lookAt(this.target);
     this.instance = camera;
     this.scene.add(camera);
   }
 
-  addControls() {
-    this.controls = new OrbitControls(this.instance, this.canvas);
-    this.controls.target = this.target;
-    this.controls.enableDamping = true;
-  }
-
   update() {
-    const playerPos = new THREE.Vector3().copy(this.playerPosition.getState());
-    const newCamPos = new THREE.Vector3().copy(playerPos).add(this.offset);
-    const dist = this.instance.position.distanceTo(newCamPos);
-
     if (!this.pointerControl) {
-      this.target.copy(playerPos).add({ x: 0, y: 0, z: 8 });
-      this.instance.position.copy(newCamPos);
+      this.calculatePosition();
     }
-
-    this.controls.update();
   }
 
   resize() {
     this.instance.aspect = this.sizes.width / this.sizes.height;
     this.instance.updateProjectionMatrix();
+  }
+
+  calculatePosition() {
+    const x = Math.sin(this.angle);
+    const z = Math.cos(this.angle);
+
+    const offset = new THREE.Vector3()
+      .copy({ x, y: this.offset.y, z })
+      .multiplyScalar(this.offsetMultiplier);
+    const playerPos = new THREE.Vector3().copy(this.playerPosition.getState());
+    this.target = playerPos;
+    const newCamPos = new THREE.Vector3().copy(playerPos).add(offset);
+
+    this.instance.position.copy(newCamPos);
+    this.instance.lookAt(playerPos);
   }
 }

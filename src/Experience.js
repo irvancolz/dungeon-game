@@ -34,6 +34,7 @@ export default class Experience {
       canvas: this.canvas,
       playerPosition: this.states.playerPosition,
       target: this.states.playerTarget,
+      debug: this.debug,
     });
 
     this.light = new Light({ scene: this.scene, debug: this.debug });
