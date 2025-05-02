@@ -1,3 +1,4 @@
+import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
 
 export default class House {
@@ -17,6 +18,19 @@ export default class House {
       house.position.copy(this.position[i]);
       house.quaternion.copy(this.quaternion[i]);
       this.scene.add(house);
+
+      // physics
+      const houseHeight = 2;
+      const houseHalfWidth = 4.5;
+      const houseHalfDepth = 3.2;
+      const colliderDesc = RAPIER.ColliderDesc.cuboid(
+        houseHalfWidth,
+        houseHeight,
+        houseHalfDepth
+      )
+        .setTranslation(this.position[i].x, houseHeight, this.position[i].z)
+        .setRotation(this.quaternion[i]);
+      const collider = this.physicsWorld.world.createCollider(colliderDesc);
     }
   }
 }
