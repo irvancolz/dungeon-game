@@ -9,6 +9,7 @@ export default class Camera {
     this.playerPosition = playerPosition;
     this.angle = 90;
     this.viewMultiplier = 0.1;
+    this.zoomPower = 1;
     this.offsetMultiplier = 24;
     this.offset = new THREE.Vector3(1, 0.457, -0.37);
     this.pointerControl = false;
@@ -16,6 +17,25 @@ export default class Camera {
     // Setup
     this.init();
     this.addDebug();
+
+    document.addEventListener("wheel", (e) => {
+      const delta = e.wheelDelta;
+
+      // +1 if down, -1 if up
+      const orientation = delta / Math.abs(delta);
+      const maxZoomOut = 30;
+      const maxZoomIn = 4;
+      const newMult = Math.min(
+        maxZoomOut,
+        Math.max(
+          maxZoomIn,
+          this.offsetMultiplier - orientation * this.zoomPower
+        )
+      );
+
+      this.offsetMultiplier = newMult;
+      this.calculatePosition();
+    });
 
     document.addEventListener("pointerdown", (e) => {
       if (e.target.id != "canvas") return;
@@ -31,7 +51,7 @@ export default class Camera {
       const x = (e.clientX / sizes.width - 0.5) * 2;
       const y = (e.clientY / sizes.height - 0.5) * 2;
 
-      this.angle = ((Math.atan2(x, y) * 180) / Math.PI) * this.viewMultiplier;
+      this.angle = ((Math.atan2(x, y) * -180) / Math.PI) * this.viewMultiplier;
       this.calculatePosition();
     });
   }
@@ -45,7 +65,7 @@ export default class Camera {
         this.calculatePosition();
       }
     );
-    f.addBinding(this, "offsetMultiplier", { min: 1, max: 50, step: 0.5 }).on(
+    f.addBinding(this, "zoomPower", { min: 0.1, max: 5, step: 0.1 }).on(
       "change",
       () => {
         this.calculatePosition();
