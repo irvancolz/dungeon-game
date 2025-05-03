@@ -8,7 +8,7 @@ export default class Camera {
     this.debug = debug;
     this.playerPosition = playerPosition;
     this.angle = 90;
-    this.viewMultiplier = 0.1;
+    this.tiltPower = 1;
     this.zoomPower = 1;
     this.offsetMultiplier = 24;
     this.offset = new THREE.Vector3(1, 0.457, -0.37);
@@ -40,6 +40,9 @@ export default class Camera {
     document.addEventListener("pointerdown", (e) => {
       if (e.target.id != "canvas") return;
       this.pointerControl = true;
+      const x = (e.clientX / sizes.width - 0.5) * 2;
+      const y = (e.clientY / sizes.height - 0.5) * 2;
+      this.pointerStart = new THREE.Vector2(x, y);
     });
 
     document.addEventListener("pointerup", () => {
@@ -51,7 +54,27 @@ export default class Camera {
       const x = (e.clientX / sizes.width - 0.5) * 2;
       const y = (e.clientY / sizes.height - 0.5) * 2;
 
-      this.angle = ((Math.atan2(x, y) * -180) / Math.PI) * this.viewMultiplier;
+      const pointerDelta = new THREE.Vector2(
+        this.pointerStart.x - x,
+        this.pointerStart.y - y
+      );
+
+      this.pointerStart.set(x, y);
+
+      // handle swipe in directional way
+      const newAngle = this.angle + pointerDelta.x * this.tiltPower;
+      this.angle = newAngle;
+
+      // handle swipe in vertical way
+      const minElevation = 0;
+      const maxElevation = 1;
+      const elevation = Math.min(
+        maxElevation,
+        Math.max(minElevation, this.offset.y - pointerDelta.y * this.tiltPower)
+      );
+
+      this.offset.y = elevation;
+
       this.calculatePosition();
     });
   }
@@ -66,6 +89,12 @@ export default class Camera {
       }
     );
     f.addBinding(this, "zoomPower", { min: 0.1, max: 5, step: 0.1 }).on(
+      "change",
+      () => {
+        this.calculatePosition();
+      }
+    );
+    f.addBinding(this, "tiltPower", { min: 0.1, max: 10, step: 0.1 }).on(
       "change",
       () => {
         this.calculatePosition();
