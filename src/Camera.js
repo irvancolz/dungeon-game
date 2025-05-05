@@ -81,7 +81,7 @@ export default class Camera {
 
   addDebug() {
     if (!this.debug.active) return;
-    const f = this.debug.ui.addFolder({ title: "camera", expanded: true });
+    const f = this.debug.ui.addFolder({ title: "camera", expanded: false });
     f.addBinding(this.offset, "y", { min: -1, max: 1, step: 0.001 }).on(
       "change",
       () => {

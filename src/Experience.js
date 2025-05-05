@@ -47,6 +47,11 @@ export default class Experience {
     });
 
     this.resources = new ResourcesLoader([
+      {
+        path: "/texture/leaves_texture.png",
+        type: "texture",
+        name: "leaves_texture",
+      },
       { path: "/player_2.glb", type: "gltfModel", name: "player" },
       { path: "/trunk_1.glb", type: "gltfModel", name: "trunk_1" },
       {

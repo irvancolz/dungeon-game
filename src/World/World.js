@@ -7,6 +7,7 @@ import Trunk from "./Trunk";
 import * as THREE from "three";
 import Fence from "./Fence";
 import House from "./House";
+import Bushes from "./Bushes";
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
     this.scene = scene;
@@ -18,16 +19,17 @@ export default class World {
     this.width = 256;
     this.maxHeight = 0.58;
 
-    this.addFences();
-    this.addHouse();
-    this.addPlayer();
-
     this.floor = new DebugFloor({
       scene: this.scene,
       debug: this.debug,
       physics: this.physics,
       width: this.width,
     });
+
+    this.addFences();
+    this.addHouse();
+    this.addPlayer();
+    this.addBushes();
 
     // this.trunk = new Trunk({
     //   scene: this.scene,
@@ -108,6 +110,23 @@ export default class World {
       position: positionRefs,
       quaternion: rotationRefs,
       physics: this.physics,
+    });
+  }
+
+  addBushes() {
+    const bushesRefs = this.map.scene.children.filter((i) => {
+      return i.name.startsWith("Bushes");
+    });
+
+    const positionRefs = bushesRefs.map((i) => i.position);
+    const rotationRefs = bushesRefs.map((i) => i.quaternion);
+
+    this.bushes = new Bushes({
+      position: positionRefs,
+      quaternion: rotationRefs,
+      scene: this.scene,
+      texture: this.resources.leaves_texture,
+      debug: this.debug,
     });
   }
 
