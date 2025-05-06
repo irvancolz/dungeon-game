@@ -23,7 +23,7 @@ export default class PlayerPhysics {
     const colliderDesc = RAPIER.ColliderDesc.capsule(
       this.height * 0.5 - this.radius,
       this.radius
-    );
+    ).setFriction(1);
 
     this.collider = this.world.createCollider(colliderDesc, this.body);
   }

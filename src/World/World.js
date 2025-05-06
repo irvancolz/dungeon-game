@@ -8,6 +8,7 @@ import * as THREE from "three";
 import Fence from "./Fence";
 import House from "./House";
 import Bushes from "./Bushes";
+import Tree from "./Tree";
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
     this.scene = scene;
@@ -30,6 +31,7 @@ export default class World {
     this.addHouse();
     this.addPlayer();
     this.addBushes();
+    this.addTree();
 
     // this.trunk = new Trunk({
     //   scene: this.scene,
@@ -120,6 +122,7 @@ export default class World {
 
     const positionRefs = bushesRefs.map((i) => i.position);
     const rotationRefs = bushesRefs.map((i) => i.quaternion);
+    const scaleRefs = bushesRefs.map((i) => i.scale);
 
     this.bushes = new Bushes({
       position: positionRefs,
@@ -127,6 +130,25 @@ export default class World {
       scene: this.scene,
       texture: this.resources.leaves_texture,
       debug: this.debug,
+      scales: scaleRefs,
+    });
+  }
+
+  addTree() {
+    const bushesRefs = this.map.scene.children.filter((i) => {
+      return i.name.startsWith("Tree");
+    });
+
+    const positionRefs = bushesRefs.map((i) => i.position);
+    const rotationRefs = bushesRefs.map((i) => i.quaternion);
+
+    this.bushes = new Tree({
+      position: positionRefs,
+      quaternion: rotationRefs,
+      scene: this.scene,
+      model: this.resources.model_tree,
+      debug: this.debug,
+      physicsWorld: this.physics,
     });
   }
 

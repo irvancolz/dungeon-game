@@ -7,6 +7,7 @@ import World from "./World/World";
 import ResourcesLoader from "./Utils/ResourcesLoader";
 import States from "./States";
 import WorldPhysics from "./Physics/World";
+import resources from "./resources";
 
 let instance = null;
 
@@ -46,30 +47,7 @@ export default class Experience {
       camera: this.camera.instance,
     });
 
-    this.resources = new ResourcesLoader([
-      {
-        path: "/texture/leaves_texture.png",
-        type: "texture",
-        name: "leaves_texture",
-      },
-      { path: "/player_2.glb", type: "gltfModel", name: "player" },
-      { path: "/trunk_1.glb", type: "gltfModel", name: "trunk_1" },
-      {
-        path: "/model/fence_wooden.glb",
-        type: "gltfModel",
-        name: "model_fence_wooden",
-      },
-      {
-        path: "/model/house_joglo.glb",
-        type: "gltfModel",
-        name: "model_house",
-      },
-      {
-        path: "/model/village_map.glb",
-        type: "gltfModel",
-        name: "village_map",
-      },
-    ]);
+    this.resources = new ResourcesLoader(resources);
 
     this.physics = new WorldPhysics();
 

@@ -3,13 +3,14 @@ import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js
 import BushesMaterial from "../Materials/Bushes";
 
 export default class Bushes {
-  constructor({ position, quaternion, scene, texture, debug }) {
+  constructor({ position, quaternion, scene, texture, debug, scales }) {
     this.position = position;
     this.quaternion = quaternion;
     this.scene = scene;
     this.height = 1;
     this.texture = texture;
     this.debug = debug;
+    this.scales = scales;
 
     this.init();
     this.addDebug();
@@ -19,7 +20,7 @@ export default class Bushes {
     if (!this.debug.active) return;
 
     const debugOpt = {
-      color: "#164116",
+      color: "#113111",
     };
 
     const f = this.debug.ui.addFolder({ title: "bushes", expanded: true });
@@ -99,6 +100,8 @@ export default class Bushes {
 
     for (let i = 0; i < this.position.length; i++) {
       dummy.position.copy(this.position[i]);
+      dummy.quaternion.copy(this.quaternion[i]);
+      dummy.scale.copy(this.scales[i]);
 
       dummy.updateMatrix();
       this.mesh.setMatrixAt(i, dummy.matrix);
