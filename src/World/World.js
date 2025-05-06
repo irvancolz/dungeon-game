@@ -64,8 +64,12 @@ export default class World {
     // this.addGraves();
   }
 
-  update() {
+  update(elapsed, delta) {
     this.player.update();
+
+    if (this.bushes) {
+      this.bushes.update(elapsed);
+    }
   }
 
   addHouse() {
@@ -143,7 +147,7 @@ export default class World {
     const positionRefs = trunkRefs.map((i) => i.position);
     const rotationRefs = trunkRefs.map((i) => i.quaternion);
 
-    this.bushes = new Trunk({
+    this.trunks = new Trunk({
       position: positionRefs,
       quaternion: rotationRefs,
       scene: this.scene,
@@ -162,7 +166,7 @@ export default class World {
     const positionRefs = bushesRefs.map((i) => i.position);
     const rotationRefs = bushesRefs.map((i) => i.quaternion);
 
-    this.bushes = new Tree({
+    this.tree = new Tree({
       position: positionRefs,
       quaternion: rotationRefs,
       scene: this.scene,

@@ -1,7 +1,6 @@
 uniform sampler2D uLeavesTexture;
 uniform vec3 uLeavesColor;
 
-varying vec3 vNormal;
 varying vec2 vUv;
 
 void main() {

@@ -6,6 +6,7 @@ export default function BushesMaterial() {
   const uniforms = {
     uLeavesTexture: new THREE.Uniform(),
     uLeavesColor: new THREE.Uniform(new THREE.Color("#113111")),
+    uTime: new THREE.Uniform(0),
   };
 
   const material = new THREE.ShaderMaterial({

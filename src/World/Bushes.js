@@ -113,6 +113,14 @@ export default class Bushes {
     this.initMaterial();
     this.initMesh();
   }
-  update() {}
-  dispose() {}
+  update(elapsed) {
+    this.material.uniforms.uTime.value = elapsed;
+  }
+
+  dispose() {
+    this.scene.remove(this.mesh);
+    this.mesh.dispose();
+    this.geometry.dispose();
+    this.material.dispose();
+  }
 }

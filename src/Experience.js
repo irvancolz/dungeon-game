@@ -75,7 +75,7 @@ export default class Experience {
       this.physics.update();
 
       if (this.world) {
-        this.world.update();
+        this.world.update(this.states.time.elapsed, this.states.time.delta);
       }
 
       this.showPhysicsWorld();
