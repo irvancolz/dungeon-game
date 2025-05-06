@@ -32,6 +32,7 @@ export default class World {
     this.addPlayer();
     this.addBushes();
     this.addTree();
+    this.addTrunks();
 
     // this.trunk = new Trunk({
     //   scene: this.scene,
@@ -131,6 +132,25 @@ export default class World {
       texture: this.resources.leaves_texture,
       debug: this.debug,
       scales: scaleRefs,
+    });
+  }
+
+  addTrunks() {
+    const trunkRefs = this.map.scene.children.filter((i) => {
+      return i.name.startsWith("Trunk");
+    });
+
+    const positionRefs = trunkRefs.map((i) => i.position);
+    const rotationRefs = trunkRefs.map((i) => i.quaternion);
+
+    this.bushes = new Trunk({
+      position: positionRefs,
+      quaternion: rotationRefs,
+      scene: this.scene,
+      debug: this.debug,
+      physics: this.physics,
+      model: this.resources.model_trunk,
+      noiseTexture: this.resources.noise_texture,
     });
   }
 

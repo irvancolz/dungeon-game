@@ -5,9 +5,14 @@ export default [
     type: "texture",
     name: "leaves_texture",
   },
+  {
+    path: "/texture/noise_texture.webp",
+    type: "texture",
+    name: "noise_texture",
+  },
   // Model
   { path: "/player_2.glb", type: "gltfModel", name: "player" },
-  { path: "/model/trunk.glb", type: "gltfModel", name: "trunk_1" },
+  { path: "/model/trunk.glb", type: "gltfModel", name: "model_trunk" },
   {
     path: "/model/fence_wooden.glb",
     type: "gltfModel",

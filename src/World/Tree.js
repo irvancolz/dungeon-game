@@ -1,5 +1,6 @@
 import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
+import TreeMaterial from "../Materials/Tree";
 export default class Tree {
   constructor({ scene, position, quaternion, debug, model, physicsWorld }) {
     this.scene = scene;
@@ -10,17 +11,28 @@ export default class Tree {
     this.physicsWorld = physicsWorld;
 
     this.init();
-    // this.model.scene.position.copy(this.position);
-    // this.scene.add(this.model.scene);
+    this.addDebug();
+  }
+
+  addDebug() {
+    if (!this.debug.active) return;
+    const debugObj = {
+      color: "#575151",
+    };
+
+    const f = this.debug.ui.addFolder({ title: "tree", expanded: true });
+    f.addBinding(debugObj, "color").on("change", () => {
+      this.material.uniforms.uColor.value.set(debugObj.color);
+    });
   }
 
   init() {
-    const geometry = this.model.scene.children[0].geometry;
-    const material = this.model.scene.children[0].material;
+    this.geometry = this.model.scene.children[0].geometry;
+    this.material = TreeMaterial();
 
     this.mesh = new THREE.InstancedMesh(
-      geometry,
-      material,
+      this.geometry,
+      this.material,
       this.position.length
     );
 

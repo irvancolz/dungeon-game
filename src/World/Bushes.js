@@ -23,7 +23,7 @@ export default class Bushes {
       color: "#113111",
     };
 
-    const f = this.debug.ui.addFolder({ title: "bushes", expanded: true });
+    const f = this.debug.ui.addFolder({ title: "bushes", expanded: false });
     f.addBinding(debugOpt, "color").on("change", () => {
       this.material.uniforms.uLeavesColor.value.set(debugOpt.color);
     });
