@@ -9,6 +9,8 @@ import Fence from "./Fence";
 import House from "./House";
 import Bushes from "./Bushes";
 import Tree from "./Tree";
+import EmissiveMaterial from "../Materials/Emissive";
+
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
     this.scene = scene;
@@ -18,7 +20,6 @@ export default class World {
     this.physics = physics;
     this.states = states;
     this.width = 256;
-    this.maxHeight = 0.58;
 
     this.floor = new DebugFloor({
       scene: this.scene,
@@ -33,43 +34,11 @@ export default class World {
     this.addBushes();
     this.addTree();
     this.addTrunks();
-
-    // this.trunk = new Trunk({
-    //   scene: this.scene,
-    //   model: this.resources.trunk_1,
-    //   physics: this.physics,
-    //   position: new THREE.Vector3(0, 0, 1),
-    // });
-
-    // this.ground = new Ground({
-    //   scene: this.scene,
-    //   debug: this.debug,
-    //   texture: this.resources.cemeteryTexture,
-    //   size: this.width,
-    //   physics: this.physics,
-    //   maxHeight: this.maxHeight,
-    // });
-
-    // this.grass = new Grass({
-    //   size: 300,
-    //   radius: this.width * 0.5,
-    //   scene: this.scene,
-    //   debug: this.debug,
-    //   states: this.states,
-    //   resources: this.resources,
-    //   fieldSize: this.width,
-    //   groundHeight: this.maxHeight,
-    // });
-
-    // this.addGraves();
   }
 
   update(elapsed, delta) {
     this.player.update();
-
-    if (this.bushes) {
-      this.bushes.update(elapsed);
-    }
+    this.bushes.update(elapsed);
   }
 
   addHouse() {
@@ -93,6 +62,7 @@ export default class World {
     const playerRef = this.map.scene.children.find((i) => {
       return i.name.startsWith("Player");
     });
+
     this.states.playerPosition.setState(playerRef.position);
     this.player = new Player({
       scene: this.scene,

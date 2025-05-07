@@ -30,7 +30,7 @@ export default class House {
       )
         .setTranslation(this.position[i].x, houseHeight, this.position[i].z)
         .setRotation(this.quaternion[i]);
-      const collider = this.physicsWorld.world.createCollider(colliderDesc);
+      this.physicsWorld.world.createCollider(colliderDesc);
     }
   }
 }

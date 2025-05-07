@@ -8,6 +8,7 @@ import ResourcesLoader from "./Utils/ResourcesLoader";
 import States from "./States";
 import WorldPhysics from "./Physics/World";
 import resources from "./resources";
+import Composer from "./Composer";
 
 let instance = null;
 
@@ -22,6 +23,23 @@ export default class Experience {
     this.states = new States();
     this.canvas = canvas;
     this.scene = new THREE.Scene();
+
+    // background
+    const path = "texture/background/";
+    const format = ".png";
+    const urls = [
+      path + "px" + format,
+      path + "nx" + format,
+      path + "py" + format,
+      path + "ny" + format,
+      path + "pz" + format,
+      path + "nz" + format,
+    ];
+
+    const background = new THREE.CubeTextureLoader().load(urls);
+    background.mapping = THREE.CubeRefractionMapping;
+
+    this.scene.background = background;
 
     this.debugOpt = {
       showPhysics: false,
@@ -45,6 +63,14 @@ export default class Experience {
       sizes: this.states.sizes,
       canvas: this.canvas,
       camera: this.camera.instance,
+    });
+
+    this.composer = new Composer({
+      renderer: this.renderer.instance,
+      scene: this.scene,
+      camera: this.camera.instance,
+      size: this.states.sizes,
+      debug: this.debug,
     });
 
     this.resources = new ResourcesLoader(resources);
@@ -71,8 +97,9 @@ export default class Experience {
     this.states.time.on("tick", () => {
       // on tick
       this.camera.update();
-      this.renderer.update();
+      // this.renderer.update();
       this.physics.update();
+      this.composer.update();
 
       if (this.world) {
         this.world.update(this.states.time.elapsed, this.states.time.delta);
