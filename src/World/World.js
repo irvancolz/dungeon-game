@@ -55,6 +55,7 @@ export default class World {
       position: positionRefs,
       quaternion: rotationRefs,
       physics: this.physics,
+      debug: this.debug,
     });
   }
 

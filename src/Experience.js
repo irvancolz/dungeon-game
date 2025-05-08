@@ -65,13 +65,13 @@ export default class Experience {
       camera: this.camera.instance,
     });
 
-    this.composer = new Composer({
-      renderer: this.renderer.instance,
-      scene: this.scene,
-      camera: this.camera.instance,
-      size: this.states.sizes,
-      debug: this.debug,
-    });
+    // this.composer = new Composer({
+    //   renderer: this.renderer.instance,
+    //   scene: this.scene,
+    //   camera: this.camera.instance,
+    //   size: this.states.sizes,
+    //   debug: this.debug,
+    // });
 
     this.resources = new ResourcesLoader(resources);
 
@@ -97,9 +97,9 @@ export default class Experience {
     this.states.time.on("tick", () => {
       // on tick
       this.camera.update();
-      // this.renderer.update();
+      this.renderer.update();
       this.physics.update();
-      this.composer.update();
+      // this.composer.update();
 
       if (this.world) {
         this.world.update(this.states.time.elapsed, this.states.time.delta);
@@ -112,6 +112,7 @@ export default class Experience {
       // on resize
       this.camera.resize();
       this.renderer.resize();
+      // this.composer.resize();
     });
   }
 

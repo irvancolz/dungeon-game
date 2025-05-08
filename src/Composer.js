@@ -1,6 +1,9 @@
 import {
   EffectComposer,
+  GammaCorrectionShader,
   RenderPass,
+  ShaderPass,
+  SMAAPass,
   UnrealBloomPass,
 } from "three/examples/jsm/Addons.js";
 import * as THREE from "three";
@@ -21,7 +24,7 @@ export default class Composer {
     if (!this.debug.active) return;
     const bloomFolder = this.debug.ui.addFolder({
       title: "bloom",
-      expanded: true,
+      expanded: false,
     });
     bloomFolder.addBinding(this.bloomPass, "strength", {
       min: 0,
@@ -41,7 +44,21 @@ export default class Composer {
   }
 
   init() {
+    this.renderTarget = new THREE.WebGLRenderTarget(
+      this.size.width,
+      this.size.height,
+      {
+        samples: this.renderer.getPixelRatio() === 1 ? 2 : 0,
+        format: THREE.RGBAFormat,
+        minFilter: THREE.NearestFilter,
+        magFilter: THREE.NearestFilter,
+      }
+    );
+    this.composer = new EffectComposer(this.renderer, this.renderTarget);
+
     this.renderPass = new RenderPass(this.scene, this.camera);
+    this.composer.addPass(this.renderPass);
+
     this.bloomPass = new UnrealBloomPass(
       new THREE.Vector2(this.size.width, this.size.height),
       1.5,
@@ -49,18 +66,29 @@ export default class Composer {
       0.85
     );
     this.bloomPass.threshold = 0;
-    this.bloomPass.strength = 0.37;
+    this.bloomPass.strength = 0.01;
     this.bloomPass.radius = 0;
+    this.composer.addPass(this.bloomPass);
 
-    this.finalComposer = new EffectComposer(this.renderer);
-    this.finalComposer.addPass(this.renderPass);
-    this.finalComposer.addPass(this.bloomPass);
+    if (
+      this.renderer.getPixelRatio() === 1 &&
+      this.renderer.capabilities.isWebGL2
+    ) {
+      this.smaaPass = new SMAAPass();
+      this.composer.addPass(this.smaaPass);
+    }
+
+    this.gammaCorrection = new ShaderPass(GammaCorrectionShader);
+    this.composer.addPass(this.gammaCorrection);
   }
 
-  resize(width, height) {}
+  resize() {
+    this.composer.setSize(this.size.width, this.size.height);
+    this.composer.setPixelRatio(this.size.pixelRatio);
+  }
 
   update() {
-    this.finalComposer.render();
+    this.composer.render();
   }
 
   dispose() {}
