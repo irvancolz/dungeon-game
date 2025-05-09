@@ -54,9 +54,6 @@ export default class Grass {
 
     for (let i = 0; i < this.count; i++) {
       const r = Math.sqrt(Math.random()) * this.radius;
-      // const angle = Math.PI * 2 * Math.random();
-      // const x = Math.sin(angle) * r;
-      // const y = Math.cos(angle) * r;
 
       const x = (Math.random() - 0.5) * 2 * this.radius;
       const y = (Math.random() - 0.5) * 2 * this.radius;
