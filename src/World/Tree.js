@@ -20,7 +20,7 @@ export default class Tree {
       color: "#575151",
     };
 
-    const f = this.debug.ui.addFolder({ title: "tree", expanded: true });
+    const f = this.debug.ui.addFolder({ title: "tree", expanded: false });
     f.addBinding(debugObj, "color").on("change", () => {
       this.material.uniforms.uColor.value.set(debugObj.color);
     });

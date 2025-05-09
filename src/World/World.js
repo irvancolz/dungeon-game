@@ -10,6 +10,7 @@ import House from "./House";
 import Bushes from "./Bushes";
 import Tree from "./Tree";
 import EmissiveMaterial from "../Materials/Emissive";
+import LampPost from "./LampPost";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -34,6 +35,7 @@ export default class World {
     this.addBushes();
     this.addTree();
     this.addTrunks();
+    this.addLampPost();
   }
 
   update(elapsed, delta) {
@@ -158,6 +160,23 @@ export default class World {
       model: this.resources.grave,
       scene: this.scene,
       debug: this.debug,
+    });
+  }
+
+  addLampPost() {
+    const lampRefs = this.map.scene.children.filter((i) => {
+      return i.name.startsWith("LampPost");
+    });
+
+    const positionRefs = lampRefs.map((i) => i.position);
+    const rotationRefs = lampRefs.map((i) => i.quaternion);
+
+    this.lampPost = new LampPost({
+      model: this.resources.model_lamp_post,
+      scene: this.scene,
+      debug: this.debug,
+      position: positionRefs,
+      quaternion: rotationRefs,
     });
   }
 

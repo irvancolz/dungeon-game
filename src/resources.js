@@ -29,6 +29,11 @@ export default [
     name: "model_tree",
   },
   {
+    path: "/model/lamp_post.glb",
+    type: "gltfModel",
+    name: "model_lamp_post",
+  },
+  {
     path: "/model/village_map.glb",
     type: "gltfModel",
     name: "village_map",

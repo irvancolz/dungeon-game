@@ -7,6 +7,7 @@ export default class PlayerPhysics {
   constructor({ world, debug, height, position }) {
     this.debug = debug;
     this.world = world;
+    this.initialPosition = position;
     this.position = position;
     this.height = height;
     this.floating = false;
@@ -36,7 +37,10 @@ export default class PlayerPhysics {
     this.body.applyImpulse({ x: 0, y: power, z: 0 }, true);
   }
   reset() {
-    this.body.setTranslation({ x: 0, y: 5, z: 0 }, true);
+    this.body.setTranslation(
+      { x: this.initialPosition.x, y: 5, z: this.initialPosition.z },
+      true
+    );
   }
 
   update() {
