@@ -1,5 +1,5 @@
-import * as THREE from "three";
 import EmissiveMaterial from "../Materials/Emissive";
+import Camera from "../Camera";
 
 export default class LampPost {
   constructor({ model, scene, debug, position, quaternion }) {
@@ -8,6 +8,7 @@ export default class LampPost {
     this.debug = debug;
     this.position = position;
     this.quaternion = quaternion;
+    this.instances = [];
 
     this.init();
   }
@@ -22,15 +23,19 @@ export default class LampPost {
 
     for (let i = 0; i < this.position.length; i++) {
       const lamp = this.model.children[0].clone();
-
       lamp.children[0].material = this.glassMaterial;
 
       lamp.position.copy(this.position[i]);
       lamp.quaternion.copy(this.quaternion[i]);
 
-      this.scene.add(lamp);
+      this.instances.push(lamp);
     }
+
+    this.scene.add(...this.instances);
   }
   update() {}
-  dispose() {}
+
+  dispose() {
+    this.scene.remove(...this.instances);
+  }
 }

@@ -105,3 +105,40 @@ button {
 #chat_bubble .btn.visible {
   display: inline;
 }
+
+#interactive_container {
+  position: fixed;
+  top: 50%;
+  left: calc(50% + 3rem);
+  translate: 0 -50%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.interaction {
+  display: none;
+}
+
+.interaction.visible {
+  display: flex;
+}
+
+.interaction .action_btn {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: #071d02;
+  color: #ffffff;
+  border: 1px solid #fff;
+  padding: 0.5rem 1rem;
+}
+
+.action_btn .key {
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.interaction .label {
+  font-weight: 500;
+}

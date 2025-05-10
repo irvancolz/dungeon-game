@@ -1,0 +1,60 @@
+import * as THREE from "three";
+import EventEmitter from "./EventEmitter";
+
+export default class InteractivePoint extends EventEmitter {
+  constructor({ position, label }) {
+    super();
+
+    this.position = position;
+    this.label = label;
+    this.visible = false;
+    this.$container = document.getElementById("interactive_container");
+    this.radius = 3;
+
+    this.init();
+  }
+
+  init() {
+    this.$wrapper = document.createElement("div");
+    this.$wrapper.setAttribute("class", "interaction");
+    this.$wrapper.innerHTML = `  
+        <button class="action_btn">
+          <span class="key">v</span>
+          <span class="label">${this.label}</span>
+        </button>
+      `;
+
+    this.$btn = this.$wrapper.querySelector(".action_btn");
+
+    this.$btn.addEventListener("click", () => {
+      this.trigger("select");
+    });
+
+    this.$container.appendChild(this.$wrapper);
+  }
+
+  show() {
+    if (this.visible) return;
+    this.visible = true;
+    this.$wrapper.classList.add("visible");
+  }
+
+  hide() {
+    if (!this.visible) return;
+    this.visible = false;
+    this.$wrapper.classList.remove("visible");
+  }
+
+  update(playerPos) {
+    const dist = this.position.distanceTo(new THREE.Vector3().copy(playerPos));
+    if (dist <= this.radius) {
+      this.show();
+    } else {
+      this.hide();
+    }
+  }
+
+  dispose() {
+    this.$container.removeChild(this.$wrapper);
+  }
+}

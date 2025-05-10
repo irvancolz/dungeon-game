@@ -166,12 +166,14 @@ export default class Camera {
   }
 
   animateTargetChange(newTarget) {
+    // gsap modify refference
+    const t = newTarget.clone();
     gsap.to(this.target, {
-      x: newTarget.x,
-      y: newTarget.y,
-      z: newTarget.z,
+      x: t.x,
+      y: t.y,
+      z: t.z,
       onComplete: () => {
-        this.target = newTarget;
+        this.target = t;
       },
       duration: 1.5,
     });
