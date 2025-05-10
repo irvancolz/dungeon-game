@@ -1,6 +1,6 @@
 import PlayerPhysics from "../Physics/Player";
 import * as THREE from "three";
-import CharacterControls from "../Utils/CharacterControls";
+import Controller from "../Utils/Controller";
 
 export default class Player {
   #STATE_IDLE = "idle";
@@ -14,7 +14,7 @@ export default class Player {
     this.states = states;
     this.physicsWorld = physics;
     this.position = this.states.playerPosition.getState();
-    this.controls = new CharacterControls();
+    this.controls = new Controller();
     this.debug = debug;
     this.mvSpeed = 6;
     this.turningPower = Math.PI / 18;

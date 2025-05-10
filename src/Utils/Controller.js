@@ -1,14 +1,27 @@
 import EventEmitter from "./EventEmitter";
 
-export default class CharacterControls extends EventEmitter {
+let instance = null;
+
+export default class Controller extends EventEmitter {
   constructor() {
     super();
+
+    // if (instance != null) {
+    //   return this;
+    // }
+
+    // instance = this;
+
     this.actions = {
+      // movement
       forward: false,
       left: false,
       right: false,
       backward: false,
       jump: false,
+
+      // others
+      interact: false,
     };
     this.idle = true;
 
@@ -24,6 +37,8 @@ export default class CharacterControls extends EventEmitter {
         this.actions.backward = true;
       } else if (pressed == "Space") {
         this.actions.jump = true;
+      } else if (pressed == "KeyF") {
+        this.actions.interact = true;
       }
       this.triggerAction();
     });
@@ -40,20 +55,23 @@ export default class CharacterControls extends EventEmitter {
         this.actions.backward = false;
       } else if (pressed == "Space") {
         this.actions.jump = false;
+      } else if (pressed == "KeyF") {
+        this.actions.interact = false;
       }
       this.triggerAction();
       this.checkIdle();
     });
 
-    document.addEventListener("click", (e) => {
-      this.trigger("attack");
-    });
+    // document.addEventListener("click", (e) => {
+    //   this.trigger("attack");
+    // });
   }
 
   triggerAction() {
     for (const action in this.actions) {
       if (!this.actions[action]) continue;
       this.idle = false;
+
       this.trigger(action);
     }
   }

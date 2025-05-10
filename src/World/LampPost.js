@@ -1,5 +1,4 @@
 import EmissiveMaterial from "../Materials/Emissive";
-import Camera from "../Camera";
 
 export default class LampPost {
   constructor({ model, scene, debug, position, quaternion }) {

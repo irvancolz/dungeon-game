@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import EventEmitter from "./EventEmitter";
+import Controller from "./Controller";
 
 export default class InteractivePoint extends EventEmitter {
   constructor({ position, label }) {
@@ -10,7 +11,12 @@ export default class InteractivePoint extends EventEmitter {
     this.visible = false;
     this.$container = document.getElementById("interactive_container");
     this.radius = 3;
+    this.controls = new Controller();
 
+    this.controls.on("interact", () => {
+      if (!this.visible) return;
+      this.trigger("select");
+    });
     this.init();
   }
 
@@ -19,7 +25,7 @@ export default class InteractivePoint extends EventEmitter {
     this.$wrapper.setAttribute("class", "interaction");
     this.$wrapper.innerHTML = `  
         <button class="action_btn">
-          <span class="key">v</span>
+          <span class="key">f</span>
           <span class="label">${this.label}</span>
         </button>
       `;
@@ -55,6 +61,7 @@ export default class InteractivePoint extends EventEmitter {
   }
 
   dispose() {
+    this.visible = false;
     this.$container.removeChild(this.$wrapper);
   }
 }
