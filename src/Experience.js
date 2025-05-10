@@ -54,7 +54,6 @@ export default class Experience {
       sizes: this.states.sizes,
       canvas: this.canvas,
       playerPosition: this.states.playerPosition,
-      target: this.states.playerTarget,
       debug: this.debug,
     });
 

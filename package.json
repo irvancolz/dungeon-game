@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@dimforge/rapier3d": "^0.15.1",
+    "gsap": "^3.13.0",
     "three": "^0.174.0",
     "tweakpane": "^4.0.5"
   }

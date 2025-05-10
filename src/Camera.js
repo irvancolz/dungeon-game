@@ -1,7 +1,15 @@
 import * as THREE from "three";
+import gsap from "gsap";
 
+let instance = null;
 export default class Camera {
-  constructor({ scene, sizes, canvas, playerPosition, debug }) {
+  constructor({ scene, sizes, canvas, playerPosition, debug, target }) {
+    if (instance != null) {
+      return instance;
+    }
+
+    instance = this;
+
     this.scene = scene;
     this.sizes = sizes;
     this.canvas = canvas;
@@ -13,6 +21,7 @@ export default class Camera {
     this.offsetMultiplier = 24;
     this.offset = new THREE.Vector3(1, 0.457, -0.37);
     this.pointerControl = false;
+    this.attachedToPlayer = true;
 
     // Setup
     this.init();
@@ -131,11 +140,40 @@ export default class Camera {
     const offset = new THREE.Vector3()
       .copy({ x, y: this.offset.y, z })
       .multiplyScalar(this.offsetMultiplier);
-    const playerPos = new THREE.Vector3().copy(this.playerPosition.getState());
-    this.target = playerPos;
-    const newCamPos = new THREE.Vector3().copy(playerPos).add(offset);
+
+    if (this.attachedToPlayer) {
+      const playerPos = new THREE.Vector3().copy(
+        this.playerPosition.getState()
+      );
+      this.target = playerPos;
+    }
+
+    const newCamPos = new THREE.Vector3().copy(this.target).add(offset);
 
     this.instance.position.copy(newCamPos);
-    this.instance.lookAt(playerPos);
+    this.instance.lookAt(this.target);
+  }
+
+  focus(target) {
+    //  add animation perhaps
+    this.attachedToPlayer = false;
+    this.animateTargetChange(target);
+  }
+
+  focusPlayer() {
+    this.attachedToPlayer = true;
+    this.animateTargetChange(this.playerPosition.getState());
+  }
+
+  animateTargetChange(newTarget) {
+    gsap.to(this.target, {
+      x: newTarget.x,
+      y: newTarget.y,
+      z: newTarget.z,
+      onComplete: () => {
+        this.target = newTarget;
+      },
+      duration: 1.5,
+    });
   }
 }
