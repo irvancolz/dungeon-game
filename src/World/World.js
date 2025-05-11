@@ -11,6 +11,7 @@ import Bushes from "./Bushes";
 import Tree from "./Tree";
 import EmissiveMaterial from "../Materials/Emissive";
 import LampPost from "./LampPost";
+import Leaves from "./Leaves";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -29,18 +30,27 @@ export default class World {
       width: this.width,
     });
 
-    this.addFences();
-    this.addHouse();
-    this.addPlayer();
-    this.addBushes();
-    this.addTree();
-    this.addTrunks();
-    this.addLampPost();
+    // leaves
+    new Leaves({
+      texture: this.resources.leaves_texture,
+      positions: [new THREE.Vector3(0, 2, 0)],
+      scales: [new THREE.Vector3(1, 1, 1)],
+      quaternions: [new THREE.Quaternion()],
+      scene: this.scene,
+    });
+
+    // this.addPlayer();
+    // this.addFences();
+    // this.addHouse();
+    // this.addBushes();
+    // this.addTree();
+    // this.addTrunks();
+    // this.addLampPost();
   }
 
   update(elapsed, delta) {
-    this.player.update();
-    this.bushes.update(elapsed);
+    // this.player.update();
+    // this.bushes.update(elapsed);
   }
 
   addHouse() {
