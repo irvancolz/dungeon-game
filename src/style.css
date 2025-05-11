@@ -38,8 +38,6 @@ button {
 }
 
 #chat_bubble {
-  display: none;
-
   position: fixed;
   bottom: 0;
   right: 0;
@@ -49,10 +47,13 @@ button {
   background-color: #ffffff;
   margin: 1rem;
   border-radius: 0.5rem;
+  transition: 0.2s ease-in-out;
+  scale: 0;
+  transform-origin: bottom;
 }
 
 #chat_bubble.visible {
-  display: block;
+  scale: 1;
 }
 
 #chat_bubble .chat_container {

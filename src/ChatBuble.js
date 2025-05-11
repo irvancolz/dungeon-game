@@ -1,21 +1,17 @@
 let instance = null;
 export default class ChatBuble {
   constructor() {
-    if (instance != null) {
-      return this;
-    }
-    instance = this;
-
     this.visible = false;
     this.conversation = [];
     this.activeChat = 0;
+    this.$container = document.getElementById("chat_bubble");
 
     this.init();
+
+    instance = this;
   }
 
   init() {
-    this.$container = document.createElement("div");
-    this.$container.setAttribute("id", "chat_bubble");
     this.$container.innerHTML = `
       <div class="chat_container">
         <p class="author"></p>
@@ -34,8 +30,6 @@ export default class ChatBuble {
 
     this.$nextBtn = this.$container.querySelector(".next_btn");
     this.$nextBtn.addEventListener("click", () => this.next());
-
-    document.body.append(this.$container);
   }
 
   close() {
@@ -44,7 +38,7 @@ export default class ChatBuble {
     this.$container.classList.remove("visible");
     this.$closeBtn.classList.remove("visible");
     this.$nextBtn.classList.add("visible");
-    this.$container.setAttribute("aria-hidden", !this.visible);
+    this.$container.setAttribute("aria-visible", this.visible);
 
     // reset conversation to begining
     this.activeChat = 0;
@@ -52,17 +46,12 @@ export default class ChatBuble {
 
   next() {
     this.activeChat++;
-
-    if (this.activeChat == this.conversation.length - 1) {
-      this.$nextBtn.classList.remove("visible");
-      this.$closeBtn.classList.add("visible");
-
-      return;
-    }
+    this.updateActionBtn();
     this.updateChat();
   }
 
   open() {
+    this.updateActionBtn();
     this.visible = true;
     this.$container.classList.add("visible");
     this.updateChat();
@@ -70,12 +59,20 @@ export default class ChatBuble {
 
   initConversation(chat = []) {
     this.conversation = chat;
+
     this.open();
   }
 
   updateChat() {
-    this.$container.setAttribute("aria-hidden", !this.visible);
+    this.$container.setAttribute("aria-visible", this.visible);
+
     this.$author.innerHTML = this.conversation[this.activeChat].author;
     this.$chat.innerHTML = this.conversation[this.activeChat].chat;
+  }
+
+  updateActionBtn() {
+    if (this.activeChat < this.conversation.length - 1) return;
+    this.$nextBtn.classList.remove("visible");
+    this.$closeBtn.classList.add("visible");
   }
 }

@@ -9,7 +9,6 @@ import States from "./States";
 import WorldPhysics from "./Physics/World";
 import resources from "./resources";
 import Composer from "./Composer";
-import ChatBuble from "./ChatBuble";
 
 let instance = null;
 
@@ -24,7 +23,6 @@ export default class Experience {
     this.states = new States();
     this.canvas = canvas;
     this.scene = new THREE.Scene();
-    this.chat = new ChatBuble();
 
     // background
     const path = "texture/background/";
