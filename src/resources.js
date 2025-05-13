@@ -29,6 +29,11 @@ export default [
     name: "model_tree",
   },
   {
+    path: "/model/bushes.glb",
+    type: "gltfModel",
+    name: "model_bushes",
+  },
+  {
     path: "/model/lamp_post.glb",
     type: "gltfModel",
     name: "model_lamp_post",

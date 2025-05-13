@@ -14,7 +14,7 @@ export default class Leaves {
     this.quaternions = quaternions;
     this.scales = scales;
     this.scene = scene;
-    this.size = 4;
+    this.size = 1;
 
     this.init();
   }
@@ -41,5 +41,14 @@ export default class Leaves {
       dummy.updateMatrix();
       this.mesh.setMatrixAt(i, dummy.matrix);
     }
+  }
+
+  update() {}
+
+  dispose() {
+    this.scene.remove(this.mesh);
+    this.mesh.dispose();
+    this.material.dispose();
+    this.geometry.dispose();
   }
 }

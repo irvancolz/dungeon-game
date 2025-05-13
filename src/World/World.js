@@ -21,7 +21,7 @@ export default class World {
     this.map = resources.village_map;
     this.physics = physics;
     this.states = states;
-    this.width = 256;
+    this.width = 128;
 
     this.floor = new DebugFloor({
       scene: this.scene,
@@ -30,26 +30,17 @@ export default class World {
       width: this.width,
     });
 
-    // leaves
-    new Leaves({
-      texture: this.resources.leaves_texture,
-      positions: [new THREE.Vector3(0, 2, 0)],
-      scales: [new THREE.Vector3(1, 1, 1)],
-      quaternions: [new THREE.Quaternion()],
-      scene: this.scene,
-    });
-
-    // this.addPlayer();
-    // this.addFences();
-    // this.addHouse();
-    // this.addBushes();
-    // this.addTree();
-    // this.addTrunks();
+    this.addPlayer();
+    this.addFences();
+    this.addHouse();
+    this.addBushes();
+    this.addTree();
+    this.addTrunks();
     // this.addLampPost();
   }
 
   update(elapsed, delta) {
-    // this.player.update();
+    this.player.update();
     // this.bushes.update(elapsed);
   }
 
@@ -109,16 +100,15 @@ export default class World {
     });
 
     const positionRefs = bushesRefs.map((i) => i.position);
-    const rotationRefs = bushesRefs.map((i) => i.quaternion);
     const scaleRefs = bushesRefs.map((i) => i.scale);
 
     this.bushes = new Bushes({
       position: positionRefs,
-      quaternion: rotationRefs,
       scene: this.scene,
       texture: this.resources.leaves_texture,
       debug: this.debug,
       scales: scaleRefs,
+      model: this.resources.model_bushes,
     });
   }
 

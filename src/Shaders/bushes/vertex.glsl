@@ -1,12 +1,16 @@
 uniform float uTime;
 
 varying vec2 vUv;
+varying vec3 vNormal;
 
 void main() {
     float time = uTime * .005;
     float windPower = .1;
+
+    vec3 newPosition = position;
+
     // Final postion
-    vec4 modelPosition = modelMatrix * instanceMatrix * vec4(position, 1.);
+    vec4 modelPosition = modelMatrix * instanceMatrix * vec4(newPosition, 1.);
 
     // maybe add randomness in future
     float offset = time * position.y + modelPosition.y;
@@ -19,4 +23,5 @@ void main() {
 
     // Varyings 
     vUv = uv;
+    vNormal = normal;
 }

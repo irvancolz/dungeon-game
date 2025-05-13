@@ -15,6 +15,7 @@ export default function BushesMaterial() {
     uniforms,
     transparent: true,
     depthWrite: false,
+    side: THREE.DoubleSide,
   });
 
   return material;

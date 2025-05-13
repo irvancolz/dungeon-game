@@ -12,7 +12,7 @@ export default class Ground {
     this.physicsFieldSize = this.size + 1;
     this.physics = physics;
     this.maxHeight = maxHeight;
-    this.material = GroundMaterial(texture, this.maxHeight);
+    this.material = new THREE.MeshStandardMaterial();
 
     this.extractTextureMap();
 
@@ -87,6 +87,7 @@ export default class Ground {
     // idk why texture is flipped,
     this.mesh.rotation.x = Math.PI * 0.5;
     this.mesh.rotation.y = -Math.PI;
+    this.mesh.receiveShadow = true;
 
     this.scene.add(this.mesh);
   }
@@ -101,18 +102,18 @@ export default class Ground {
 
     const f = this.debug.ui.addFolder({ title: "ground", expanded: false });
     f.addBinding(this.mesh, "visible");
-    f.addBinding(this.material.uniforms.uMaxHeight, "value", {
-      min: 0.1,
-      max: 5,
-      step: 0.01,
-      label: "max height",
-    });
-    f.addBinding(debugOpt, "color").on("change", () => {
-      this.material.uniforms.uColor.value.set(debugOpt.color);
-    });
-    f.addBinding(debugOpt, "edgeColor").on("change", () => {
-      this.material.uniforms.uEdgeColor.value.set(debugOpt.edgeColor);
-    });
+    // f.addBinding(this.material.uniforms.uMaxHeight, "value", {
+    //   min: 0.1,
+    //   max: 5,
+    //   step: 0.01,
+    //   label: "max height",
+    // });
+    // f.addBinding(debugOpt, "color").on("change", () => {
+    //   this.material.uniforms.uColor.value.set(debugOpt.color);
+    // });
+    // f.addBinding(debugOpt, "edgeColor").on("change", () => {
+    //   this.material.uniforms.uEdgeColor.value.set(debugOpt.edgeColor);
+    // });
   }
 
   dispose() {
