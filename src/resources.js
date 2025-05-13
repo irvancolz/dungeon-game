@@ -10,6 +10,11 @@ export default [
     type: "texture",
     name: "noise_texture",
   },
+  {
+    path: "/texture/village_map.png",
+    type: "texture",
+    name: "ground_texture",
+  },
   // Model
   { path: "/player_2.glb", type: "gltfModel", name: "player" },
   { path: "/model/trunk.glb", type: "gltfModel", name: "model_trunk" },

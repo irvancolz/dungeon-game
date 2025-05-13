@@ -6,9 +6,7 @@ varying vec2 vUv;
 
 void main() {
 
-    float colorMix = texture2D(uMapTexture, vUv).r;
-    // colorMix = pow(colorMix, 2.);
-    colorMix = smoothstep(0.01, .3, colorMix);
+    float colorMix = texture2D(uMapTexture, vUv).g;
 
     vec3 color = mix(uEdgeColor, uColor, colorMix);
 

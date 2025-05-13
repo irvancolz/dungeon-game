@@ -23,11 +23,13 @@ export default class World {
     this.states = states;
     this.width = 128;
 
-    this.floor = new DebugFloor({
+    this.floor = new Ground({
       scene: this.scene,
       debug: this.debug,
       physics: this.physics,
       width: this.width,
+      texture: this.resources.ground_texture,
+      maxHeight: 0,
     });
 
     this.addPlayer();

@@ -4,20 +4,25 @@ import * as THREE from "three";
 import { mix, smoothstep } from "../Utils/math";
 
 export default class Ground {
-  constructor({ scene, debug, texture, size, physics, maxHeight }) {
+  constructor({ scene, debug, texture, width, physics, maxHeight }) {
     this.scene = scene;
     this.debug = debug;
     this.texture = texture;
-    this.size = size;
+    this.size = width;
     this.physicsFieldSize = this.size + 1;
     this.physics = physics;
     this.maxHeight = maxHeight;
-    this.material = new THREE.MeshStandardMaterial();
 
     this.extractTextureMap();
 
     this.init();
     this.addDebug();
+  }
+
+  initMaterial() {
+    this.material = GroundMaterial();
+    this.material.uniforms.uMaxHeight.value = this.maxHeight;
+    this.material.uniforms.uMapTexture.value = this.texture;
   }
 
   convertToRapierCoord(line, col) {
@@ -32,6 +37,7 @@ export default class Ground {
     canvas.height = this.size;
 
     const ctx = canvas.getContext("2d");
+
     ctx.drawImage(this.texture.image, 0, 0);
 
     canvas.style.position = "fixed";
@@ -81,6 +87,7 @@ export default class Ground {
 
   init() {
     this.initPhysics();
+    this.initMaterial();
     this.initGeometry();
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
@@ -97,23 +104,23 @@ export default class Ground {
 
     const debugOpt = {
       color: "#1f2a28",
-      edgeColor: "#3e3f40",
+      edgeColor: "#39362c",
     };
 
     const f = this.debug.ui.addFolder({ title: "ground", expanded: false });
     f.addBinding(this.mesh, "visible");
-    // f.addBinding(this.material.uniforms.uMaxHeight, "value", {
-    //   min: 0.1,
-    //   max: 5,
-    //   step: 0.01,
-    //   label: "max height",
-    // });
-    // f.addBinding(debugOpt, "color").on("change", () => {
-    //   this.material.uniforms.uColor.value.set(debugOpt.color);
-    // });
-    // f.addBinding(debugOpt, "edgeColor").on("change", () => {
-    //   this.material.uniforms.uEdgeColor.value.set(debugOpt.edgeColor);
-    // });
+    f.addBinding(this.material.uniforms.uMaxHeight, "value", {
+      min: 0.1,
+      max: 5,
+      step: 0.01,
+      label: "max height",
+    });
+    f.addBinding(debugOpt, "color").on("change", () => {
+      this.material.uniforms.uColor.value.set(debugOpt.color);
+    });
+    f.addBinding(debugOpt, "edgeColor").on("change", () => {
+      this.material.uniforms.uEdgeColor.value.set(debugOpt.edgeColor);
+    });
   }
 
   dispose() {
