@@ -1,20 +1,51 @@
 import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
+import WoodDarkMaterial from "../Materials/WoodDark";
 
 export default class Fence {
-  constructor({ model, scene, physics, position = [], quaternion = [] }) {
+  constructor({
+    model,
+    scene,
+    physics,
+    noise,
+    position = [],
+    quaternion = [],
+    debug,
+  }) {
     this.model = model;
     this.scene = scene;
     this.position = position;
     this.quaternion = quaternion;
     this.physicsWorld = physics;
+    this.noise = noise;
+    this.debug = debug;
 
     this.init();
+    this.addDebug();
+  }
+
+  addDebug() {
+    if (!this.debug.active) return;
+    const debugObj = {
+      color: "#281b07",
+      noiseColor: "#392b16",
+    };
+
+    const f = this.debug.ui.addFolder({
+      title: "wood (fence)",
+      expanded: true,
+    });
+    f.addBinding(debugObj, "color").on("change", () => {
+      this.material.uniforms.uColor.value.set(debugObj.color);
+    });
+    f.addBinding(debugObj, "noiseColor").on("change", () => {
+      this.material.uniforms.uNoiseColor.value.set(debugObj.noiseColor);
+    });
   }
 
   init() {
     this.geometry = this.model.scene.children[0].geometry;
-    this.material = this.model.scene.children[0].material;
+    this.material = WoodDarkMaterial();
 
     this.mesh = new THREE.InstancedMesh(
       this.geometry,

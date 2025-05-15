@@ -6,11 +6,10 @@ export default function GrassMaterial() {
   const uniforms = {
     uPlayerPosition: new THREE.Uniform(new THREE.Vector3()),
     uGrassDistance: new THREE.Uniform(),
-    uColor: new THREE.Uniform(new THREE.Color("#148606")),
+    uColor: new THREE.Uniform(new THREE.Color("#179908")),
     uMaxHeightRatio: new THREE.Uniform(),
     uFieldSize: new THREE.Uniform(),
-    uGroundHeight: new THREE.Uniform(),
-    uCemeteryTexture: new THREE.Uniform(),
+    uGroundTexture: new THREE.Uniform(),
   };
 
   const material = new THREE.ShaderMaterial({

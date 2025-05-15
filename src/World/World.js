@@ -9,9 +9,7 @@ import Fence from "./Fence";
 import House from "./House";
 import Bushes from "./Bushes";
 import Tree from "./Tree";
-import EmissiveMaterial from "../Materials/Emissive";
 import LampPost from "./LampPost";
-import Leaves from "./Leaves";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -32,17 +30,18 @@ export default class World {
       maxHeight: 0,
     });
 
+    // this.addGrass();
     this.addPlayer();
     this.addFences();
     this.addHouse();
     this.addBushes();
     this.addTree();
     this.addTrunks();
-    // this.addLampPost();
   }
 
   update(elapsed, delta) {
     this.player.update();
+    // this.grass.update(this.states.playerPosition.getState());
     // this.bushes.update(elapsed);
   }
 
@@ -93,6 +92,7 @@ export default class World {
       position: positionRefs,
       quaternion: rotationRefs,
       physics: this.physics,
+      debug: this.debug,
     });
   }
 
@@ -179,6 +179,17 @@ export default class World {
       debug: this.debug,
       position: positionRefs,
       quaternion: rotationRefs,
+    });
+  }
+
+  addGrass() {
+    this.grass = new Grass({
+      size: 400,
+      debug: this.debug,
+      fieldSize: this.width,
+      radius: this.width / 2,
+      groundTexture: this.resources.ground_texture,
+      scene: this.scene,
     });
   }
 

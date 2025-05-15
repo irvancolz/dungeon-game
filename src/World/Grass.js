@@ -2,30 +2,19 @@ import * as THREE from "three";
 import GrassMaterial from "../Materials/Grass";
 
 export default class Grass {
-  constructor({
-    size,
-    scene,
-    states,
-    debug,
-    radius,
-    resources,
-    fieldSize,
-    groundHeight,
-  }) {
+  constructor({ size, scene, debug, radius, groundTexture, fieldSize }) {
     this.size = size;
     this.count = size ** 2;
     this.radius = radius;
     this.fieldSize = fieldSize;
-    this.groundHeight = groundHeight;
 
-    this.BLADE_HEIGHT = 0.6;
-    this.BLADE_WIDTH = 0.1;
+    this.BLADE_HEIGHT = 0.3;
+    this.BLADE_WIDTH = 0.2;
     this.BLADE_HEIGHT_VARIATION = 0.5;
 
     this.scene = scene;
-    this.states = states;
     this.debug = debug;
-    this.resources = resources;
+    this.groundTexture = groundTexture;
 
     this.positionsArray = [];
     this.uvsArray = [];
@@ -38,13 +27,12 @@ export default class Grass {
   }
 
   initMaterial() {
+    // this.material = new THREE.MeshBasicMaterial();
     this.material = GrassMaterial();
     this.material.uniforms.uGrassDistance.value = this.radius * 2;
     this.material.uniforms.uMaxHeightRatio.value = this.BLADE_HEIGHT;
     this.material.uniforms.uFieldSize.value = this.fieldSize;
-    this.material.uniforms.uGroundHeight.value = this.groundHeight;
-    this.material.uniforms.uCemeteryTexture.value =
-      this.resources.cemeteryTexture;
+    this.material.uniforms.uGroundTexture.value = this.groundTexture;
   }
 
   initGeometry() {
@@ -103,17 +91,18 @@ export default class Grass {
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.frustumCulled = false;
+
     this.scene.add(this.mesh);
   }
 
   initDebug() {
     if (!this.debug.active) return;
     const opt = {
-      color: "#148606",
+      color: "#179908",
     };
     const f = this.debug.ui.addFolder({
       title: "grass",
-      expanded: true,
+      expanded: false,
     });
     f.addBinding(this.material.uniforms.uMaxHeightRatio, "value", {
       min: 0.1,
@@ -126,9 +115,7 @@ export default class Grass {
     });
   }
 
-  update() {
-    const playerPos = this.states.playerPosition.getState();
-
+  update(playerPos) {
     this.material.uniforms.uPlayerPosition.value.copy(playerPos);
     // this.mesh.position.set(playerPos.x, 0, playerPos.z);
   }
