@@ -7,11 +7,10 @@ varying vec2 vUv;
 
 void main() {
 
-    vec2 uv = vUv;
+    vec2 uv = vUv * 4.;
 
     float noise = simplexNoise2d(uv);
-    // noise = pow(noise, 2.);
-    vec3 color = mix(uNoiseColor, uColor, noise);
+    vec3 color = mix(uColor, uNoiseColor, noise);
 
     gl_FragColor = vec4(color, 1.);
     #include <tonemapping_fragment>

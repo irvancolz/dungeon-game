@@ -27,8 +27,8 @@ export default class Fence {
   addDebug() {
     if (!this.debug.active) return;
     const debugObj = {
-      color: "#281b07",
-      noiseColor: "#392b16",
+      color: "#342a19",
+      noiseColor: "#2b1f0d",
     };
 
     const f = this.debug.ui.addFolder({

@@ -10,6 +10,7 @@ import House from "./House";
 import Bushes from "./Bushes";
 import Tree from "./Tree";
 import LampPost from "./LampPost";
+import WoodDarkMaterial from "../Materials/WoodDark";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -67,6 +68,13 @@ export default class World {
     const playerRef = this.map.scene.children.find((i) => {
       return i.name.startsWith("Player");
     });
+
+    const box = new THREE.Mesh(
+      new THREE.BoxGeometry(),
+      WoodDarkMaterial(false)
+    );
+    box.position.add(playerRef.position).add({ x: 0, y: 0, z: 3 });
+    this.scene.add(box);
 
     this.states.playerPosition.setState(playerRef.position);
     this.player = new Player({

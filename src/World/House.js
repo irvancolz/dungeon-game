@@ -1,6 +1,7 @@
 import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
 import EmissiveMaterial from "../Materials/Emissive";
+import WoodDarkMaterial from "../Materials/WoodDark";
 
 export default class House {
   constructor({
@@ -23,6 +24,7 @@ export default class House {
       this.debug,
       "window"
     );
+    this.woodMaterial = WoodDarkMaterial(false);
 
     this.init();
   }
@@ -31,8 +33,11 @@ export default class House {
     for (let i = 0; i < this.position.length; i++) {
       const house = this.model.scene.children[0].clone();
 
-      const windowGlass = house.children.find((el) => el.name == "WindowGlass");
-      windowGlass.material = this.windowMaterial;
+      house.traverse((e) => {
+        if (e.name.toLowerCase().includes("wood")) {
+          e.material = this.woodMaterial;
+        }
+      });
 
       house.position.copy(this.position[i]);
       house.quaternion.copy(this.quaternion[i]);
