@@ -2,6 +2,7 @@ import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
 import EmissiveMaterial from "../Materials/Emissive";
 import WoodDarkMaterial from "../Materials/WoodDark";
+import WallMaterial from "../Materials/Wall";
 
 export default class House {
   constructor({
@@ -35,7 +36,26 @@ export default class House {
       side: THREE.DoubleSide,
     });
 
+    this.wallMaterial = WallMaterial();
+    this.wallMaterial.uniforms.uColor.value = new THREE.Color("#333333");
+
     this.init();
+    this.addDebug();
+  }
+
+  addDebug() {
+    if (!this.debug.active) return;
+    const debugObj = {
+      color: "#333333",
+    };
+
+    const f = this.debug.ui.addFolder({
+      title: "house wall",
+      expanded: true,
+    });
+    f.addBinding(debugObj, "color").on("change", () => {
+      this.wallMaterial.uniforms.uColor.value.set(debugObj.color);
+    });
   }
 
   init() {
@@ -47,7 +67,8 @@ export default class House {
           e.material = this.woodMaterial;
         } else if (e.name.toLowerCase().includes("roof")) {
           e.material = this.roofMaterial;
-        } else {
+        } else if (e.name.toLowerCase().includes("modelhouse")) {
+          e.material = this.wallMaterial;
         }
       });
 

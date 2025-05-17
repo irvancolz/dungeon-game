@@ -44,6 +44,11 @@ export default [
     name: "model_bushes",
   },
   {
+    path: "/model/wooden_box.glb",
+    type: "gltfModel",
+    name: "model_wooden_box",
+  },
+  {
     path: "/model/lamp_post.glb",
     type: "gltfModel",
     name: "model_lamp_post",

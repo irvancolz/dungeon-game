@@ -11,6 +11,7 @@ import Bushes from "./Bushes";
 import Tree from "./Tree";
 import LampPost from "./LampPost";
 import WoodDarkMaterial from "../Materials/WoodDark";
+import WoodenBox from "./WoodenBox";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -38,6 +39,7 @@ export default class World {
     this.addBushes();
     this.addTree();
     this.addTrunks();
+    this.addWoodenBoxes();
   }
 
   update(elapsed, delta) {
@@ -69,13 +71,6 @@ export default class World {
     const playerRef = this.map.scene.children.find((i) => {
       return i.name.startsWith("Player");
     });
-
-    // const box = new THREE.Mesh(
-    //   new THREE.BoxGeometry(),
-    //   WoodDarkMaterial(false)
-    // );
-    // box.position.add(playerRef.position).add({ x: 0, y: 0, z: 3 });
-    // this.scene.add(box);
 
     this.states.playerPosition.setState(playerRef.position);
     this.player = new Player({
@@ -157,6 +152,24 @@ export default class World {
       model: this.resources.model_tree,
       debug: this.debug,
       physicsWorld: this.physics,
+    });
+  }
+
+  addWoodenBoxes() {
+    const woodenBoxesref = this.map.scene.children.filter((i) => {
+      return i.name.startsWith("ModelWoodenBox");
+    });
+
+    const positionRefs = woodenBoxesref.map((i) => i.position);
+    const rotationRefs = woodenBoxesref.map((i) => i.quaternion);
+
+    this.woodenBoxes = new WoodenBox({
+      model: this.resources.model_wooden_box,
+      debug: this.debug,
+      physics: this.physics,
+      position: positionRefs,
+      quaternion: rotationRefs,
+      scene: this.scene,
     });
   }
 
