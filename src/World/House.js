@@ -11,6 +11,7 @@ export default class House {
     position = [],
     quaternion = [],
     debug,
+    roofTexture,
   }) {
     this.scene = scene;
     this.model = model;
@@ -26,6 +27,14 @@ export default class House {
     );
     this.woodMaterial = WoodDarkMaterial(false);
 
+    roofTexture.colorSpace = THREE.SRGBColorSpace;
+    roofTexture.wrapS = THREE.RepeatWrapping;
+    roofTexture.wrapT = THREE.RepeatWrapping;
+    this.roofMaterial = new THREE.MeshStandardMaterial({
+      map: roofTexture,
+      side: THREE.DoubleSide,
+    });
+
     this.init();
   }
 
@@ -36,6 +45,9 @@ export default class House {
       house.traverse((e) => {
         if (e.name.toLowerCase().includes("wood")) {
           e.material = this.woodMaterial;
+        } else if (e.name.toLowerCase().includes("roof")) {
+          e.material = this.roofMaterial;
+        } else {
         }
       });
 

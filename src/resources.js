@@ -15,6 +15,11 @@ export default [
     type: "texture",
     name: "ground_texture",
   },
+  {
+    path: "/texture/roof_texture.jpg",
+    type: "texture",
+    name: "roof_texture",
+  },
   // Model
   { path: "/player_2.glb", type: "gltfModel", name: "player" },
   { path: "/model/trunk.glb", type: "gltfModel", name: "model_trunk" },

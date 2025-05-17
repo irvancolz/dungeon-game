@@ -61,6 +61,7 @@ export default class World {
       quaternion: rotationRefs,
       physics: this.physics,
       debug: this.debug,
+      roofTexture: this.resources.roof_texture,
     });
   }
 
@@ -69,12 +70,12 @@ export default class World {
       return i.name.startsWith("Player");
     });
 
-    const box = new THREE.Mesh(
-      new THREE.BoxGeometry(),
-      WoodDarkMaterial(false)
-    );
-    box.position.add(playerRef.position).add({ x: 0, y: 0, z: 3 });
-    this.scene.add(box);
+    // const box = new THREE.Mesh(
+    //   new THREE.BoxGeometry(),
+    //   WoodDarkMaterial(false)
+    // );
+    // box.position.add(playerRef.position).add({ x: 0, y: 0, z: 3 });
+    // this.scene.add(box);
 
     this.states.playerPosition.setState(playerRef.position);
     this.player = new Player({
