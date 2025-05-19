@@ -45,7 +45,7 @@ export default class World {
   update(elapsed, delta) {
     this.player.update();
     // this.grass.update(this.states.playerPosition.getState());
-    // this.bushes.update(elapsed);
+    this.bushes.update(elapsed);
   }
 
   addHouse() {

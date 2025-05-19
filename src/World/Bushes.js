@@ -1,7 +1,6 @@
 import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import BushesMaterial from "../Materials/Bushes";
-import Leaves from "./Leaves";
 
 export default class Bushes {
   constructor({ position, scene, texture, debug, scales, model }) {
@@ -31,35 +30,60 @@ export default class Bushes {
     });
   }
 
-  initLeaves() {
-    const leavesCount = 40;
-    const vertPerLeaves = 4;
+  createLeaves(pos) {
+    // base
+    const rotations = [
+      {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      {
+        x: 0,
+        y: Math.PI / 2,
+        z: 0,
+      },
+      {
+        x: Math.PI / 2,
+        y: 0,
+        z: 0,
+      },
+    ];
+
+    const leavesCount = rotations.length;
     const leavesArray = [];
 
     for (let i = 0; i < leavesCount; i++) {
-      const x = Math.random() - 0.5;
-      const y = (Math.random() - 0.5) * 0.8;
-      const z = Math.random() - 0.5;
-
-      const angle = Math.random() * Math.PI;
-
       const geometry = new THREE.PlaneGeometry(1, 1);
-      geometry.translate(x, y, z);
-      geometry.rotateY(angle);
+
+      geometry.translate(pos.x, pos.y, pos.z);
+
+      geometry.rotateX(rotations[i].x);
+      geometry.rotateY(rotations[i].y);
+      geometry.rotateZ(rotations[i].z);
 
       leavesArray.push(geometry);
     }
 
-    this.leavesGeometry = mergeGeometries(leavesArray);
+    const result = mergeGeometries(leavesArray);
+    result.rotateX(Math.random() * Math.PI);
+    result.rotateY(Math.random() * Math.PI);
+    result.rotateZ(Math.random() * Math.PI);
+    return result;
+  }
 
-    const normalArray = new Float32Array(leavesCount * vertPerLeaves * 3);
-    for (let v = 0; v < vertPerLeaves * leavesCount; v++) {
+  computeNormal() {
+    const planePerLeaves = 3;
+    const vertPerLeaves = 4;
+    const leaves = this.leavesCount * planePerLeaves;
+    const normalArray = new Float32Array(leaves * vertPerLeaves * 3);
+    for (let v = 0; v < vertPerLeaves * leaves; v++) {
       const v3 = v * 3;
 
       const pos = new THREE.Vector3(
-        this.leavesGeometry.attributes.position.array[v3],
-        this.leavesGeometry.attributes.position.array[v3 + 1],
-        this.leavesGeometry.attributes.position.array[v3 + 2]
+        this.geometry.attributes.position.array[v3],
+        this.geometry.attributes.position.array[v3 + 1],
+        this.geometry.attributes.position.array[v3 + 2]
       );
 
       normalArray[v3] = pos.x;
@@ -67,29 +91,33 @@ export default class Bushes {
       normalArray[v3 + 2] = pos.z;
     }
 
-    this.leavesGeometry.setAttribute(
+    this.geometry.setAttribute(
       "normal",
       new THREE.Float32BufferAttribute(normalArray, 3)
     );
-
-    this.leavesMaterial = BushesMaterial();
-    this.leavesMaterial.uniforms.uLeavesTexture.value = this.texture;
-
-    this.leaves = new THREE.InstancedMesh(
-      this.leavesGeometry,
-      this.leavesMaterial,
-      this.position.length
-    );
-
-    this.scene.add(this.leaves);
   }
 
   initGeometry() {
-    this.geometry = this.stem.geometry;
+    const base = new THREE.IcosahedronGeometry(1, 0);
+    const pos = base.attributes.position;
+    this.leavesCount = pos.count;
+    const leaves = [];
+
+    for (let i = 0; i < this.leavesCount; i++) {
+      const i3 = i * 3;
+      const leavesGeometry = this.createLeaves(
+        new THREE.Vector3(pos.array[i3], pos.array[i3 + 1], pos.array[i3 + 2])
+      );
+      leaves.push(leavesGeometry);
+    }
+
+    this.geometry = mergeGeometries(leaves);
+    this.computeNormal();
   }
 
   initMaterial() {
-    this.material = new THREE.MeshBasicMaterial({ color: "#2b160b" });
+    this.material = BushesMaterial();
+    this.material.uniforms.uLeavesTexture.value = this.texture;
   }
 
   initMesh() {
@@ -98,7 +126,7 @@ export default class Bushes {
       this.material,
       this.position.length
     );
-    // this.scene.add(this.mesh);
+    this.scene.add(this.mesh);
 
     const dummy = new THREE.Object3D();
     for (let i = 0; i < this.position.length; i++) {
@@ -107,17 +135,19 @@ export default class Bushes {
 
       dummy.updateMatrix();
       this.mesh.setMatrixAt(i, dummy.matrix);
-      this.leaves.setMatrixAt(i, dummy.matrix);
+      // this.leaves.setMatrixAt(i, dummy.matrix);
     }
   }
 
   init() {
-    this.initLeaves();
+    // this.initLeaves();
     this.initGeometry();
     this.initMaterial();
     this.initMesh();
   }
-  update(elapsed) {}
+  update(elapsed) {
+    this.material.uniforms.uTime.value = elapsed;
+  }
 
   dispose() {
     this.scene.remove(this.mesh);

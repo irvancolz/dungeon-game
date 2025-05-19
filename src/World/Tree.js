@@ -28,6 +28,7 @@ export default class Tree {
 
   init() {
     this.geometry = this.model.scene.children[0].geometry;
+
     this.material = TreeMaterial();
 
     this.mesh = new THREE.InstancedMesh(

@@ -16,6 +16,11 @@ export default [
     name: "ground_texture",
   },
   {
+    path: "/texture/bushes_matcap_texture.png",
+    type: "texture",
+    name: "bushes_matcap_texture",
+  },
+  {
     path: "/texture/roof_texture.jpg",
     type: "texture",
     name: "roof_texture",

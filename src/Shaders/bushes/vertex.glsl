@@ -2,6 +2,7 @@ uniform float uTime;
 
 varying vec2 vUv;
 varying vec3 vNormal;
+varying vec3 vPosition;
 
 void main() {
     float time = uTime * .005;
@@ -23,5 +24,6 @@ void main() {
 
     // Varyings 
     vUv = uv;
-    vNormal = normal;
+    vNormal = normalize(normal);
+    vPosition = newPosition;
 }
