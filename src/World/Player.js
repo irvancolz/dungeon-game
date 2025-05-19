@@ -144,12 +144,7 @@ export default class Player {
   }
 
   move() {
-    if (
-      this.state == this.#STATE_FALL ||
-      this.state == this.#STATE_JUMP ||
-      this.physics.floating
-    )
-      return;
+    if (this.state == this.#STATE_JUMP || this.physics.floating) return;
 
     this.updateState(this.#STATE_RUN);
     this.moveDirection.set(

@@ -20,6 +20,11 @@ export default [
     type: "texture",
     name: "roof_texture",
   },
+  {
+    path: "/texture/wooden_box_alpha_texture.jpg",
+    type: "texture",
+    name: "wooden_box_alpha_texture",
+  },
   // Model
   { path: "/player_2.glb", type: "gltfModel", name: "player" },
   { path: "/model/trunk.glb", type: "gltfModel", name: "model_trunk" },
@@ -42,11 +47,6 @@ export default [
     path: "/model/bushes.glb",
     type: "gltfModel",
     name: "model_bushes",
-  },
-  {
-    path: "/model/wooden_box.glb",
-    type: "gltfModel",
-    name: "model_wooden_box",
   },
   {
     path: "/model/lamp_post.glb",

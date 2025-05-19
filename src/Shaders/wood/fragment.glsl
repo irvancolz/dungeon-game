@@ -1,5 +1,6 @@
 uniform vec3 uColor;
 uniform vec3 uNoiseColor;
+uniform sampler2D uAphaTexture;
 
 varying vec2 vUv;
 
@@ -7,12 +8,18 @@ varying vec2 vUv;
 
 void main() {
 
-    vec2 uv = vUv * 4.;
+    float alpha = 1.;
+    vec2 uv = vUv;
 
     float noise = simplexNoise2d(uv);
     vec3 color = mix(uColor, uNoiseColor, noise);
 
-    gl_FragColor = vec4(color, 1.);
+    #if defined (USE_ALPHA)
+    alpha = texture2D(uAphaTexture, vUv).r;
+    alpha = step(.5, alpha);
+    #endif
+
+    gl_FragColor = vec4(color, alpha);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
 }

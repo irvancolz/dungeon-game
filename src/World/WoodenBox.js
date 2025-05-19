@@ -3,13 +3,14 @@ import * as THREE from "three";
 import WoodDarkMaterial from "../Materials/WoodDark";
 
 export default class WoodenBox {
-  constructor({ model, scene, physics, position, quaternion, debug }) {
+  constructor({ model, scene, physics, position, quaternion, debug, alpha }) {
     this.model = model;
     this.scene = scene;
     this.physicsWorld = physics;
     this.position = position;
     this.quaternion = quaternion;
     this.debug = debug;
+    this.alphaTexture = alpha;
 
     this.init();
     this.addDebug();
@@ -28,11 +29,11 @@ export default class WoodenBox {
   }
 
   initGeometry() {
-    this.geometry = this.model.scene.children[0].geometry;
+    this.geometry = new THREE.BoxGeometry();
   }
 
   initMaterial() {
-    this.material = WoodDarkMaterial();
+    this.material = WoodDarkMaterial(true, this.alphaTexture);
   }
 
   initMesh() {

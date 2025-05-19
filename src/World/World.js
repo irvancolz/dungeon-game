@@ -170,6 +170,7 @@ export default class World {
       position: positionRefs,
       quaternion: rotationRefs,
       scene: this.scene,
+      alpha: this.resources.wooden_box_alpha_texture,
     });
   }
 

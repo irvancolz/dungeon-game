@@ -69,6 +69,8 @@ export default class House {
           e.material = this.roofMaterial;
         } else if (e.name.toLowerCase().includes("modelhouse")) {
           e.material = this.wallMaterial;
+        } else if (e.name.toLowerCase().includes("windowglass")) {
+          e.material = this.windowMaterial;
         }
       });
 
