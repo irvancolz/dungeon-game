@@ -3,15 +3,15 @@ import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js
 import BushesMaterial from "../Materials/Bushes";
 
 export default class Bushes {
-  constructor({ position, scene, texture, debug, scales, model }) {
+  constructor({ position, scene, texture, debug, scales, matcap }) {
     this.position = position;
     this.scene = scene;
     this.height = 1;
     this.texture = texture;
     this.debug = debug;
     this.scales = scales;
-    this.model = model;
-    this.stem = model.scene.children[0];
+    this.matcap = matcap;
+    matcap.colorSpace = THREE.SRGBColorSpace;
 
     this.init();
     this.addDebug();
@@ -116,8 +116,38 @@ export default class Bushes {
   }
 
   initMaterial() {
-    this.material = BushesMaterial();
-    this.material.uniforms.uLeavesTexture.value = this.texture;
+    this.uniforms = {
+      uTime: { value: 0 },
+    };
+    this.material = BushesMaterial(this.matcap, this.texture);
+
+    this.material.onBeforeCompile = (shader) => {
+      shader.uniforms.uTime = this.uniforms.uTime;
+
+      shader.vertexShader = shader.vertexShader.replace(
+        "#include <common>",
+        `
+        #include <common>
+  
+        uniform float uTime;
+        `
+      );
+      shader.vertexShader = shader.vertexShader.replace(
+        "#include <begin_vertex>",
+        `
+        #include <begin_vertex>
+  
+        float time = uTime * .005;
+        float windPower = .1;
+
+        float offset = time * position.y + transformed.y;
+  
+        transformed.xz += vec2(sin(uv.x + offset), sin(uv.y + offset)) * windPower;
+        `
+      );
+    };
+    // this.material.uniforms.uLeavesTexture.value = this.texture;
+    // this.material.uniforms.uMatcapTexture.value = this.matcap;
   }
 
   initMesh() {
@@ -131,6 +161,7 @@ export default class Bushes {
     const dummy = new THREE.Object3D();
     for (let i = 0; i < this.position.length; i++) {
       dummy.position.copy(this.position[i]);
+      dummy.scale.copy(this.scales[i]);
       // dummy.position.copy(new THREE.Vector3());
 
       dummy.updateMatrix();
@@ -140,13 +171,12 @@ export default class Bushes {
   }
 
   init() {
-    // this.initLeaves();
     this.initGeometry();
     this.initMaterial();
     this.initMesh();
   }
   update(elapsed) {
-    this.material.uniforms.uTime.value = elapsed;
+    this.uniforms.uTime.value = elapsed;
   }
 
   dispose() {

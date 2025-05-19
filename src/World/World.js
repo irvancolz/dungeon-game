@@ -46,6 +46,7 @@ export default class World {
     this.player.update();
     // this.grass.update(this.states.playerPosition.getState());
     this.bushes.update(elapsed);
+    this.tree.update(elapsed);
   }
 
   addHouse() {
@@ -114,7 +115,7 @@ export default class World {
       texture: this.resources.leaves_texture,
       debug: this.debug,
       scales: scaleRefs,
-      model: this.resources.model_bushes,
+      matcap: this.resources.bushes_matcap_texture,
     });
   }
 
@@ -152,6 +153,8 @@ export default class World {
       model: this.resources.model_tree,
       debug: this.debug,
       physicsWorld: this.physics,
+      leaves: this.resources.leaves_texture,
+      leavesMatcap: this.resources.bushes_matcap_texture,
     });
   }
 

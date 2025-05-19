@@ -1,8 +1,18 @@
 import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
 import TreeMaterial from "../Materials/Tree";
+import Bushes from "./Bushes";
 export default class Tree {
-  constructor({ scene, position, quaternion, debug, model, physicsWorld }) {
+  constructor({
+    scene,
+    position,
+    quaternion,
+    debug,
+    model,
+    physicsWorld,
+    leaves,
+    leavesMatcap,
+  }) {
     this.scene = scene;
     this.position = position;
     this.quaternion = quaternion;
@@ -10,7 +20,12 @@ export default class Tree {
     this.model = model;
     this.physicsWorld = physicsWorld;
 
+    // leaves
+    this.leavesTexture = leaves;
+    this.leavesMatcap = leavesMatcap;
+
     this.init();
+    this.addLeaves();
     this.addDebug();
   }
 
@@ -26,8 +41,37 @@ export default class Tree {
     });
   }
 
+  addLeaves() {
+    let pos = [];
+    let scale = [];
+    let quat = [];
+
+    for (let i = 0; i < this.position.length; i++) {
+      const p = this.ref.children.map((el) =>
+        el.position.add(this.position[i])
+      );
+      pos.push(...p);
+
+      const s = this.ref.children.map((el) => el.scale);
+      scale.push(...s);
+
+      const q = this.ref.children.map((el) => el.quaternion);
+      quat.push(...q);
+    }
+
+    this.leaves = new Bushes({
+      position: pos,
+      scene: this.scene,
+      debug: this.debug,
+      matcap: this.leavesMatcap,
+      texture: this.leavesTexture,
+      scales: scale,
+    });
+  }
+
   init() {
-    this.geometry = this.model.scene.children[0].geometry;
+    this.ref = this.model.scene.children[0];
+    this.geometry = this.ref.geometry;
 
     this.material = TreeMaterial();
 
@@ -54,5 +98,9 @@ export default class Tree {
       dummy.updateMatrix();
       this.mesh.setMatrixAt(i, dummy.matrix);
     }
+  }
+
+  update(elapsed) {
+    this.leaves.update(elapsed);
   }
 }
