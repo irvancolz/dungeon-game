@@ -6,8 +6,8 @@ export default function GroundMaterial() {
   const uniforms = {
     uMaxHeight: new THREE.Uniform(),
     uMapTexture: new THREE.Uniform(),
-    uColor: new THREE.Uniform(new THREE.Color("#1f2a28")),
-    uEdgeColor: new THREE.Uniform(new THREE.Color("#39362c")),
+    uColor: new THREE.Uniform(new THREE.Color("#336342")),
+    uEdgeColor: new THREE.Uniform(new THREE.Color("#696967")),
   };
 
   const material = new THREE.ShaderMaterial({

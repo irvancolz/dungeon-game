@@ -14,6 +14,9 @@ export default function BushesMaterial(matcap, alpha) {
     side: THREE.DoubleSide,
     matcap,
     alphaMap: alpha,
+    polygonOffset: true,
+    polygonOffsetUnits: 1,
+    polygonOffsetFactor: 1,
   });
 
   return material;

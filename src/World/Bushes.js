@@ -28,6 +28,11 @@ export default class Bushes {
     f.addBinding(debugOpt, "color").on("change", () => {
       this.leaves.material.uniforms.uLeavesColor.value.set(debugOpt.color);
     });
+    f.addBinding(this.material, "alphaTest", {
+      min: 0,
+      max: 1,
+      step: 0.01,
+    });
   }
 
   createLeaves(pos) {
@@ -119,6 +124,7 @@ export default class Bushes {
     this.uniforms = {
       uTime: { value: 0 },
     };
+    // this.material = new THREE.MeshNormalMaterial();
     this.material = BushesMaterial(this.matcap, this.texture);
 
     this.material.onBeforeCompile = (shader) => {
@@ -128,7 +134,7 @@ export default class Bushes {
         "#include <common>",
         `
         #include <common>
-  
+
         uniform float uTime;
         `
       );
@@ -136,12 +142,12 @@ export default class Bushes {
         "#include <begin_vertex>",
         `
         #include <begin_vertex>
-  
+
         float time = uTime * .005;
         float windPower = .1;
 
         float offset = time * position.y + transformed.y;
-  
+
         transformed.xz += vec2(sin(uv.x + offset), sin(uv.y + offset)) * windPower;
         `
       );

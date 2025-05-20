@@ -21,7 +21,7 @@ export default class House {
     this.physicsWorld = physics;
     this.debug = debug;
     this.windowMaterial = EmissiveMaterial(
-      "#f0d07a",
+      "#346965",
       0.522,
       this.debug,
       "window"

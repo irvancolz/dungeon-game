@@ -24,6 +24,7 @@ export default function WoodMaterial({
     transparent: useAlpha,
     depthWrite: !useAlpha,
     side: THREE.DoubleSide,
+    alphaTest: 0.99,
   });
 
   material.defines = {

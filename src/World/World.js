@@ -35,18 +35,18 @@ export default class World {
     // this.addGrass();
     this.addPlayer();
     this.addFences();
-    this.addHouse();
+    // this.addHouse();
     this.addBushes();
     this.addTree();
-    this.addTrunks();
-    this.addWoodenBoxes();
+    // this.addTrunks();
+    // this.addWoodenBoxes();
   }
 
   update(elapsed, delta) {
     this.player.update();
-    // this.grass.update(this.states.playerPosition.getState());
     this.bushes.update(elapsed);
     this.tree.update(elapsed);
+    // this.grass.update(this.states.playerPosition.getState());
   }
 
   addHouse() {

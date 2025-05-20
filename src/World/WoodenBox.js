@@ -1,6 +1,7 @@
 import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
 import WoodDarkMaterial from "../Materials/WoodDark";
+import WoodLightMaterial from "../Materials/WoodLight";
 
 export default class WoodenBox {
   constructor({ model, scene, physics, position, quaternion, debug, alpha }) {
@@ -19,12 +20,19 @@ export default class WoodenBox {
   addDebug() {
     if (!this.debug.active) return;
     const debugObj = {
-      color: "#2b160b",
+      color: "#765430",
+      noiseColor: "#66420c",
     };
 
-    const f = this.debug.ui.addFolder({ title: "wooden box", expanded: false });
+    const f = this.debug.ui.addFolder({
+      title: "wooden boxes",
+      expanded: true,
+    });
     f.addBinding(debugObj, "color").on("change", () => {
       this.material.uniforms.uColor.value.set(debugObj.color);
+    });
+    f.addBinding(debugObj, "noiseColor").on("change", () => {
+      this.material.uniforms.uNoiseColor.value.set(debugObj.noiseColor);
     });
   }
 
@@ -33,7 +41,7 @@ export default class WoodenBox {
   }
 
   initMaterial() {
-    this.material = WoodDarkMaterial(true, this.alphaTexture);
+    this.material = WoodLightMaterial(true, this.alphaTexture);
   }
 
   initMesh() {

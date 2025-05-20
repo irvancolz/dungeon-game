@@ -47,15 +47,18 @@ export default class Tree {
     let quat = [];
 
     for (let i = 0; i < this.position.length; i++) {
-      const p = this.ref.children.map((el) =>
-        el.position.add(this.position[i])
+      const src = this.ref.clone();
+      // src.quaternion.copy(this.quaternion[i]);
+
+      const p = src.children.map((el) =>
+        el.position.applyQuaternion(this.quaternion[i]).add(this.position[i])
       );
       pos.push(...p);
 
-      const s = this.ref.children.map((el) => el.scale);
+      const s = src.children.map((el) => el.scale);
       scale.push(...s);
 
-      const q = this.ref.children.map((el) => el.quaternion);
+      const q = src.children.map((el) => el.quaternion);
       quat.push(...q);
     }
 
