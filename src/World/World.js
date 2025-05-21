@@ -25,21 +25,21 @@ export default class World {
 
     this.chat = new ChatBuble();
 
-    this.floor = new DebugFloor({
-      scene: this.scene,
-      debug: this.debug,
-      physics: this.physics,
-      width: this.width,
-      texture: this.resources.ground_texture,
-    });
-    // this.floor = new Ground({
+    // this.floor = new DebugFloor({
     //   scene: this.scene,
     //   debug: this.debug,
     //   physics: this.physics,
     //   width: this.width,
     //   texture: this.resources.ground_texture,
-    //   maxHeight: 0,
     // });
+    this.floor = new Ground({
+      scene: this.scene,
+      debug: this.debug,
+      physics: this.physics,
+      width: this.width,
+      texture: this.resources.ground_texture,
+      maxHeight: 0,
+    });
 
     // this.addGrass();
     this.addPlayer();
@@ -187,7 +187,7 @@ export default class World {
 
     this.evt = new Button({
       position: positionRefs[0],
-      label: "box",
+      label: "box lorem ipsum dolor sit amet",
     });
     this.evt.on("select", () => {
       this.chat.initConversation([

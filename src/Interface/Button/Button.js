@@ -24,16 +24,17 @@ export default class Button extends EventEmitter {
     this.$wrapper = document.createElement("div");
     this.$wrapper.setAttribute("class", "interaction");
     this.$wrapper.innerHTML = `  
-        <button class="action_btn">
+        <button class="btn" title="${this.label}">
           <span class="key">e</span>
           <span class="label">${this.label}</span>
         </button>
       `;
 
-    this.$btn = this.$wrapper.querySelector(".action_btn");
+    this.$btn = this.$wrapper.querySelector(".btn");
 
     this.$btn.addEventListener("click", () => {
       this.trigger("select");
+      this.hide();
     });
 
     this.$container.appendChild(this.$wrapper);

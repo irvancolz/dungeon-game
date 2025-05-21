@@ -1,22 +1,54 @@
 .interaction {
   display: none;
+  width: fit-content;
 
   &.visible {
     display: flex;
   }
 
-  & .action_btn {
+  & .btn {
     display: flex;
     align-items: center;
-    gap: 1rem;
-    background-color: #071d02;
-    color: #ffffff;
-    border: 1px solid #fff;
-    padding: 0.5rem 1rem;
+    width: 15em;
+    position: relative;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    color: var(--color-white);
+    text-transform: capitalize;
+    background: #1e5166;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.393) 0%,
+      #3737377c 24%,
+      #a9a9a900 100%
+    );
+
+    &::before {
+      --color-border: rgba(0, 0, 0, 0.393);
+      content: "";
+      position: absolute;
+
+      right: 100%;
+      border-top: 2em solid transparent;
+      border-bottom: 1em solid transparent;
+
+      border-right: 0.5em solid var(--color-border);
+    }
+
+    & .label {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
 
     & .key {
       text-transform: uppercase;
       font-weight: 700;
+      margin-right: 0.5rem;
+      background-color: var(--color-white);
+      color: var(--color-black);
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.25rem;
     }
   }
 
