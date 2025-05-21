@@ -6,12 +6,6 @@ export default class Controller extends EventEmitter {
   constructor() {
     super();
 
-    // if (instance != null) {
-    //   return this;
-    // }
-
-    // instance = this;
-
     this.actions = {
       // movement
       forward: false,
@@ -37,7 +31,7 @@ export default class Controller extends EventEmitter {
         this.actions.backward = true;
       } else if (pressed == "Space") {
         this.actions.jump = true;
-      } else if (pressed == "KeyF") {
+      } else if (pressed == "KeyE") {
         this.actions.interact = true;
       }
       this.triggerAction();
@@ -55,7 +49,7 @@ export default class Controller extends EventEmitter {
         this.actions.backward = false;
       } else if (pressed == "Space") {
         this.actions.jump = false;
-      } else if (pressed == "KeyF") {
+      } else if (pressed == "KeyE") {
         this.actions.interact = false;
       }
       this.triggerAction();

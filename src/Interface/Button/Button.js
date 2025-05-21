@@ -1,8 +1,8 @@
 import * as THREE from "three";
-import EventEmitter from "./EventEmitter";
-import Controller from "./Controller";
+import EventEmitter from "../../Utils/EventEmitter";
+import Controller from "../../Utils/Controller";
 
-export default class InteractivePoint extends EventEmitter {
+export default class Button extends EventEmitter {
   constructor({ position, label }) {
     super();
 
@@ -25,7 +25,7 @@ export default class InteractivePoint extends EventEmitter {
     this.$wrapper.setAttribute("class", "interaction");
     this.$wrapper.innerHTML = `  
         <button class="action_btn">
-          <span class="key">f</span>
+          <span class="key">e</span>
           <span class="label">${this.label}</span>
         </button>
       `;

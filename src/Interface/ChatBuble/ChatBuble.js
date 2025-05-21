@@ -1,4 +1,3 @@
-let instance = null;
 export default class ChatBuble {
   constructor() {
     this.visible = false;
@@ -7,8 +6,6 @@ export default class ChatBuble {
     this.$container = document.getElementById("chat_bubble");
 
     this.init();
-
-    instance = this;
   }
 
   init() {

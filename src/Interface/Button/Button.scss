@@ -1,0 +1,26 @@
+.interaction {
+  display: none;
+
+  &.visible {
+    display: flex;
+  }
+
+  & .action_btn {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: #071d02;
+    color: #ffffff;
+    border: 1px solid #fff;
+    padding: 0.5rem 1rem;
+
+    & .key {
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+  }
+
+  & .label {
+    font-weight: 500;
+  }
+}

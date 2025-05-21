@@ -10,9 +10,9 @@ import House from "./House";
 import Bushes from "./Bushes";
 import Tree from "./Tree";
 import LampPost from "./LampPost";
-import WoodDarkMaterial from "../Materials/WoodDark";
 import WoodenBox from "./WoodenBox";
-
+import Button from "../Interface/Button/Button";
+import ChatBuble from "../Interface/ChatBuble/ChatBuble";
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
     this.scene = scene;
@@ -23,30 +23,39 @@ export default class World {
     this.states = states;
     this.width = 128;
 
-    this.floor = new Ground({
+    this.chat = new ChatBuble();
+
+    this.floor = new DebugFloor({
       scene: this.scene,
       debug: this.debug,
       physics: this.physics,
       width: this.width,
       texture: this.resources.ground_texture,
-      maxHeight: 0,
     });
+    // this.floor = new Ground({
+    //   scene: this.scene,
+    //   debug: this.debug,
+    //   physics: this.physics,
+    //   width: this.width,
+    //   texture: this.resources.ground_texture,
+    //   maxHeight: 0,
+    // });
 
     // this.addGrass();
     this.addPlayer();
     this.addFences();
     // this.addHouse();
-    this.addBushes();
-    this.addTree();
+    // this.addBushes();
+    // this.addTree();
     // this.addTrunks();
-    // this.addWoodenBoxes();
+    this.addWoodenBoxes();
   }
 
   update(elapsed, delta) {
     this.player.update();
-    this.bushes.update(elapsed);
-    this.tree.update(elapsed);
-    // this.grass.update(this.states.playerPosition.getState());
+    this.evt.update(this.states.playerPosition.getState());
+    // this.bushes.update(elapsed);
+    // this.tree.update(elapsed);
   }
 
   addHouse() {
@@ -174,6 +183,27 @@ export default class World {
       quaternion: rotationRefs,
       scene: this.scene,
       alpha: this.resources.wooden_box_alpha_texture,
+    });
+
+    this.evt = new Button({
+      position: positionRefs[0],
+      label: "box",
+    });
+    this.evt.on("select", () => {
+      this.chat.initConversation([
+        { author: "Customer", chat: "Hi, is my laundry ready yet?" },
+        {
+          author: "Staff",
+          chat: "Hello! Let me check your order. Can I have your order ID?",
+        },
+        { author: "Customer", chat: "Sure, it's ORD123456." },
+        {
+          author: "Staff",
+          chat: "Thanks! It looks like your laundry is still being ironed. It should be ready in about 30 minutes.",
+        },
+        { author: "Customer", chat: "Great, I’ll come by later then. Thanks!" },
+        { author: "Staff", chat: "You're welcome! See you soon." },
+      ]);
     });
   }
 

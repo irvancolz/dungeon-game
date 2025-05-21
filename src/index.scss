@@ -1,0 +1,9 @@
+// base
+@use "./Styles/base.scss";
+@use "./Styles/vars.scss";
+@use "./Styles/reset.scss";
+@use "./Styles/type.scss";
+
+// interface
+@use "./Interface//Button/Button.scss";
+@use "./Interface/ChatBuble/ChatBuble.scss";

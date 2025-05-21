@@ -1,11 +1,5 @@
 import Experience from "./Experience";
-import "./style.css";
-
-// window.addEventListener("keydown", (e) => {
-//   if (e.code == "KeyF") {
-//     document.body.requestFullscreen();
-//   }
-// });
+import "./index.scss";
 
 const canvas = document.getElementById("canvas");
 
