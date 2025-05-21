@@ -13,6 +13,7 @@ import LampPost from "./LampPost";
 import WoodenBox from "./WoodenBox";
 import Button from "../Interface/Button/Button";
 import ChatBuble from "../Interface/ChatBuble/ChatBuble";
+import Marker from "../Interface/Marker";
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
     this.scene = scene;
@@ -53,7 +54,7 @@ export default class World {
 
   update(elapsed, delta) {
     this.player.update();
-    this.evt.update(this.states.playerPosition.getState());
+    this.marker.update(this.states.playerPosition.getState());
     // this.bushes.update(elapsed);
     // this.tree.update(elapsed);
   }
@@ -184,12 +185,17 @@ export default class World {
       scene: this.scene,
       alpha: this.resources.wooden_box_alpha_texture,
     });
+    const pos = positionRefs[0].clone();
 
-    this.evt = new Button({
-      position: positionRefs[0],
+    this.marker = new Marker({
+      scene: this.scene,
+      position: pos,
+      parent: this.woodenBoxes.mesh,
+      debug: this.debug,
       label: "box lorem ipsum dolor sit amet",
     });
-    this.evt.on("select", () => {
+
+    this.marker.on("interact", () => {
       this.chat.initConversation([
         { author: "Customer", chat: "Hi, is my laundry ready yet?" },
         {

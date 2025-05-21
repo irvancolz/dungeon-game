@@ -26,7 +26,7 @@ export default class WoodenBox {
 
     const f = this.debug.ui.addFolder({
       title: "wooden boxes",
-      expanded: true,
+      expanded: false,
     });
     f.addBinding(debugObj, "color").on("change", () => {
       this.material.uniforms.uColor.value.set(debugObj.color);
