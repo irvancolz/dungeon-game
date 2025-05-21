@@ -3,7 +3,7 @@ import EventEmitter from "../../Utils/EventEmitter";
 import Controller from "../../Utils/Controller";
 
 export default class Button extends EventEmitter {
-  constructor({ position, label }) {
+  constructor({ position, label, once = false }) {
     super();
 
     this.position = position;
@@ -11,11 +11,13 @@ export default class Button extends EventEmitter {
     this.visible = false;
     this.$container = document.getElementById("interactive_container");
     this.radius = 3;
+    this.expired = false;
     this.controls = new Controller();
+    this.once = once;
 
     this.controls.on("interact", () => {
       if (!this.visible) return;
-      this.trigger("select");
+      this.handleSelect();
     });
     this.init();
   }
@@ -33,11 +35,18 @@ export default class Button extends EventEmitter {
     this.$btn = this.$wrapper.querySelector(".btn");
 
     this.$btn.addEventListener("click", () => {
-      this.trigger("select");
-      this.hide();
+      this.handleSelect();
     });
 
     this.$container.appendChild(this.$wrapper);
+  }
+
+  handleSelect() {
+    this.trigger("select");
+    if (this.once) {
+      this.expired = true;
+      this.hide();
+    }
   }
 
   show() {
@@ -54,7 +63,7 @@ export default class Button extends EventEmitter {
 
   update(playerPos) {
     const dist = this.position.distanceTo(new THREE.Vector3().copy(playerPos));
-    if (dist <= this.radius) {
+    if (dist <= this.radius && !this.expired) {
       this.show();
     } else {
       this.hide();
