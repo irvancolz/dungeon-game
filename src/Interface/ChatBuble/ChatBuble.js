@@ -11,13 +11,16 @@ export default class ChatBuble {
   init() {
     this.$container.innerHTML = `
       <div class="chat_container">
-        <p class="author"></p>
+      <div class="header">
+        <h3 class="author"></h3>
+         <div class="btn_container">
+          <button class="btn close_btn">close</button>
+          <button class="btn next_btn visible">next</button>
+        </div>
+      </div>
         <p class="chat"></p>
       </div>
-      <div class="btn_container">
-        <button class="btn close_btn">close</button>
-        <button class="btn next_btn visible">next</button>
-      </div>`;
+     `;
 
     this.$author = this.$container.querySelector(".author");
     this.$chat = this.$container.querySelector(".chat");
@@ -65,6 +68,11 @@ export default class ChatBuble {
 
     this.$author.innerHTML = this.conversation[this.activeChat].author;
     this.$chat.innerHTML = this.conversation[this.activeChat].chat;
+
+    const height = this.$chat.getBoundingClientRect().height;
+    if (height > 0) {
+      this.$chat.style.setProperty("--chat-height", height + "px");
+    }
   }
 
   updateActionBtn() {
