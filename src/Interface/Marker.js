@@ -3,6 +3,7 @@ import vertexShader from "../Shaders/markers/vertex.glsl";
 import fragmentShader from "../Shaders/markers/fragment.glsl";
 import EventEmitter from "../Utils/EventEmitter";
 import Button from "./Button/Button";
+import gsap from "gsap";
 
 class Marker extends EventEmitter {
   constructor({ icon, scene, position, parent, debug, label }) {
@@ -22,9 +23,6 @@ class Marker extends EventEmitter {
 
   addDebug() {
     if (!this.debug.active) return;
-    const debugObj = {
-      color: "#575151",
-    };
 
     const f = this.debug.ui.addFolder({ title: "marker", expanded: true });
     f.addBinding(this.material.uniforms.uBorderWidth, "value", {
@@ -32,6 +30,12 @@ class Marker extends EventEmitter {
       max: 0.5,
       step: 0.01,
       label: "ring tresshold",
+    });
+    f.addBinding(this.material.uniforms.uClearProgress, "value", {
+      min: 0,
+      max: 1.5,
+      step: 0.01,
+      label: "dissapear tresshold",
     });
     f.addBinding(this.material.uniforms.uCenterWidth, "value", {
       min: 0,
@@ -53,10 +57,12 @@ class Marker extends EventEmitter {
       vertexShader,
       fragmentShader,
       side: THREE.DoubleSide,
+      transparent: true,
       uniforms: {
         uCenter: new THREE.Uniform(this.position),
         uBorderWidth: new THREE.Uniform(0.3),
         uCenterWidth: new THREE.Uniform(0.15),
+        uClearProgress: new THREE.Uniform(1.5),
       },
     });
   }
@@ -94,7 +100,18 @@ class Marker extends EventEmitter {
     this.button.update(player);
   }
 
-  dispose() {}
+  dispose() {
+    gsap.to(this.material.uniforms.uClearProgress, {
+      value: 0,
+      duration: 1,
+      onComplete: () => {
+        this.button.dispose();
+        this.scene.remove(this.mesh);
+        this.material.dispose();
+        this.geometry.dispose();
+      },
+    });
+  }
 }
 
 export default Marker;

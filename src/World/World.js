@@ -215,6 +215,7 @@ export default class World {
       ]);
 
       this.chat.on("chat:ended", () => {
+        this.marker.dispose();
         this.camera.focusPlayer();
       });
     });

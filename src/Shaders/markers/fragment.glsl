@@ -2,6 +2,9 @@ varying vec2 vUv;
 uniform float uProgress;
 uniform float uBorderWidth;
 uniform float uCenterWidth;
+uniform float uClearProgress;
+
+#include ../includes/simplexNoise2d.glsl
 
 void main() {
     vec2 uv = vUv;
@@ -26,5 +29,11 @@ void main() {
 
     color = vec3(center * border);
 
-    gl_FragColor = vec4(color, 1.);
+    float noise = simplexNoise2d(uv * 2.) * .1;
+    float h = length(uv + noise);
+    h = step(h, uClearProgress);
+
+    float alpha = h;
+
+    gl_FragColor = vec4(color, alpha);
 }
