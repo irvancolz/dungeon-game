@@ -161,21 +161,23 @@ export default class Camera {
   }
 
   focusPlayer() {
-    this.attachedToPlayer = true;
     this.animateTargetChange(this.playerPosition.getState());
+    setTimeout(() => {
+      this.attachedToPlayer = true;
+    }, 1000);
   }
 
   animateTargetChange(newTarget) {
     // gsap modify refference
-    const t = newTarget.clone();
+    const t = new THREE.Vector3().copy(newTarget);
     gsap.to(this.target, {
       x: t.x,
       y: t.y,
       z: t.z,
       onComplete: () => {
-        this.target = t;
+        this.target.copy(t);
       },
-      duration: 1.5,
+      duration: 1,
     });
   }
 }

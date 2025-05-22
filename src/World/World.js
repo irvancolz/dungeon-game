@@ -11,9 +11,9 @@ import Bushes from "./Bushes";
 import Tree from "./Tree";
 import LampPost from "./LampPost";
 import WoodenBox from "./WoodenBox";
-import Button from "../Interface/Button/Button";
 import ChatBuble from "../Interface/ChatBuble/ChatBuble";
 import Marker from "../Interface/Marker";
+import Camera from "../Camera";
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
     this.scene = scene;
@@ -23,6 +23,7 @@ export default class World {
     this.physics = physics;
     this.states = states;
     this.width = 128;
+    this.camera = new Camera({});
 
     this.chat = new ChatBuble();
 
@@ -196,6 +197,8 @@ export default class World {
     });
 
     this.marker.on("interact", () => {
+      this.camera.focus(pos);
+
       this.chat.initConversation([
         { author: "Customer", chat: "Hi, is my laundry ready yet?" },
         {
@@ -210,6 +213,10 @@ export default class World {
         { author: "Customer", chat: "Great, I’ll come by later then. Thanks!" },
         { author: "Staff", chat: "You're welcome! See you soon." },
       ]);
+
+      this.chat.on("chat:ended", () => {
+        this.camera.focusPlayer();
+      });
     });
   }
 

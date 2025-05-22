@@ -1,5 +1,8 @@
-export default class ChatBuble {
+import EventEmitter from "../../Utils/EventEmitter";
+
+export default class ChatBuble extends EventEmitter {
   constructor() {
+    super();
     this.visible = false;
     this.conversation = [];
     this.activeChat = 0;
@@ -42,6 +45,8 @@ export default class ChatBuble {
 
     // reset conversation to begining
     this.activeChat = 0;
+
+    this.trigger("chat:ended");
   }
 
   next() {
@@ -72,6 +77,7 @@ export default class ChatBuble {
     const height = this.$chat.getBoundingClientRect().height;
     if (height > 0) {
       this.$chat.style.setProperty("--chat-height", height + "px");
+      this.trigger("chat:update");
     }
   }
 
