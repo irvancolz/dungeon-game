@@ -14,6 +14,9 @@ import WoodenBox from "./WoodenBox";
 import ChatBuble from "../Interface/ChatBuble/ChatBuble";
 import Marker from "../Interface/Marker";
 import Camera from "../Camera";
+import Backpack from "../Utils/Backpack";
+import DropItem from "../Utils/DropItem.js";
+
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
     this.scene = scene;
@@ -26,6 +29,7 @@ export default class World {
     this.camera = new Camera({});
 
     this.chat = new ChatBuble();
+    this.backpack = new Backpack();
 
     this.floor = new DebugFloor({
       scene: this.scene,
@@ -55,6 +59,7 @@ export default class World {
 
   update(elapsed, delta) {
     this.player.update();
+    this.drop.update(this.states.playerPosition.getState());
   }
 
   addHouse() {
@@ -182,6 +187,14 @@ export default class World {
       quaternion: rotationRefs,
       scene: this.scene,
       alpha: this.resources.wooden_box_alpha_texture,
+    });
+
+    const pos = positionRefs[0];
+    this.drop = new DropItem({
+      id: "item001",
+      name: "Potion of Minor Healing",
+      count: 3,
+      position: pos,
     });
   }
 
