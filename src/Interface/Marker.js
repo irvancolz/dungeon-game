@@ -101,11 +101,11 @@ class Marker extends EventEmitter {
   }
 
   dispose() {
+    this.button.dispose();
     gsap.to(this.material.uniforms.uClearProgress, {
       value: 0,
       duration: 1,
       onComplete: () => {
-        this.button.dispose();
         this.scene.remove(this.mesh);
         this.material.dispose();
         this.geometry.dispose();

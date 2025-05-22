@@ -27,21 +27,21 @@ export default class World {
 
     this.chat = new ChatBuble();
 
-    // this.floor = new DebugFloor({
-    //   scene: this.scene,
-    //   debug: this.debug,
-    //   physics: this.physics,
-    //   width: this.width,
-    //   texture: this.resources.ground_texture,
-    // });
-    this.floor = new Ground({
+    this.floor = new DebugFloor({
       scene: this.scene,
       debug: this.debug,
       physics: this.physics,
       width: this.width,
       texture: this.resources.ground_texture,
-      maxHeight: 0,
     });
+    // this.floor = new Ground({
+    //   scene: this.scene,
+    //   debug: this.debug,
+    //   physics: this.physics,
+    //   width: this.width,
+    //   texture: this.resources.ground_texture,
+    //   maxHeight: 0,
+    // });
 
     // this.addGrass();
     this.addPlayer();
@@ -55,9 +55,6 @@ export default class World {
 
   update(elapsed, delta) {
     this.player.update();
-    this.marker.update(this.states.playerPosition.getState());
-    // this.bushes.update(elapsed);
-    // this.tree.update(elapsed);
   }
 
   addHouse() {
@@ -185,39 +182,6 @@ export default class World {
       quaternion: rotationRefs,
       scene: this.scene,
       alpha: this.resources.wooden_box_alpha_texture,
-    });
-    const pos = positionRefs[0].clone();
-
-    this.marker = new Marker({
-      scene: this.scene,
-      position: pos,
-      parent: this.woodenBoxes.mesh,
-      debug: this.debug,
-      label: "box lorem ipsum dolor sit amet",
-    });
-
-    this.marker.on("interact", () => {
-      this.camera.focus(pos);
-
-      this.chat.initConversation([
-        { author: "Customer", chat: "Hi, is my laundry ready yet?" },
-        {
-          author: "Staff",
-          chat: "Hello! Let me check your order. Can I have your order ID?",
-        },
-        { author: "Customer", chat: "Sure, it's ORD123456." },
-        {
-          author: "Staff",
-          chat: "Thanks! It looks like your laundry is still being ironed. It should be ready in about 30 minutes.",
-        },
-        { author: "Customer", chat: "Great, I’ll come by later then. Thanks!" },
-        { author: "Staff", chat: "You're welcome! See you soon." },
-      ]);
-
-      this.chat.on("chat:ended", () => {
-        this.marker.dispose();
-        this.camera.focusPlayer();
-      });
     });
   }
 
