@@ -26,9 +26,9 @@ export default [
     name: "roof_texture",
   },
   {
-    path: "/texture/wooden_box_alpha_texture.jpg",
+    path: "/texture/drops_alpha_texture.jpg",
     type: "texture",
-    name: "wooden_box_alpha_texture",
+    name: "drops_alpha_texture",
   },
   // Model
   { path: "/player_2.glb", type: "gltfModel", name: "player" },

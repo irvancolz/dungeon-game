@@ -71,6 +71,8 @@ export default class Button extends EventEmitter {
   }
 
   dispose() {
+    const target = this.$container.querySelector(".interaction");
+    if (!target) return;
     this.visible = false;
     this.$container.removeChild(this.$wrapper);
   }

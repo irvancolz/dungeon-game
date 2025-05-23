@@ -15,7 +15,9 @@ import ChatBuble from "../Interface/ChatBuble/ChatBuble";
 import Marker from "../Interface/Marker";
 import Camera from "../Camera";
 import Backpack from "../Utils/Backpack";
-import DropItem from "../Utils/DropItem.js";
+import DropItem from "../Utils/DropItem";
+import DropItemManager from "../Interface/DropItemManager";
+import backpackSeeds from "../Seeds/backpack.json";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -30,6 +32,9 @@ export default class World {
 
     this.chat = new ChatBuble();
     this.backpack = new Backpack();
+    this.dropManager = new DropItemManager();
+    this.dropManager.setScene(this.scene);
+    this.dropManager.setTexture(this.resources.drops_alpha_texture);
 
     this.floor = new DebugFloor({
       scene: this.scene,
@@ -58,8 +63,9 @@ export default class World {
   }
 
   update(elapsed, delta) {
+    const playerPosition = this.states.playerPosition.getState();
     this.player.update();
-    this.drop.update(this.states.playerPosition.getState());
+    this.dropManager.update(playerPosition);
   }
 
   addHouse() {
@@ -179,23 +185,22 @@ export default class World {
     const positionRefs = woodenBoxesref.map((i) => i.position);
     const rotationRefs = woodenBoxesref.map((i) => i.quaternion);
 
-    this.woodenBoxes = new WoodenBox({
-      model: this.resources.model_wooden_box,
-      debug: this.debug,
-      physics: this.physics,
-      position: positionRefs,
-      quaternion: rotationRefs,
-      scene: this.scene,
-      alpha: this.resources.wooden_box_alpha_texture,
-    });
+    // this.woodenBoxes = new WoodenBox({
+    //   model: this.resources.model_wooden_box,
+    //   debug: this.debug,
+    //   physics: this.physics,
+    //   position: positionRefs,
+    //   quaternion: rotationRefs,
+    //   scene: this.scene,
+    //   alpha: this.resources.wooden_box_alpha_texture,
+    // });
 
-    const pos = positionRefs[0];
-    this.drop = new DropItem({
-      id: "item001",
-      name: "Potion of Minor Healing",
-      count: 3,
-      position: pos,
-    });
+    const drops = backpackSeeds.map((item, i) => ({
+      ...item,
+      position: new THREE.Vector3(i * 2, 0, 0),
+    }));
+
+    this.dropManager.init(drops);
   }
 
   // update in future
