@@ -2,6 +2,7 @@ import * as THREE from "three";
 import DropItem from "../Utils/DropItem";
 import vertexShader from "../Shaders/drops/vertex.glsl";
 import fragmentShader from "../Shaders/drops/fragment.glsl";
+import { items } from "../Backend/items";
 
 /**
  *  I could use some of these alternatives :
@@ -125,14 +126,16 @@ class DropItemManager {
     }
   }
 
-  add(item) {
-    if (!item instanceof DropItem) {
+  add(i) {
+    if (!i instanceof DropItem) {
       console.error("canceled : trying to insert non dropItem into manager");
       return;
     }
 
+    const item = items.toDropsItem(i.id, i.count, i.position);
     this.items.push(item);
     this.position.push(item.position);
+
     item.on("taken", () => {
       const idx = this.items.indexOf(item);
       this.items.splice(idx, 1);

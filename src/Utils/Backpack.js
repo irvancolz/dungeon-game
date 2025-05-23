@@ -1,4 +1,4 @@
-import BackpackItem from "./BackpackItem";
+import { items } from "../Backend/items";
 
 let instance = null;
 class Backpack {
@@ -14,7 +14,7 @@ class Backpack {
 
   init(seed = []) {
     for (let i = 0; i < seed.length; i++) {
-      const item = new BackpackItem(seed[i]);
+      const item = items.toBackpackItem(seed[i].id, seed[i].count);
 
       this.items.push(item);
     }
@@ -22,10 +22,13 @@ class Backpack {
 
   insert(item, count) {
     const target = this.find(item);
+
     if (!target) {
       item.add(count);
       this.items.push(item);
+      return;
     }
+
     target.add(count);
   }
 
