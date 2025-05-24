@@ -1,4 +1,5 @@
 import { items } from "../Backend/items";
+import LootExpLog from "../Interface/LootExpLog/LootExpLog";
 
 let instance = null;
 class Backpack {
@@ -8,6 +9,7 @@ class Backpack {
     }
 
     instance = this;
+    this.notification = new LootExpLog();
 
     this.items = [];
   }
@@ -26,10 +28,11 @@ class Backpack {
     if (!target) {
       item.add(count);
       this.items.push(item);
-      return;
+    } else {
+      target.add(count);
     }
 
-    target.add(count);
+    this.notification.addNotification(`${item.name} x ${count}`);
   }
 
   find(item) {

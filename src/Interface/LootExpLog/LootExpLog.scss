@@ -1,0 +1,62 @@
+#loot_notification {
+  position: fixed;
+  top: 50%;
+  left: 1rem;
+  width: 15vw;
+  height: 20vh;
+  translate: 0 -50%;
+
+  & .notification {
+    margin-block: 0.25rem;
+    position: relative;
+    padding: 0.25rem 0.75rem;
+    background: #1e5166;
+    width: fit-content;
+    max-width: 20em;
+    color: var(--color-white);
+    text-transform: capitalize;
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.393) 0%,
+      #3737377c 24%,
+      #a9a9a900 100%
+    );
+
+    animation: notificationPopUp 0.5s ease-out;
+    transition: all 0.5s ease-in;
+
+    &.hide {
+      opacity: 0;
+      translate: 0 -2rem;
+    }
+
+    &::before {
+      --color-border: rgba(0, 0, 0, 0.393);
+      content: "";
+      position: absolute;
+
+      right: 100%;
+      border-top: 1.5em solid transparent;
+      border-bottom: 0.25em solid transparent;
+
+      border-right: 0.5em solid var(--color-border);
+    }
+
+    & .label {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+  }
+}
+
+@keyframes notificationPopUp {
+  0% {
+    opacity: 0;
+    translate: 2rem 0;
+  }
+  100% {
+    opacity: 1;
+    translate: 0 0;
+  }
+}

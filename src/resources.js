@@ -26,6 +26,11 @@ export default [
     name: "roof_texture",
   },
   {
+    path: "/texture/wooden_box_alpha_texture.jpg",
+    type: "texture",
+    name: "wooden_box_alpha_texture",
+  },
+  {
     path: "/texture/drops_alpha_texture.jpg",
     type: "texture",
     name: "drops_alpha_texture",

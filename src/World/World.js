@@ -36,29 +36,29 @@ export default class World {
     this.dropManager.setScene(this.scene);
     this.dropManager.setTexture(this.resources.drops_alpha_texture);
 
-    this.floor = new DebugFloor({
-      scene: this.scene,
-      debug: this.debug,
-      physics: this.physics,
-      width: this.width,
-      texture: this.resources.ground_texture,
-    });
-    // this.floor = new Ground({
+    // this.floor = new DebugFloor({
     //   scene: this.scene,
     //   debug: this.debug,
     //   physics: this.physics,
     //   width: this.width,
     //   texture: this.resources.ground_texture,
-    //   maxHeight: 0,
     // });
+    this.floor = new Ground({
+      scene: this.scene,
+      debug: this.debug,
+      physics: this.physics,
+      width: this.width,
+      texture: this.resources.ground_texture,
+      maxHeight: 0,
+    });
 
     // this.addGrass();
     this.addPlayer();
     this.addFences();
-    // this.addHouse();
-    // this.addBushes();
-    // this.addTree();
-    // this.addTrunks();
+    this.addHouse();
+    this.addBushes();
+    this.addTree();
+    this.addTrunks();
     this.addWoodenBoxes();
   }
 
@@ -185,15 +185,15 @@ export default class World {
     const positionRefs = woodenBoxesref.map((i) => i.position);
     const rotationRefs = woodenBoxesref.map((i) => i.quaternion);
 
-    // this.woodenBoxes = new WoodenBox({
-    //   model: this.resources.model_wooden_box,
-    //   debug: this.debug,
-    //   physics: this.physics,
-    //   position: positionRefs,
-    //   quaternion: rotationRefs,
-    //   scene: this.scene,
-    //   alpha: this.resources.wooden_box_alpha_texture,
-    // });
+    this.woodenBoxes = new WoodenBox({
+      model: this.resources.model_wooden_box,
+      debug: this.debug,
+      physics: this.physics,
+      position: positionRefs,
+      quaternion: rotationRefs,
+      scene: this.scene,
+      alpha: this.resources.wooden_box_alpha_texture,
+    });
 
     const drops = backpackSeeds.map((item, i) => ({
       ...item,

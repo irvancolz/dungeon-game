@@ -11,6 +11,7 @@ import resources from "./resources";
 import Composer from "./Composer";
 import Backpack from "./Utils/Backpack";
 import backpackSeeds from "./Seeds/backpack.json";
+import LootExpLlog from "./Interface/LootExpLog/LootExpLog";
 
 let instance = null;
 
@@ -25,8 +26,11 @@ export default class Experience {
     this.states = new States();
     this.canvas = canvas;
     this.scene = new THREE.Scene();
+
     this.backpack = new Backpack();
     this.backpack.init(backpackSeeds);
+
+    this.lootExplog = new LootExpLlog();
 
     // background
     const path = "texture/background/";
