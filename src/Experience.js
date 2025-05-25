@@ -9,7 +9,7 @@ import States from "./States";
 import WorldPhysics from "./Physics/World";
 import resources from "./resources";
 import Composer from "./Composer";
-import Backpack from "./Utils/Backpack";
+import Backpack from "./Interface/Backpack/Backpack";
 import backpackSeeds from "./Seeds/backpack.json";
 import LootExpLlog from "./Interface/LootExpLog/LootExpLog";
 

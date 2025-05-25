@@ -5,6 +5,7 @@ varying vec3 vNormal;
 varying vec3 vPosition;
 
 #include ../includes/simplexNoise2d.glsl
+#include <logdepthbuf_pars_vertex>
 
 void main() {
     float time = uTime * .005;
@@ -24,6 +25,8 @@ void main() {
     vec4 projectedPosition = projectionMatrix * viewPosition;
 
     gl_Position = projectedPosition;
+
+    #include <logdepthbuf_vertex>  
 
     // Varyings 
     vUv = uv;

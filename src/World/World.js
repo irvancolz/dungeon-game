@@ -14,7 +14,7 @@ import WoodenBox from "./WoodenBox";
 import ChatBuble from "../Interface/ChatBuble/ChatBuble";
 import Marker from "../Interface/Marker";
 import Camera from "../Camera";
-import Backpack from "../Utils/Backpack";
+import Backpack from "../Interface/Backpack/Backpack";
 import DropItem from "../Utils/DropItem";
 import DropItemManager from "../Interface/DropItemManager";
 import backpackSeeds from "../Seeds/backpack.json";
@@ -32,9 +32,15 @@ export default class World {
 
     this.chat = new ChatBuble();
     this.backpack = new Backpack();
+
     this.dropManager = new DropItemManager();
     this.dropManager.setScene(this.scene);
     this.dropManager.setTexture(this.resources.drops_alpha_texture);
+    const drops = backpackSeeds.map((item, i) => ({
+      ...item,
+      position: new THREE.Vector3(i * 2, 0, 0),
+    }));
+    this.dropManager.init(drops);
 
     // this.floor = new DebugFloor({
     //   scene: this.scene,
@@ -55,10 +61,10 @@ export default class World {
     // this.addGrass();
     this.addPlayer();
     this.addFences();
-    this.addHouse();
-    this.addBushes();
-    this.addTree();
-    this.addTrunks();
+    // this.addHouse();
+    // this.addBushes();
+    // this.addTree();
+    // this.addTrunks();
     this.addWoodenBoxes();
   }
 
@@ -194,13 +200,6 @@ export default class World {
       scene: this.scene,
       alpha: this.resources.wooden_box_alpha_texture,
     });
-
-    const drops = backpackSeeds.map((item, i) => ({
-      ...item,
-      position: new THREE.Vector3(i * 2, 0, 0),
-    }));
-
-    this.dropManager.init(drops);
   }
 
   // update in future

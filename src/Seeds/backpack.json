@@ -2,42 +2,42 @@
   {
     "id": "item001",
     "name": "Potion of Minor Healing",
-    "img": "https://example.com/images/potion-healing.png",
+    "img": "https://i.pinimg.com/736x/21/c4/9b/21c49bfe4ea44af105d5c83b80b57222.jpg",
     "description": "Restores a small amount of health when consumed. Essential for surviving minor skirmishes.",
     "count": 3
   },
   {
     "id": "item002",
     "name": "Traveler's Cloak",
-    "img": "https://example.com/images/travelers-cloak.png",
+    "img": "https://i.pinimg.com/736x/14/b7/36/14b736b52f0fc6fa8f72008ad7f803d6.jpg",
     "description": "A lightweight cloak enchanted to protect against cold and rain.",
     "count": 1
   },
   {
     "id": "item003",
     "name": "Elven Waybread",
-    "img": "https://example.com/images/waybread.png",
+    "img": "https://i.pinimg.com/736x/00/86/5d/00865d81e3f8596e011c6bcdcba49c51.jpg",
     "description": "Magical bread that provides nourishment for an entire day with a single bite.",
     "count": 2
   },
   {
     "id": "item004",
     "name": "Runestone of Light",
-    "img": "https://example.com/images/runestone-light.png",
+    "img": "https://i.pinimg.com/736x/d4/d4/cf/d4d4cfee308b9cde6df84fa7d99e42ac.jpg",
     "description": "A glowing stone used to light up dark dungeons or forests.",
     "count": 1
   },
   {
     "id": "item005",
     "name": "Map of Forgotten Lands",
-    "img": "https://example.com/images/map-forgotten-lands.png",
+    "img": "https://i.pinimg.com/736x/99/cd/4c/99cd4cb9241d947f160e1b01b3a56628.jpg",
     "description": "A detailed map revealing hidden paths and ancient ruins.",
     "count": 1
   },
   {
     "id": "item006",
     "name": "Dagger of the Silent Step",
-    "img": "https://example.com/images/dagger-silent-step.png",
+    "img": "https://i.pinimg.com/736x/b4/70/1e/b4701eeee9d44d0280e70d517f543a38.jpg",
     "description": "A stealthy blade favored by rogues. Increases agility and stealth.",
     "count": 1
   }

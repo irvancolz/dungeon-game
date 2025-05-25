@@ -1,6 +1,6 @@
 import { items } from "../Backend/items";
 import Button from "../Interface/Button/Button";
-import Backpack from "./Backpack";
+import Backpack from "../Interface/Backpack/Backpack";
 import EventEmitter from "./EventEmitter";
 
 class DropItem extends EventEmitter {

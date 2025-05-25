@@ -6,7 +6,10 @@ varying vec2 vUv;
 varying vec3 vNormal;
 varying vec3 vPosition;
 
+#include <logdepthbuf_pars_fragment>
+
 void main() {
+    #include <logdepthbuf_fragment>
     vec3 color = uLeavesColor;
     vec3 normal = normalize(vNormal);
     vec2 uv = vUv;

@@ -16,6 +16,7 @@ export default class Controller extends EventEmitter {
 
       // others
       interact: false,
+      backpack: false,
     };
     this.idle = true;
 
@@ -33,6 +34,8 @@ export default class Controller extends EventEmitter {
         this.actions.jump = true;
       } else if (pressed == "KeyE") {
         this.actions.interact = true;
+      } else if (pressed == "KeyB") {
+        this.actions.backpack = true;
       }
       this.triggerAction();
     });
@@ -51,6 +54,8 @@ export default class Controller extends EventEmitter {
         this.actions.jump = false;
       } else if (pressed == "KeyE") {
         this.actions.interact = false;
+      } else if (pressed == "KeyB") {
+        this.actions.backpack = false;
       }
       this.triggerAction();
       this.checkIdle();

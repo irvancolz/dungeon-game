@@ -1,5 +1,5 @@
 import data from "../Seeds/backpack.json";
-import BackpackItem from "../Utils/BackpackItem";
+import BackpackItem from "../Interface/BackpackItem/BackpackItem";
 import DropItem from "../Utils/DropItem";
 
 function getAll() {}
