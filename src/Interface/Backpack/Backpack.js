@@ -50,6 +50,9 @@ class Backpack {
     if (!target) {
       item.add(count);
       this.$backpackUI.append(item.$ui);
+      item.on("select", (id) => {
+        this.$secondaryInterface.changeItem(id);
+      });
       this.items.push(item);
     } else {
       target.add(count);
