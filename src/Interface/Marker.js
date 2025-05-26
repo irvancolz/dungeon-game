@@ -6,7 +6,7 @@ import Button from "./Button/Button";
 import gsap from "gsap";
 
 class Marker extends EventEmitter {
-  constructor({ icon, scene, position, parent, debug, label }) {
+  constructor({ scene, position, parent, debug, label, radius }) {
     super();
     this.offset = new THREE.Vector3(0, 0.5, 0);
     this.scene = scene;
@@ -14,6 +14,7 @@ class Marker extends EventEmitter {
     this.parent = parent.clone();
     this.debug = debug;
     this.label = label;
+    this.radius = radius;
 
     this.init();
     if (debug) {
@@ -46,7 +47,11 @@ class Marker extends EventEmitter {
   }
 
   initButton() {
-    this.button = new Button({ position: this.position, label: this.label });
+    this.button = new Button({
+      position: this.position,
+      label: this.label,
+      radius: this.radius,
+    });
     this.button.on("select", () => {
       this.trigger("interact");
     });
@@ -109,6 +114,7 @@ class Marker extends EventEmitter {
         this.scene.remove(this.mesh);
         this.material.dispose();
         this.geometry.dispose();
+        this.trigger("dispose");
       },
     });
   }

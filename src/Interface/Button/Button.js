@@ -3,14 +3,14 @@ import EventEmitter from "../../Utils/EventEmitter";
 import Controller from "../../Utils/Controller";
 
 export default class Button extends EventEmitter {
-  constructor({ position, label, once = false }) {
+  constructor({ position, label, once = false, radius = 3 }) {
     super();
 
     this.position = position;
     this.label = label;
     this.visible = false;
     this.$container = document.getElementById("interactive_container");
-    this.radius = 3;
+    this.radius = radius;
     this.expired = false;
     this.controls = new Controller();
     this.once = once;
