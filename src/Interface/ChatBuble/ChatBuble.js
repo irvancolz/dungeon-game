@@ -7,6 +7,7 @@ export default class ChatBuble extends EventEmitter {
     this.conversation = [];
     this.activeChat = 0;
     this.$container = document.getElementById("chat_bubble");
+    this.id = 0;
 
     this.init();
   }
@@ -46,7 +47,7 @@ export default class ChatBuble extends EventEmitter {
     // reset conversation to begining
     this.activeChat = 0;
 
-    this.trigger("chat:ended");
+    this.trigger("chat:ended", [this.id]);
   }
 
   next() {
@@ -64,8 +65,11 @@ export default class ChatBuble extends EventEmitter {
 
   initConversation(chat = []) {
     this.conversation = chat;
+    this.id = Date.now();
 
     this.open();
+
+    return this.id;
   }
 
   updateChat() {
