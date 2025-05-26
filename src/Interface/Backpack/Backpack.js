@@ -1,5 +1,6 @@
 import { items } from "../../Backend/items";
 import Controller from "../../Utils/Controller";
+import ItemDetail from "../ItemDetail/ItemDetail";
 import LootExpLog from "../LootExpLog/LootExpLog";
 
 let instance = null;
@@ -35,6 +36,9 @@ class Backpack {
   init(seed = []) {
     for (let i = 0; i < seed.length; i++) {
       const item = items.toBackpackItem(seed[i].id, seed[i].count);
+      item.on("select", (id) => {
+        this.$secondaryInterface.changeItem(id);
+      });
       this.$backpackUI.append(item.$ui);
       this.items.push(item);
     }
@@ -77,11 +81,8 @@ class Backpack {
   }
 
   initSecondaryInterface() {
-    this.$secondaryInterface = document.createElement("div");
-    this.$secondaryInterface.setAttribute("class", "item_detail");
-
-    this.$secondaryInterface.innerHTML = "item detail";
-    this.$content.appendChild(this.$secondaryInterface);
+    this.$secondaryInterface = new ItemDetail();
+    this.$content.appendChild(this.$secondaryInterface.$ui);
   }
 
   addBackpacInterface() {
@@ -96,6 +97,7 @@ class Backpack {
     this.$container.classList.remove("visible");
     this.$container.setAttribute("aria-visible", this.opened);
     this.opened = false;
+    this.$secondaryInterface.changeItem(null);
   }
 
   open() {

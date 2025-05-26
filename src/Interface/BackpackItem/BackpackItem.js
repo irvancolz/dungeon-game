@@ -1,5 +1,7 @@
-class BackpackItem {
+import EventEmitter from "../../Utils/EventEmitter";
+class BackpackItem extends EventEmitter {
   constructor({ name, img, description, count = 0, id }) {
+    super();
     this.id = id;
     this.name = name;
     this.img = img;
@@ -42,7 +44,7 @@ class BackpackItem {
     this.$count = this.$ui.querySelector(".count");
 
     btn.addEventListener("click", () => {
-      console.log(this.id);
+      this.trigger("select", [this.id]);
     });
   }
 }

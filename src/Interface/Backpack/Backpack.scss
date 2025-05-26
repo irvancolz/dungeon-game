@@ -68,12 +68,10 @@
       padding: 0.5rem;
       column-gap: 0.5rem;
       row-gap: 0.5rem;
-    }
-  }
 
-  & .backpack,
-  & .item_detail {
-    flex-grow: 1;
-    border: 1px solid red;
+      border: 1px solid var(--color-black);
+      border-radius: 1rem;
+      padding: 1rem;
+    }
   }
 }
