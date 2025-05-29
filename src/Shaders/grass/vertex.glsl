@@ -1,10 +1,7 @@
 attribute vec2 aCenter;
 attribute vec3 color;
 
-uniform float uTime;
-uniform float uWindStrength;
-uniform float uWindSpeed;
-uniform vec2 uWindDirection;
+#include ../includes/wind_pars_vertex.glsl
 
 varying vec2 vUv;
 
@@ -14,10 +11,11 @@ varying vec2 vUv;
 void main() {
 
     float noise = simplexNoise2d(uv);
-    float time = uTime * .001;
     vec3 newPosition = position;
     // calculate wind
-    newPosition.xz += uWindDirection * sin(time * uWindSpeed) * uWindStrength * noise * pow(newPosition.y, 2.);
+    #include ../includes/wind_vertex.glsl
+    newPosition.xz += wind * noise * pow(newPosition.y, 2.);
+
     vec4 modelPosition = modelMatrix * vec4(newPosition, 1.);
 
     vec4 viewPosition = viewMatrix * modelPosition;
