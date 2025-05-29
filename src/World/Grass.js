@@ -2,19 +2,24 @@ import * as THREE from "three";
 import GrassMaterial from "../Materials/Grass";
 
 export default class Grass {
-  constructor({ size, scene, debug, radius, groundTexture, fieldSize }) {
-    this.size = size;
-    this.count = size ** 2;
-    this.radius = radius;
-    this.fieldSize = fieldSize;
+  constructor({
+    density,
+    scene,
+    debug,
+    width,
+    position = new THREE.Vector3(),
+  }) {
+    this.density = density;
+    this.width = width;
+    this.count = density * width ** 2;
+    this.position = position;
 
-    this.BLADE_HEIGHT = 0.3;
-    this.BLADE_WIDTH = 0.2;
+    this.BLADE_HEIGHT = 0.5;
+    this.BLADE_WIDTH = 0.02;
     this.BLADE_HEIGHT_VARIATION = 0.5;
 
     this.scene = scene;
     this.debug = debug;
-    this.groundTexture = groundTexture;
 
     this.positionsArray = [];
     this.uvsArray = [];
@@ -29,38 +34,38 @@ export default class Grass {
   initMaterial() {
     // this.material = new THREE.MeshBasicMaterial();
     this.material = GrassMaterial();
-    this.material.uniforms.uGrassDistance.value = this.radius * 2;
-    this.material.uniforms.uMaxHeightRatio.value = this.BLADE_HEIGHT;
-    this.material.uniforms.uFieldSize.value = this.fieldSize;
-    this.material.uniforms.uGroundTexture.value = this.groundTexture;
   }
 
   initGeometry() {
     const VERT_PER_BLADE = 5;
-    const SURFACE_MIN = this.radius * -1;
-    const SURFACE_MAX = this.radius;
+    const SURFACE_MIN = this.width * 0.5 * -1;
+    const SURFACE_MAX = this.width * 0.5;
 
-    for (let i = 0; i < this.count; i++) {
-      const r = Math.sqrt(Math.random()) * this.radius;
+    for (let row = 0; row < this.width; row++) {
+      for (let col = 0; col < this.width; col++) {
+        for (let idx = 0; idx < this.density; idx++) {
+          const i = row * this.width * this.density + col * this.density + idx;
 
-      const x = (Math.random() - 0.5) * 2 * this.radius;
-      const y = (Math.random() - 0.5) * 2 * this.radius;
+          const x = row - this.width * 0.5 + 0.5 + (Math.random() - 0.5);
+          const y = col - this.width * 0.5 + 0.5 + (Math.random() - 0.5);
 
-      const center = new THREE.Vector3(x, 0, y);
+          const center = new THREE.Vector3(x, 0, y).add(this.position);
 
-      const uv = [
-        this.convertRange(center.x, SURFACE_MIN, SURFACE_MAX, 0, 1),
-        this.convertRange(center.z, SURFACE_MIN, SURFACE_MAX, 0, 1),
-      ];
+          const uv = [
+            this.convertRange(center.x, SURFACE_MIN, SURFACE_MAX, 0, 1),
+            this.convertRange(center.z, SURFACE_MIN, SURFACE_MAX, 0, 1),
+          ];
 
-      const blade = this.generateBlade(center, i * VERT_PER_BLADE, uv);
-      blade.verts.forEach((vert) => {
-        this.positionsArray.push(...vert.pos);
-        this.uvsArray.push(...vert.uv);
-        this.colorsArray.push(...vert.color);
-        this.centersArray.push(center.x, center.z);
-      });
-      blade.indices.forEach((i) => this.indiciesArray.push(i));
+          const blade = this.generateBlade(center, i * VERT_PER_BLADE, uv);
+          blade.verts.forEach((vert) => {
+            this.positionsArray.push(...vert.pos);
+            this.uvsArray.push(...vert.uv);
+            this.colorsArray.push(...vert.color);
+            this.centersArray.push(center.x, center.z);
+          });
+          blade.indices.forEach((i) => this.indiciesArray.push(i));
+        }
+      }
     }
 
     this.geometry = new THREE.BufferGeometry();
@@ -104,19 +109,54 @@ export default class Grass {
       title: "grass",
       expanded: false,
     });
-    f.addBinding(this.material.uniforms.uMaxHeightRatio, "value", {
-      min: 0.1,
-      max: 3,
-      step: 0.01,
-      label: "blade height",
-    });
     f.addBinding(opt, "color").on("change", () => {
       this.material.uniforms.uColor.value.set(opt.color);
     });
+    f.addBinding(this.material.uniforms.uWindStrength, "value", {
+      label: "wind strength",
+      min: 0.1,
+      max: 2,
+      step: 0.01,
+    });
+    f.addBinding(this.material.uniforms.uWindSpeed, "value", {
+      label: "wind speed",
+      min: 0.1,
+      max: 5,
+      step: 0.01,
+    });
+    f.addBinding(this.material.uniforms.uWindDirection.value, "x", {
+      label: "wind x",
+      min: -1,
+      max: 1,
+      step: 0.01,
+    });
+    f.addBinding(this.material.uniforms.uWindDirection.value, "y", {
+      label: "wind y",
+      min: -1,
+      max: 1,
+      step: 0.01,
+    });
+    f.addBinding(this, "density", {
+      min: 1,
+      max: 300,
+      step: 1,
+    }).on("change", (e) => {
+      if (!e.last) return;
+      this.positionsArray = [];
+      this.uvsArray = [];
+      this.colorsArray = [];
+      this.indiciesArray = [];
+      this.centersArray = [];
+      this.scene.remove(this.mesh);
+      this.geometry.dispose();
+      this.material.dispose();
+
+      this.init();
+    });
   }
 
-  update(playerPos) {
-    this.material.uniforms.uPlayerPosition.value.copy(playerPos);
+  update(playerPos, time) {
+    this.material.uniforms.uTime.value = time;
     // this.mesh.position.set(playerPos.x, 0, playerPos.z);
   }
 
@@ -128,10 +168,9 @@ export default class Grass {
 
   // https://github.com/James-Smyth/three-grass-demo/blob/main/src/index.js
   generateBlade(center, vArrOffset, uv) {
-    const MID_WIDTH = this.BLADE_WIDTH * 0.5;
+    const MID_WIDTH = this.BLADE_WIDTH * 1.75;
     const TIP_OFFSET = 0.1;
-    const height =
-      this.BLADE_HEIGHT + Math.random() * this.BLADE_HEIGHT_VARIATION;
+    const height = this.BLADE_HEIGHT;
 
     const yaw = Math.random() * Math.PI * 2;
     const yawUnitVec = new THREE.Vector3(Math.sin(yaw), 0, -Math.cos(yaw));
@@ -165,11 +204,11 @@ export default class Grass {
     );
     const tc = new THREE.Vector3().addVectors(
       center,
-      new THREE.Vector3().copy(tipBendUnitVec).multiplyScalar(TIP_OFFSET)
+      new THREE.Vector3().multiplyScalar(TIP_OFFSET)
     );
 
-    tl.y += height / 2;
-    tr.y += height / 2;
+    tl.y += height * 0.6;
+    tr.y += height * 0.6;
     tc.y += height;
 
     // Vertex Colors

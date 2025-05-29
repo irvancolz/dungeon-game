@@ -1,25 +1,30 @@
-uniform sampler2D uGroundTexture;
-uniform float uFieldSize;
+attribute vec2 aCenter;
+attribute vec3 color;
 
-varying float vGrassHeight;
+uniform float uTime;
+uniform float uWindStrength;
+uniform float uWindSpeed;
+uniform vec2 uWindDirection;
+
 varying vec2 vUv;
 
+#include ../includes/getRotatePivot2d.glsl
+#include ../includes/simplexNoise2d.glsl
+
 void main() {
-    vec4 modelPosition = modelMatrix * vec4(position, 1.);
 
-    // place height based on texture
-    vec2 worldUv = (modelPosition.xz + uFieldSize * .5) / uFieldSize;
-    worldUv.x = 1. - worldUv.x;
-
-    float grassHeight = texture2D(uGroundTexture, worldUv).g;
-    modelPosition.y = modelPosition.y * grassHeight;
+    float noise = simplexNoise2d(uv);
+    float time = uTime * .001;
+    vec3 newPosition = position;
+    // calculate wind
+    newPosition.xz += uWindDirection * sin(time * uWindSpeed) * uWindStrength * noise * pow(newPosition.y, 2.);
+    vec4 modelPosition = modelMatrix * vec4(newPosition, 1.);
 
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
 
     gl_Position = projectedPosition;
 
-    // varying
-    vUv = worldUv;
-    vGrassHeight = grassHeight;
+    vUv = uv;
+
 }

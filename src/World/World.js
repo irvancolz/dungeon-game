@@ -42,24 +42,6 @@ export default class World {
 
     this.markers = new MarkersManager();
 
-    const dropsCount = 5;
-    const drops = [];
-    for (let i = 0; i < dropsCount; i++) {
-      const radius = 50;
-      const angle = (Math.random() - 0.5) * Math.PI * 2;
-      const x = Math.sin(angle) * radius * Math.random();
-      const z = Math.cos(angle) * radius * Math.random();
-      const pos = new THREE.Vector3(x, 0, z);
-      const idx = Math.floor(Math.random()) * backpackSeeds.length;
-      const drop = {
-        ...backpackSeeds[idx],
-        position: pos,
-        count: Math.round(Math.random() * 3) + 1,
-      };
-      drops.push(drop);
-    }
-    this.dropManager.init(drops);
-
     this.floor = new DebugFloor({
       scene: this.scene,
       debug: this.debug,
@@ -77,10 +59,10 @@ export default class World {
     //   maxHeight: 0,
     // });
 
-    // this.addGrass();
-    this.addPlayer();
-    this.addNPC();
-    this.addFences();
+    this.addGrass();
+    // this.addPlayer();
+    // this.addNPC();
+    // this.addFences();
     // this.addHouse();
     // this.addBushes();
     // this.addTree();
@@ -90,9 +72,10 @@ export default class World {
 
   update(elapsed, delta) {
     const playerPosition = this.states.playerPosition.getState();
-    this.player.update();
-    this.dropManager.update(playerPosition);
-    this.markers.update(playerPosition);
+    // this.player.update();
+    // this.dropManager.update(playerPosition);
+    // this.markers.update(playerPosition);
+    this.grass.update(playerPosition, elapsed);
   }
 
   addNPC() {
@@ -328,12 +311,11 @@ export default class World {
 
   addGrass() {
     this.grass = new Grass({
-      size: 400,
+      density: 100,
       debug: this.debug,
-      fieldSize: this.width,
-      radius: this.width / 2,
-      groundTexture: this.resources.ground_texture,
+      width: 10,
       scene: this.scene,
+      position: new THREE.Vector3(0, 0, 0),
     });
   }
 
