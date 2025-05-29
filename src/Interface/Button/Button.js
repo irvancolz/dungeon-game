@@ -16,7 +16,7 @@ export default class Button extends EventEmitter {
     this.once = once;
 
     this.controls.on("interact", () => {
-      if (!this.visible) return;
+      if (!this.visible || this.expired) return;
       this.handleSelect();
     });
     this.init();
@@ -35,6 +35,7 @@ export default class Button extends EventEmitter {
     this.$btn = this.$wrapper.querySelector(".btn");
 
     this.$btn.addEventListener("click", () => {
+      if (!this.visible || this.expired) return;
       this.handleSelect();
     });
 
@@ -71,9 +72,10 @@ export default class Button extends EventEmitter {
   }
 
   dispose() {
+    this.visible = false;
+    this.expired = true;
     const target = this.$container.querySelector(".interaction");
     if (!target) return;
-    this.visible = false;
     this.$container.removeChild(this.$wrapper);
   }
 }

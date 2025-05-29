@@ -12,6 +12,7 @@ import Composer from "./Composer";
 import Backpack from "./Interface/Backpack/Backpack";
 import backpackSeeds from "./Seeds/backpack.json";
 import LootExpLlog from "./Interface/LootExpLog/LootExpLog";
+import Controller from "./Utils/Controller";
 
 let instance = null;
 
@@ -22,13 +23,14 @@ export default class Experience {
     }
     instance = this;
 
+    this.controller = new Controller();
     this.debug = new Debugger();
     this.states = new States();
     this.canvas = canvas;
     this.scene = new THREE.Scene();
 
     this.backpack = new Backpack();
-    this.backpack.init(backpackSeeds);
+    this.backpack.init(backpackSeeds.filter((e) => e.id != "item007"));
 
     this.lootExplog = new LootExpLlog();
 
@@ -120,6 +122,10 @@ export default class Experience {
       this.camera.resize();
       this.renderer.resize();
       // this.composer.resize();
+    });
+
+    this.controller.on("fullscreen", () => {
+      document.body.requestFullscreen();
     });
   }
 

@@ -68,4 +68,9 @@ export default [
     type: "gltfModel",
     name: "village_map",
   },
+  {
+    path: "/model/old_elf_model.glb",
+    type: "gltfModel",
+    name: "old_elf_model",
+  },
 ];

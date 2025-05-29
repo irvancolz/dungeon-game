@@ -40,5 +40,12 @@
     "img": "https://i.pinimg.com/736x/b4/70/1e/b4701eeee9d44d0280e70d517f543a38.jpg",
     "description": "A stealthy blade favored by rogues. Increases agility and stealth.",
     "count": 1
+  },
+  {
+    "id": "item007",
+    "name": "Apples",
+    "img": "https://i.pinimg.com/736x/56/7e/06/567e06f91b594442a47e009bf732b66c.jpg",
+    "description": "Just Ordinary Apples",
+    "count": 1
   }
 ]

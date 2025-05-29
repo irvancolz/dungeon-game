@@ -18,6 +18,9 @@ import Backpack from "../Interface/Backpack/Backpack";
 import DropItem from "../Utils/DropItem";
 import DropItemManager from "../Interface/DropItemManager";
 import backpackSeeds from "../Seeds/backpack.json";
+import NPC from "./NPC";
+import MarkersManager from "../Interface/MarkersManager";
+import { items } from "../Backend/items";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -36,42 +39,132 @@ export default class World {
     this.dropManager = new DropItemManager();
     this.dropManager.setScene(this.scene);
     this.dropManager.setTexture(this.resources.drops_alpha_texture);
-    const drops = backpackSeeds.map((item, i) => ({
-      ...item,
-      position: new THREE.Vector3(i * 2, 0, 0),
-    }));
+
+    this.markers = new MarkersManager();
+
+    const dropsCount = 5;
+    const drops = [];
+    for (let i = 0; i < dropsCount; i++) {
+      const radius = 50;
+      const angle = (Math.random() - 0.5) * Math.PI * 2;
+      const x = Math.sin(angle) * radius * Math.random();
+      const z = Math.cos(angle) * radius * Math.random();
+      const pos = new THREE.Vector3(x, 0, z);
+      const idx = Math.floor(Math.random()) * backpackSeeds.length;
+      const drop = {
+        ...backpackSeeds[idx],
+        position: pos,
+        count: Math.round(Math.random() * 3) + 1,
+      };
+      drops.push(drop);
+    }
     this.dropManager.init(drops);
 
-    // this.floor = new DebugFloor({
-    //   scene: this.scene,
-    //   debug: this.debug,
-    //   physics: this.physics,
-    //   width: this.width,
-    //   texture: this.resources.ground_texture,
-    // });
-    this.floor = new Ground({
+    this.floor = new DebugFloor({
       scene: this.scene,
       debug: this.debug,
       physics: this.physics,
       width: this.width,
       texture: this.resources.ground_texture,
-      maxHeight: 0,
     });
+
+    // this.floor = new Ground({
+    //   scene: this.scene,
+    //   debug: this.debug,
+    //   physics: this.physics,
+    //   width: this.width,
+    //   texture: this.resources.ground_texture,
+    //   maxHeight: 0,
+    // });
 
     // this.addGrass();
     this.addPlayer();
+    this.addNPC();
     this.addFences();
     // this.addHouse();
     // this.addBushes();
     // this.addTree();
     // this.addTrunks();
-    this.addWoodenBoxes();
+    // this.addWoodenBoxes();
   }
 
   update(elapsed, delta) {
     const playerPosition = this.states.playerPosition.getState();
     this.player.update();
     this.dropManager.update(playerPosition);
+    this.markers.update(playerPosition);
+  }
+
+  addNPC() {
+    const box = this.resources.old_elf_model.scene.clone();
+
+    const oldElfPos = new THREE.Vector3(0, 0, 0);
+    this.oldElf = new NPC({
+      position: oldElfPos,
+      model: this.resources.old_elf_model,
+      name: "old man",
+      scene: this.scene,
+      quaternion: new THREE.Quaternion().setFromAxisAngle(
+        new THREE.Vector3(0, 1, 0),
+        Math.PI
+      ),
+      scale: new THREE.Vector3(2, 2, 2),
+    });
+
+    const oldElfMarkers = new Marker({
+      scene: this.scene,
+      label: this.oldElf.name,
+      parent: box,
+      position: oldElfPos,
+      radius: 6,
+    });
+
+    oldElfMarkers.on("interact", () => {
+      this.camera.focus(oldElfPos);
+      const chatId = this.chat.initConversation([
+        {
+          author: "Traveler",
+          chat: "Excuse me, sir. Do you know where the nearest village is?",
+        },
+        {
+          author: "Old Man",
+          chat: "Ah, you're a bit off the trail, young one. The village lies just beyond the grove to the east.",
+        },
+        {
+          author: "Traveler",
+          chat: "Thank you kindly. It's been a long walk, and I'm running low on food.",
+        },
+        {
+          author: "Old Man",
+          chat: "I see. Here, take these apples from my satchel. They're fresh and sweet—just picked this morning.",
+        },
+        {
+          author: "Traveler",
+          chat: "Really? That's very generous of you. Are you sure?",
+        },
+        {
+          author: "Old Man",
+          chat: "Of course. A traveler should never go hungry on the road. Besides, kindness has a way of circling back.",
+        },
+        {
+          author: "Traveler",
+          chat: "Thank you, sir. I won’t forget this. I hope to repay your kindness one day.",
+        },
+        {
+          author: "Old Man",
+          chat: "No need. Just pass it on when you can. Safe travels, young one.",
+        },
+      ]);
+
+      this.chat.on("chat:ended", () => {
+        oldElfMarkers.dispose();
+        this.camera.focusPlayer();
+        const apples = items.toBackpackItem("item007");
+        this.backpack.insert(apples, 3);
+      });
+    });
+
+    this.markers.add(oldElfMarkers);
   }
 
   addHouse() {

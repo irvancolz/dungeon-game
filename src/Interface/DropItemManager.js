@@ -90,6 +90,7 @@ class DropItemManager {
       fragmentShader,
       transparent: true,
       depthWrite: false,
+      side: THREE.DoubleSide,
     });
   }
 
