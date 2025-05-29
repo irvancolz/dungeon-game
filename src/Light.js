@@ -1,9 +1,11 @@
 import * as THREE from "three";
+import Debugger from "./Debugger";
 
 export default class Light {
-  constructor({ scene, debug }) {
+  constructor({ scene }) {
     this.scene = scene;
-    this.debug = debug;
+
+    this.debug = new Debugger();
 
     this.config = {
       intensity: 0.4,
