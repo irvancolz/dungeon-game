@@ -63,6 +63,10 @@ export default class House {
       const house = this.model.scene.children[0].clone();
 
       house.traverse((e) => {
+        if (e.isMesh) {
+          e.castShadow = true;
+          e.receiveShadow = true;
+        }
         if (e.name.toLowerCase().includes("wood")) {
           e.material = this.woodMaterial;
         } else if (e.name.toLowerCase().includes("roof")) {

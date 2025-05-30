@@ -103,7 +103,7 @@ export default class Ground {
     if (!this.debug.active) return;
 
     const debugOpt = {
-      color: "#336342",
+      color: "#168c00",
       edgeColor: "#696967",
     };
 

@@ -42,40 +42,51 @@ export default class World {
 
     this.markers = new MarkersManager();
 
-    this.floor = new DebugFloor({
-      scene: this.scene,
-      debug: this.debug,
-      physics: this.physics,
-      width: this.width,
-      texture: this.resources.ground_texture,
-    });
-
-    // this.floor = new Ground({
+    // this.floor = new DebugFloor({
     //   scene: this.scene,
     //   debug: this.debug,
     //   physics: this.physics,
     //   width: this.width,
     //   texture: this.resources.ground_texture,
-    //   maxHeight: 0,
     // });
 
+    this.floor = new Ground({
+      scene: this.scene,
+      debug: this.debug,
+      physics: this.physics,
+      width: this.width,
+      texture: this.resources.ground_texture,
+      maxHeight: 0,
+    });
+
     this.addGrass();
-    // this.addPlayer();
+    this.addPlayer();
     // this.addNPC();
-    // this.addFences();
-    // this.addHouse();
+    this.addFences();
+    this.addHouse();
     this.addBushes();
-    // this.addTree();
+    this.addTree();
     // this.addTrunks();
     // this.addWoodenBoxes();
   }
 
   update(elapsed, delta) {
     const playerPosition = this.states.playerPosition.getState();
-    // this.player.update();
-    // this.dropManager.update(playerPosition);
-    // this.markers.update(playerPosition);
-    this.grass.update(playerPosition, elapsed);
+    if (this.player) {
+      this.player.update();
+    }
+    if (this.dropManager) {
+      this.dropManager.update(playerPosition);
+    }
+    if (this.markers) {
+      this.markers.update(playerPosition);
+    }
+    if (this.grass) {
+      this.grass.update(playerPosition, elapsed);
+    }
+    if (this.bushes) {
+      this.bushes.update(elapsed);
+    }
   }
 
   addNPC() {
@@ -313,7 +324,7 @@ export default class World {
     this.grass = new Grass({
       density: 100,
       debug: this.debug,
-      width: 10,
+      width: 50,
       scene: this.scene,
       position: new THREE.Vector3(0, 0, 0),
     });
