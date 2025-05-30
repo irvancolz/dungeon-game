@@ -96,6 +96,8 @@ export default class Grass {
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.frustumCulled = false;
+    this.mesh.receiveShadow = true;
+    this.mesh.castShadow = true;
 
     this.scene.add(this.mesh);
   }
@@ -103,7 +105,7 @@ export default class Grass {
   initDebug() {
     if (!this.debug.active) return;
     const opt = {
-      color: "#179908",
+      color: "##168e08",
     };
     const f = this.debug.ui.addFolder({
       title: "grass",

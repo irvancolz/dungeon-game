@@ -162,6 +162,8 @@ export default class Bushes {
       this.material,
       this.position.length
     );
+    this.mesh.castShadow = true;
+    this.mesh.receiveShadow = true;
     this.scene.add(this.mesh);
 
     const dummy = new THREE.Object3D();

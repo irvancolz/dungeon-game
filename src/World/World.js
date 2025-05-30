@@ -64,7 +64,7 @@ export default class World {
     // this.addNPC();
     // this.addFences();
     // this.addHouse();
-    // this.addBushes();
+    this.addBushes();
     // this.addTree();
     // this.addTrunks();
     // this.addWoodenBoxes();
@@ -211,7 +211,7 @@ export default class World {
     const scaleRefs = bushesRefs.map((i) => i.scale);
 
     this.bushes = new Bushes({
-      position: positionRefs,
+      position: [new THREE.Vector3(0, 0, 0)],
       scene: this.scene,
       texture: this.resources.leaves_texture,
       debug: this.debug,
