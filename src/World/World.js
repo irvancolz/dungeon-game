@@ -59,13 +59,13 @@ export default class World {
       maxHeight: 0,
     });
 
-    this.addGrass();
-    this.addPlayer();
-    // this.addNPC();
     this.addFences();
-    this.addHouse();
+    this.addPlayer();
     this.addBushes();
-    this.addTree();
+    // this.addGrass();
+    // this.addNPC();
+    // this.addHouse();
+    // this.addTree();
     // this.addTrunks();
     // this.addWoodenBoxes();
   }
@@ -222,7 +222,7 @@ export default class World {
     const scaleRefs = bushesRefs.map((i) => i.scale);
 
     this.bushes = new Bushes({
-      position: [new THREE.Vector3(0, 0, 0)],
+      position: positionRefs,
       scene: this.scene,
       texture: this.resources.leaves_texture,
       debug: this.debug,

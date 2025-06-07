@@ -21,12 +21,12 @@ export default class Bushes {
     if (!this.debug.active) return;
 
     const debugOpt = {
-      color: "#113111",
+      color: "#209420",
     };
 
     const f = this.debug.ui.addFolder({ title: "bushes", expanded: false });
     f.addBinding(debugOpt, "color").on("change", () => {
-      this.leaves.material.uniforms.uLeavesColor.value.set(debugOpt.color);
+      this.material.uniforms.uLeavesColor.value.set(debugOpt.color);
     });
     f.addBinding(this.material, "alphaTest", {
       min: 0,
@@ -36,44 +36,17 @@ export default class Bushes {
   }
 
   createLeaves(pos) {
-    // base
-    const rotations = [
-      {
-        x: 0,
-        y: 0,
-        z: 0,
-      },
-      {
-        x: 0,
-        y: Math.PI / 2,
-        z: 0,
-      },
-      {
-        x: Math.PI / 2,
-        y: 0,
-        z: 0,
-      },
-    ];
-
-    const leavesCount = rotations.length;
     const leavesArray = [];
 
-    for (let i = 0; i < leavesCount; i++) {
-      const geometry = new THREE.PlaneGeometry(1, 1);
+    const geometry = new THREE.PlaneGeometry(1, 1);
 
-      geometry.translate(pos.x, pos.y, pos.z);
+    geometry.translate(pos.x, pos.y, pos.z);
 
-      geometry.rotateX(rotations[i].x);
-      geometry.rotateY(rotations[i].y);
-      geometry.rotateZ(rotations[i].z);
-
-      leavesArray.push(geometry);
-    }
+    leavesArray.push(geometry);
 
     const result = mergeGeometries(leavesArray);
-    result.rotateX(Math.random() * Math.PI);
-    result.rotateY(Math.random() * Math.PI);
-    result.rotateZ(Math.random() * Math.PI);
+    const scale = Math.random() + 0.5;
+    result.scale(scale, scale, 1);
     return result;
   }
 
@@ -103,57 +76,41 @@ export default class Bushes {
   }
 
   initGeometry() {
-    const base = new THREE.IcosahedronGeometry(1, 0);
-    const pos = base.attributes.position;
-    this.leavesCount = pos.count;
+    const base = new THREE.IcosahedronGeometry(1, 1);
+    const arr = base.attributes.position;
+    this.leavesCount = arr.count;
+    const centerArray = [];
     const leaves = [];
 
     for (let i = 0; i < this.leavesCount; i++) {
       const i3 = i * 3;
-      const leavesGeometry = this.createLeaves(
-        new THREE.Vector3(pos.array[i3], pos.array[i3 + 1], pos.array[i3 + 2])
-      );
+
+      const offset = Math.random() - 0.5;
+      const x = offset + arr.array[i3];
+      const y = offset + arr.array[i3 + 1];
+      const z = offset + arr.array[i3 + 2];
+
+      const pos = new THREE.Vector3(x, y, z);
+
+      for (let j = 0; j < 4; j++) {
+        centerArray.push(x, y, z);
+      }
+
+      const leavesGeometry = this.createLeaves(pos);
       leaves.push(leavesGeometry);
     }
 
     this.geometry = mergeGeometries(leaves);
+    this.geometry.setAttribute(
+      "aCenter",
+      new THREE.Float32BufferAttribute(new Float32Array(centerArray), 3)
+    );
     this.computeNormal();
   }
 
   initMaterial() {
-    this.uniforms = {
-      uTime: { value: 0 },
-    };
-    // this.material = new THREE.MeshNormalMaterial();
-    this.material = BushesMaterial(this.matcap, this.texture);
-
-    this.material.onBeforeCompile = (shader) => {
-      shader.uniforms.uTime = this.uniforms.uTime;
-
-      shader.vertexShader = shader.vertexShader.replace(
-        "#include <common>",
-        `
-        #include <common>
-
-        uniform float uTime;
-        `
-      );
-      shader.vertexShader = shader.vertexShader.replace(
-        "#include <begin_vertex>",
-        `
-        #include <begin_vertex>
-
-        float time = uTime * .005;
-        float windPower = .1;
-
-        float offset = time * position.y + transformed.y;
-
-        transformed.xz += vec2(sin(uv.x + offset), sin(uv.y + offset)) * windPower;
-        `
-      );
-    };
-    // this.material.uniforms.uLeavesTexture.value = this.texture;
-    // this.material.uniforms.uMatcapTexture.value = this.matcap;
+    this.material = BushesMaterial();
+    this.material.uniforms.uLeavesTexture.value = this.texture;
   }
 
   initMesh() {
@@ -170,11 +127,9 @@ export default class Bushes {
     for (let i = 0; i < this.position.length; i++) {
       dummy.position.copy(this.position[i]);
       dummy.scale.copy(this.scales[i]);
-      // dummy.position.copy(new THREE.Vector3());
 
       dummy.updateMatrix();
       this.mesh.setMatrixAt(i, dummy.matrix);
-      // this.leaves.setMatrixAt(i, dummy.matrix);
     }
   }
 
@@ -184,7 +139,7 @@ export default class Bushes {
     this.initMesh();
   }
   update(elapsed) {
-    this.uniforms.uTime.value = elapsed;
+    // this.mesh.rotation.y = elapsed * 0.001;
   }
 
   dispose() {

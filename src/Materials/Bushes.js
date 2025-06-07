@@ -1,23 +1,27 @@
 import * as THREE from "three";
+import CustomShaderMaterial from "three-custom-shader-material/vanilla";
+import vertexShader from "../Shaders/bushes/vertex.glsl";
+import fragmentShader from "../Shaders/bushes/fragment.glsl";
 
 export default function BushesMaterial(matcap, alpha) {
   const uniforms = {
     uLeavesTexture: new THREE.Uniform(),
     uMatcapTexture: new THREE.Uniform(),
-    uLeavesColor: new THREE.Uniform(new THREE.Color("#113111")),
+    uLeavesColor: new THREE.Uniform(new THREE.Color("#209420")),
     uTime: new THREE.Uniform(0),
   };
 
-  const material = new THREE.MeshMatcapMaterial({
+  const material = new THREE.ShaderMaterial({
+    // baseMaterial: THREE.MeshStandardMaterial,
+    uniforms,
+    vertexShader,
+    fragmentShader,
     transparent: true,
-    depthWrite: false,
+    depthTest: true,
     side: THREE.DoubleSide,
-    matcap,
-    alphaMap: alpha,
-    polygonOffset: true,
-    polygonOffsetUnits: 1,
-    polygonOffsetFactor: 1,
   });
+
+  // const material = new THREE.MeshNormalMaterial();
 
   return material;
 }

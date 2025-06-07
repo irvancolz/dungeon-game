@@ -1,10 +1,13 @@
+attribute vec3 aCenter;
+
 uniform float uTime;
 
 varying vec2 vUv;
-varying vec3 vNormal;
 varying vec3 vPosition;
+varying vec3 vNormal;
 
 #include ../includes/simplexNoise2d.glsl
+#include ../includes/getRotatePivot2d.glsl
 #include <logdepthbuf_pars_vertex>
 
 void main() {
@@ -14,12 +17,15 @@ void main() {
 
     vec3 newPosition = position;
 
-    // Final postion
+    float angle = atan(newPosition.x - cameraPosition.x, newPosition.z - cameraPosition.z);
+    newPosition.xz = getRotatePivot2d(newPosition.xz, angle, aCenter.xz);
+
+    // // Final postion
     vec4 modelPosition = modelMatrix * instanceMatrix * vec4(newPosition, 1.);
 
     // maybe add randomness in future
     float offset = time * position.y + modelPosition.y + noise;
-    modelPosition.xz += vec2(sin(uv.x + offset), sin(uv.y + offset)) * windPower;
+    // modelPosition.xz += vec2(sin(uv.x + offset), sin(uv.y + offset)) * windPower;
 
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
@@ -28,8 +34,10 @@ void main() {
 
     #include <logdepthbuf_vertex>  
 
+    vec4 modifiedNormal = modelMatrix * vec4(normal, 0.);
+
     // Varyings 
     vUv = uv;
-    vNormal = normalize(normal);
+    vNormal = modifiedNormal.xyz;
     vPosition = newPosition;
 }
