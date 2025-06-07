@@ -45,6 +45,7 @@ export default class Bushes {
     const leavesArray = [];
 
     const geometry = new THREE.PlaneGeometry(1, 1);
+    geometry.rotateY(Math.random() * Math.PI * 0.5);
 
     geometry.translate(pos.x, pos.y, pos.z);
 

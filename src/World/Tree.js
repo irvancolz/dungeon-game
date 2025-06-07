@@ -70,7 +70,7 @@ export default class Tree {
       texture: this.leavesTexture,
       scales: scale,
       name: "tree leaves",
-      color: "#ff0000",
+      color: "#af2879",
     });
   }
 

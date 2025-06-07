@@ -8,7 +8,7 @@ export default class Light {
     this.debug = new Debugger();
 
     this.config = {
-      intensity: 3.38,
+      intensity: 1,
       color: new THREE.Color(0xffffff),
       x: 3.5,
       y: 2,
