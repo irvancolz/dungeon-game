@@ -3,11 +3,11 @@ import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 import vertexShader from "../Shaders/bushes/vertex.glsl";
 import fragmentShader from "../Shaders/bushes/fragment.glsl";
 
-export default function BushesMaterial(matcap, alpha) {
+export default function BushesMaterial(color) {
   const uniforms = {
     uLeavesTexture: new THREE.Uniform(),
     uMatcapTexture: new THREE.Uniform(),
-    uLeavesColor: new THREE.Uniform(new THREE.Color("#209420")),
+    uLeavesColor: new THREE.Uniform(new THREE.Color(color)),
     uTime: new THREE.Uniform(0),
   };
 

@@ -3,7 +3,16 @@ import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js
 import BushesMaterial from "../Materials/Bushes";
 
 export default class Bushes {
-  constructor({ position, scene, texture, debug, scales, matcap }) {
+  constructor({
+    position,
+    scene,
+    texture,
+    debug,
+    scales,
+    matcap,
+    color = "#209420",
+    name = "bushes",
+  }) {
     this.position = position;
     this.scene = scene;
     this.height = 1;
@@ -11,7 +20,9 @@ export default class Bushes {
     this.debug = debug;
     this.scales = scales;
     this.matcap = matcap;
+    this.color = color;
     matcap.colorSpace = THREE.SRGBColorSpace;
+    this.name = name;
 
     this.init();
     this.addDebug();
@@ -21,17 +32,12 @@ export default class Bushes {
     if (!this.debug.active) return;
 
     const debugOpt = {
-      color: "#209420",
+      color: this.color,
     };
 
-    const f = this.debug.ui.addFolder({ title: "bushes", expanded: false });
+    const f = this.debug.ui.addFolder({ title: this.name, expanded: false });
     f.addBinding(debugOpt, "color").on("change", () => {
       this.material.uniforms.uLeavesColor.value.set(debugOpt.color);
-    });
-    f.addBinding(this.material, "alphaTest", {
-      min: 0,
-      max: 1,
-      step: 0.01,
     });
   }
 
@@ -51,7 +57,7 @@ export default class Bushes {
   }
 
   computeNormal() {
-    const planePerLeaves = 3;
+    const planePerLeaves = 1;
     const vertPerLeaves = 4;
     const leaves = this.leavesCount * planePerLeaves;
     const normalArray = new Float32Array(leaves * vertPerLeaves * 3);
@@ -62,7 +68,7 @@ export default class Bushes {
         this.geometry.attributes.position.array[v3],
         this.geometry.attributes.position.array[v3 + 1],
         this.geometry.attributes.position.array[v3 + 2]
-      );
+      ).normalize();
 
       normalArray[v3] = pos.x;
       normalArray[v3 + 1] = pos.y;
@@ -109,7 +115,7 @@ export default class Bushes {
   }
 
   initMaterial() {
-    this.material = BushesMaterial();
+    this.material = BushesMaterial(this.color);
     this.material.uniforms.uLeavesTexture.value = this.texture;
   }
 
@@ -126,7 +132,7 @@ export default class Bushes {
     const dummy = new THREE.Object3D();
     for (let i = 0; i < this.position.length; i++) {
       dummy.position.copy(this.position[i]);
-      dummy.scale.copy(this.scales[i]);
+      // dummy.scale.copy(this.scales[i]);
 
       dummy.updateMatrix();
       this.mesh.setMatrixAt(i, dummy.matrix);

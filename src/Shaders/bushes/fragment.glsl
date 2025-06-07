@@ -23,7 +23,6 @@ void main() {
 
     float lightIntensity = dot(vNormal, lightDirection);
     lightIntensity = smoothstep(-.8, .5, lightIntensity);
-    // color = vec3(lightIntensity);
 
     color = mix(shadowColor, uLeavesColor, lightIntensity);
 

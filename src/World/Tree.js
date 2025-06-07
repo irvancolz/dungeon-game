@@ -69,6 +69,8 @@ export default class Tree {
       matcap: this.leavesMatcap,
       texture: this.leavesTexture,
       scales: scale,
+      name: "tree leaves",
+      color: "#ff0000",
     });
   }
 
