@@ -42,30 +42,30 @@ export default class World {
 
     this.markers = new MarkersManager();
 
-    // this.floor = new DebugFloor({
-    //   scene: this.scene,
-    //   debug: this.debug,
-    //   physics: this.physics,
-    //   width: this.width,
-    //   texture: this.resources.ground_texture,
-    // });
-
-    this.floor = new Ground({
+    this.floor = new DebugFloor({
       scene: this.scene,
       debug: this.debug,
       physics: this.physics,
       width: this.width,
       texture: this.resources.ground_texture,
-      maxHeight: 0,
     });
+
+    // this.floor = new Ground({
+    //   scene: this.scene,
+    //   debug: this.debug,
+    //   physics: this.physics,
+    //   width: this.width,
+    //   texture: this.resources.ground_texture,
+    //   maxHeight: 0,
+    // });
 
     this.addFences();
     this.addPlayer();
-    this.addBushes();
-    this.addTree();
-    this.addGrass();
+    // this.addBushes();
+    // this.addTree();
+    // this.addGrass();
     // this.addNPC();
-    // this.addHouse();
+    this.addHouse();
     // this.addTrunks();
     // this.addWoodenBoxes();
   }
@@ -177,6 +177,7 @@ export default class World {
       physics: this.physics,
       debug: this.debug,
       roofTexture: this.resources.roof_texture,
+      texture: this.resources.house_texture,
     });
   }
 

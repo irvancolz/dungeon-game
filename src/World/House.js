@@ -13,6 +13,7 @@ export default class House {
     quaternion = [],
     debug,
     roofTexture,
+    texture,
   }) {
     this.scene = scene;
     this.model = model;
@@ -20,6 +21,8 @@ export default class House {
     this.quaternion = quaternion;
     this.physicsWorld = physics;
     this.debug = debug;
+    this.texture = texture;
+
     this.windowMaterial = EmissiveMaterial(
       "#346965",
       0.522,
@@ -59,33 +62,38 @@ export default class House {
   }
 
   init() {
-    for (let i = 0; i < this.position.length; i++) {
-      const house = this.model.scene.children[0].clone();
+    this.texture.colorSpace = THREE.SRGBColorSpace;
 
-      house.traverse((e) => {
-        if (e.isMesh) {
-          e.castShadow = true;
-          e.receiveShadow = true;
+    this.texture.flipY = false;
+    this.material = new THREE.MeshStandardMaterial({
+      map: this.texture,
+    });
+    this.lightMaterial = EmissiveMaterial(
+      "#ffdc3f",
+      3,
+      this.debug,
+      "house light"
+    );
+    for (let i = 0; i < this.position.length; i++) {
+      const group = new THREE.Group();
+      this.model.scene.children.forEach((el) => {
+        if (!el.name.includes("Emissive")) {
+          el.material = this.material;
+        } else {
+          el.material = this.lightMaterial;
         }
-        if (e.name.toLowerCase().includes("wood")) {
-          e.material = this.woodMaterial;
-        } else if (e.name.toLowerCase().includes("roof")) {
-          e.material = this.roofMaterial;
-        } else if (e.name.toLowerCase().includes("modelhouse")) {
-          e.material = this.wallMaterial;
-        } else if (e.name.toLowerCase().includes("windowglass")) {
-          e.material = this.windowMaterial;
-        }
+
+        group.add(el.clone());
       });
 
-      house.position.copy(this.position[i]);
-      house.quaternion.copy(this.quaternion[i]);
-      this.scene.add(house);
+      group.position.copy(this.position[i]);
+      group.quaternion.copy(this.quaternion[i]);
+      this.scene.add(group);
 
       // physics
       const houseHeight = 2;
-      const houseHalfWidth = 4.5;
-      const houseHalfDepth = 3.2;
+      const houseHalfWidth = 3.2;
+      const houseHalfDepth = 4.8;
       const colliderDesc = RAPIER.ColliderDesc.cuboid(
         houseHalfWidth,
         houseHeight,

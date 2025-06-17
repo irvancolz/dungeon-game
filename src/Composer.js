@@ -65,8 +65,8 @@ export default class Composer {
       0.4,
       0.85
     );
-    this.bloomPass.threshold = 0;
-    this.bloomPass.strength = 0.01;
+    this.bloomPass.threshold = 0.48;
+    this.bloomPass.strength = 0.36;
     this.bloomPass.radius = 0;
     this.composer.addPass(this.bloomPass);
 

@@ -26,6 +26,11 @@ export default [
     name: "roof_texture",
   },
   {
+    path: "/texture/house_color_texture.jpg",
+    type: "texture",
+    name: "house_texture",
+  },
+  {
     path: "/texture/wooden_box_alpha_texture.jpg",
     type: "texture",
     name: "wooden_box_alpha_texture",
@@ -44,7 +49,7 @@ export default [
     name: "model_fence_wooden",
   },
   {
-    path: "/model/house_joglo.glb",
+    path: "/model/house.glb",
     type: "gltfModel",
     name: "model_house",
   },
