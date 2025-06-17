@@ -61,8 +61,8 @@ export default class World {
 
     this.addFences();
     this.addPlayer();
-    // this.addBushes();
-    // this.addTree();
+    this.addBushes();
+    this.addTree();
     // this.addGrass();
     // this.addNPC();
     this.addHouse();

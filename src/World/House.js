@@ -12,7 +12,6 @@ export default class House {
     position = [],
     quaternion = [],
     debug,
-    roofTexture,
     texture,
   }) {
     this.scene = scene;
@@ -24,23 +23,17 @@ export default class House {
     this.texture = texture;
 
     this.windowMaterial = EmissiveMaterial(
-      "#346965",
-      0.522,
+      "#907418",
+      0.217,
       this.debug,
       "window"
     );
-    this.woodMaterial = WoodDarkMaterial(false);
 
-    roofTexture.colorSpace = THREE.SRGBColorSpace;
-    roofTexture.wrapS = THREE.RepeatWrapping;
-    roofTexture.wrapT = THREE.RepeatWrapping;
-    this.roofMaterial = new THREE.MeshStandardMaterial({
-      map: roofTexture,
-      side: THREE.DoubleSide,
+    this.texture.colorSpace = THREE.SRGBColorSpace;
+    this.texture.flipY = false;
+    this.material = new THREE.MeshStandardMaterial({
+      map: this.texture,
     });
-
-    this.wallMaterial = WallMaterial();
-    this.wallMaterial.uniforms.uColor.value = new THREE.Color("#333333");
 
     this.init();
     this.addDebug();
@@ -62,25 +55,13 @@ export default class House {
   }
 
   init() {
-    this.texture.colorSpace = THREE.SRGBColorSpace;
-
-    this.texture.flipY = false;
-    this.material = new THREE.MeshStandardMaterial({
-      map: this.texture,
-    });
-    this.lightMaterial = EmissiveMaterial(
-      "#ffdc3f",
-      3,
-      this.debug,
-      "house light"
-    );
     for (let i = 0; i < this.position.length; i++) {
       const group = new THREE.Group();
       this.model.scene.children.forEach((el) => {
         if (!el.name.includes("Emissive")) {
           el.material = this.material;
         } else {
-          el.material = this.lightMaterial;
+          el.material = this.windowMaterial;
         }
 
         group.add(el.clone());
