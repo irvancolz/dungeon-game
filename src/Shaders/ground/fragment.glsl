@@ -10,8 +10,8 @@ void main() {
 
     vec3 color = mix(uEdgeColor, uColor, colorMix);
 
-    // gl_FragColor = vec4(color, 1.);
-    csm_DiffuseColor = vec4(color, 1.);
+    gl_FragColor = vec4(color, 1.);
+    // csm_DiffuseColor = vec4(color, 1.);
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
 }

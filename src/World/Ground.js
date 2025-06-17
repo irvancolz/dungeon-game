@@ -103,8 +103,8 @@ export default class Ground {
     if (!this.debug.active) return;
 
     const debugOpt = {
-      color: "#168c00",
-      edgeColor: "#696967",
+      color: "#124009",
+      edgeColor: "#203623",
     };
 
     const f = this.debug.ui.addFolder({ title: "ground", expanded: false });

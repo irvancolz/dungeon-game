@@ -5,7 +5,7 @@ import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 export default function GrassMaterial() {
   const uniforms = {
-    uColor: new THREE.Uniform(new THREE.Color("#168e08")),
+    uColor: new THREE.Uniform(new THREE.Color("#085944")),
     uTime: new THREE.Uniform(0),
     // global uniform
     uWindStrength: new THREE.Uniform(1),

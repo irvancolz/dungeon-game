@@ -105,7 +105,7 @@ export default class Grass {
   initDebug() {
     if (!this.debug.active) return;
     const opt = {
-      color: "#168e08",
+      color: "#085944",
     };
     const f = this.debug.ui.addFolder({
       title: "grass",
