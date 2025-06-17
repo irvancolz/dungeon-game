@@ -91,6 +91,7 @@ export default class Ground {
     this.initGeometry();
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
+
     // idk why texture is flipped,
     this.mesh.rotation.x = Math.PI * 0.5;
     this.mesh.rotation.y = -Math.PI;
