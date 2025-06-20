@@ -26,6 +26,11 @@ export default [
     name: "roof_texture",
   },
   {
+    path: "/texture/lamppost_texture.jpg",
+    type: "texture",
+    name: "lamppost_texture",
+  },
+  {
     path: "/texture/house_color_texture.jpg",
     type: "texture",
     name: "house_texture",

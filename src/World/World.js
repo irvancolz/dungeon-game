@@ -42,32 +42,33 @@ export default class World {
 
     this.markers = new MarkersManager();
 
-    // this.floor = new DebugFloor({
-    //   scene: this.scene,
-    //   debug: this.debug,
-    //   physics: this.physics,
-    //   width: this.width,
-    //   texture: this.resources.ground_texture,
-    // });
-
-    this.floor = new Ground({
+    this.floor = new DebugFloor({
       scene: this.scene,
       debug: this.debug,
       physics: this.physics,
       width: this.width,
       texture: this.resources.ground_texture,
-      maxHeight: 0,
     });
+
+    // this.floor = new Ground({
+    //   scene: this.scene,
+    //   debug: this.debug,
+    //   physics: this.physics,
+    //   width: this.width,
+    //   texture: this.resources.ground_texture,
+    //   maxHeight: 0,
+    // });
 
     this.addFences();
     this.addPlayer();
     this.addBushes();
     this.addTree();
     // this.addGrass();
-    // this.addNPC();
     this.addHouse();
+    this.addLampPost();
     // this.addTrunks();
     // this.addWoodenBoxes();
+    // this.addNPC();
   }
 
   update(elapsed, delta) {
@@ -304,6 +305,15 @@ export default class World {
     });
   }
 
+  addGrass() {
+    this.grass = new Grass({
+      density: 100,
+      debug: this.debug,
+      width: this.width,
+      scene: this.scene,
+      position: new THREE.Vector3(0, 0, 0),
+    });
+  }
   addLampPost() {
     const lampRefs = this.map.scene.children.filter((i) => {
       return i.name.startsWith("LampPost");
@@ -313,21 +323,12 @@ export default class World {
     const rotationRefs = lampRefs.map((i) => i.quaternion);
 
     this.lampPost = new LampPost({
-      model: this.resources.model_lamp_post,
       scene: this.scene,
       debug: this.debug,
       position: positionRefs,
       quaternion: rotationRefs,
-    });
-  }
-
-  addGrass() {
-    this.grass = new Grass({
-      density: 100,
-      debug: this.debug,
-      width: this.width,
-      scene: this.scene,
-      position: new THREE.Vector3(0, 0, 0),
+      model: this.resources.model_lamp_post,
+      texture: this.resources.lamppost_texture,
     });
   }
 

@@ -44,14 +44,6 @@ export default class House {
     const debugObj = {
       color: "#333333",
     };
-
-    const f = this.debug.ui.addFolder({
-      title: "house wall",
-      expanded: true,
-    });
-    f.addBinding(debugObj, "color").on("change", () => {
-      this.wallMaterial.uniforms.uColor.value.set(debugObj.color);
-    });
   }
 
   init() {
