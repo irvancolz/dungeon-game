@@ -13,6 +13,7 @@ import Backpack from "./Interface/Backpack/Backpack";
 import backpackSeeds from "./Seeds/backpack.json";
 import LootExpLlog from "./Interface/LootExpLog/LootExpLog";
 import Controller from "./Utils/Controller";
+import AnimationProvider from "./Utils/AnimationProvider";
 
 let instance = null;
 
@@ -33,6 +34,7 @@ export default class Experience {
     this.backpack.init(backpackSeeds.filter((e) => e.id != "item007"));
 
     this.lootExplog = new LootExpLlog();
+    this.animationProvider = new AnimationProvider();
 
     // background
     const path = "texture/background/";
@@ -87,6 +89,10 @@ export default class Experience {
     this.physics = new WorldPhysics();
 
     this.resources.on("finish:loaded", () => {
+      this.animationProvider.addPlaylist(
+        this.resources.resources.model_zombie.animations
+      );
+
       this.world = new World({
         scene: this.scene,
         debug: this.debug,

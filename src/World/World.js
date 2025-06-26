@@ -18,9 +18,10 @@ import Backpack from "../Interface/Backpack/Backpack";
 import DropItem from "../Utils/DropItem";
 import DropItemManager from "../Interface/DropItemManager";
 import backpackSeeds from "../Seeds/backpack.json";
-import NPC from "./NPC";
 import MarkersManager from "../Interface/MarkersManager";
 import { items } from "../Backend/items";
+import Human from "./Human";
+import NPCManager from "./NPCManager";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -41,6 +42,7 @@ export default class World {
     this.dropManager.setTexture(this.resources.drops_alpha_texture);
 
     this.markers = new MarkersManager();
+    this.npc = new NPCManager();
 
     this.floor = new DebugFloor({
       scene: this.scene,
@@ -59,16 +61,16 @@ export default class World {
     //   maxHeight: 0,
     // });
 
-    this.addFences();
-    this.addPlayer();
-    this.addBushes();
-    this.addTree();
+    // this.addFences();
+    // this.addPlayer();
+    // this.addBushes();
+    // this.addTree();
     // this.addGrass();
-    this.addHouse();
-    this.addLampPost();
+    // this.addHouse();
+    // this.addLampPost();
     // this.addTrunks();
     // this.addWoodenBoxes();
-    // this.addNPC();
+    this.addNPC();
   }
 
   update(elapsed, delta) {
@@ -88,34 +90,49 @@ export default class World {
     if (this.bushes) {
       this.bushes.update(elapsed);
     }
+    if (this.npc) {
+      this.npc.update(delta);
+    }
   }
 
   addNPC() {
-    const box = this.resources.old_elf_model.scene.clone();
+    const box = this.resources.model_zombie.scene.clone();
 
-    const oldElfPos = new THREE.Vector3(0, 0, 0);
-    this.oldElf = new NPC({
-      position: oldElfPos,
-      model: this.resources.old_elf_model,
+    const npc1Pos = new THREE.Vector3(0, 0, 0);
+    const npc1 = new Human({
+      position: npc1Pos,
+      model: this.resources.model_zombie_2,
       name: "old man",
       scene: this.scene,
       quaternion: new THREE.Quaternion().setFromAxisAngle(
         new THREE.Vector3(0, 1, 0),
         Math.PI
       ),
-      scale: new THREE.Vector3(2, 2, 2),
+    });
+    this.npc.addNPC(npc1);
+
+    const npc2Pos = new THREE.Vector3(2, 0, 0);
+    const npc2 = new Human({
+      position: npc2Pos,
+      model: this.resources.model_zombie,
+      name: "zombie 2",
+      scene: this.scene,
+      quaternion: new THREE.Quaternion().setFromAxisAngle(
+        new THREE.Vector3(0, 1, 0),
+        Math.PI
+      ),
     });
 
-    const oldElfMarkers = new Marker({
+    const npc1Marker = new Marker({
       scene: this.scene,
-      label: this.oldElf.name,
+      label: npc1.name,
       parent: box,
-      position: oldElfPos,
+      position: npc1Pos,
       radius: 6,
     });
 
-    oldElfMarkers.on("interact", () => {
-      this.camera.focus(oldElfPos);
+    npc1Marker.on("interact", () => {
+      this.camera.focus(npc1Pos);
       const chatId = this.chat.initConversation([
         {
           author: "Traveler",
@@ -152,14 +169,16 @@ export default class World {
       ]);
 
       this.chat.on("chat:ended", () => {
-        oldElfMarkers.dispose();
+        npc1Marker.dispose();
         this.camera.focusPlayer();
         const apples = items.toBackpackItem("item007");
         this.backpack.insert(apples, 3);
       });
     });
 
-    this.markers.add(oldElfMarkers);
+    this.markers.add(npc1Marker);
+
+    this.npc.addNPC(npc2);
   }
 
   addHouse() {

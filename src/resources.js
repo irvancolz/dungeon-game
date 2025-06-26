@@ -79,8 +79,13 @@ export default [
     name: "village_map",
   },
   {
-    path: "/model/old_elf_model.glb",
+    path: "/model/zombie_1.glb",
     type: "gltfModel",
-    name: "old_elf_model",
+    name: "model_zombie",
+  },
+  {
+    path: "/model/zombie_2.glb",
+    type: "gltfModel",
+    name: "model_zombie_2",
   },
 ];
