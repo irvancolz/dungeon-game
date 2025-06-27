@@ -11,8 +11,8 @@ export default function BushesMaterial(color) {
     uTime: new THREE.Uniform(0),
   };
 
-  const material = new THREE.ShaderMaterial({
-    // baseMaterial: THREE.MeshStandardMaterial,
+  const material = new CustomShaderMaterial({
+    baseMaterial: THREE.MeshStandardMaterial,
     uniforms,
     vertexShader,
     fragmentShader,

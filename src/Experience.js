@@ -30,6 +30,9 @@ export default class Experience {
     this.canvas = canvas;
     this.scene = new THREE.Scene();
 
+    this.fog = new THREE.FogExp2("#565f67", 0.001);
+    this.scene.fog = this.fog;
+
     this.backpack = new Backpack();
     this.backpack.init(backpackSeeds.filter((e) => e.id != "item007"));
 
@@ -56,6 +59,7 @@ export default class Experience {
     this.debugOpt = {
       showPhysics: false,
       showAxes: true,
+      fogColor: "#565f67",
     };
     this.addDebugger();
 
@@ -138,6 +142,16 @@ export default class Experience {
   addDebugger() {
     if (this.debug.active) {
       this.debug.ui.addBinding(this.debugOpt, "showPhysics");
+
+      const fogFolder = this.debug.ui.addFolder({ title: "fog" });
+      fogFolder.addBinding(this.debugOpt, "fogColor").on("change", (e) => {
+        this.fog.color.set(this.debugOpt.fogColor);
+      });
+      fogFolder.addBinding(this.fog, "density", {
+        min: 0.001,
+        max: 0.1,
+        step: 0.001,
+      });
     }
   }
 

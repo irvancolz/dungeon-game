@@ -11,11 +11,11 @@ export default function GroundMaterial() {
     uEdgeColor: new THREE.Uniform(new THREE.Color("#203623")),
   };
 
-  const material = new THREE.ShaderMaterial({
+  const material = new CustomShaderMaterial({
     vertexShader: groundVertexShader,
     fragmentShader: groundFragmentShader,
     uniforms,
-    // baseMaterial: THREE.MeshStandardMaterial,
+    baseMaterial: THREE.MeshStandardMaterial,
   });
 
   return material;

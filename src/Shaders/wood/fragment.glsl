@@ -19,7 +19,10 @@ void main() {
     alpha = step(.5, alpha);
     #endif
 
-    gl_FragColor = vec4(color, alpha);
+    // gl_FragColor = vec4(color, alpha);
+
+    csm_DiffuseColor = vec4(color, alpha);
+
     #include <tonemapping_fragment>
     #include <colorspace_fragment>
 }

@@ -4,7 +4,6 @@ uniform vec3 uLeavesColor;
 
 varying vec2 vUv;
 varying vec3 vPosition;
-varying vec3 vNormal;
 
 #include <logdepthbuf_pars_fragment>
 
@@ -30,6 +29,6 @@ void main() {
         discard;
     }
 
-    // csm_DiffuseColor = vec4(color, 1.);
-    gl_FragColor = vec4(color, alpha);
+    csm_DiffuseColor = vec4(color, alpha);
+    // gl_FragColor = vec4(color, alpha);
 }

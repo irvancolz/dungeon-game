@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import trunkVertexShader from "../Shaders/baseInstancedVert.glsl";
 import trunkFragmentShader from "../Shaders/trunk/fragment.glsl";
+import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 export default function TrunkMaterial() {
   const uniforms = {
@@ -10,10 +11,10 @@ export default function TrunkMaterial() {
     uNoiseTexture: new THREE.Uniform(),
   };
 
-  const material = new THREE.ShaderMaterial({
+  const material = new CustomShaderMaterial({
     uniforms,
-    vertexShader: trunkVertexShader,
     fragmentShader: trunkFragmentShader,
+    baseMaterial: THREE.MeshStandardMaterial,
   });
 
   return material;

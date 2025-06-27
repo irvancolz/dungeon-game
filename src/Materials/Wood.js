@@ -2,6 +2,7 @@ import * as THREE from "three";
 import woodVertexShader from "../Shaders/baseInstancedVert.glsl";
 import singleVertexShader from "../Shaders/baseVertex.glsl";
 import woodFragmentShader from "../Shaders/wood/fragment.glsl";
+import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 export default function WoodMaterial({
   color,
@@ -17,7 +18,8 @@ export default function WoodMaterial({
     uAphaTexture: new THREE.Uniform(alphaTexture),
   };
 
-  const material = new THREE.ShaderMaterial({
+  const material = new CustomShaderMaterial({
+    baseMaterial: THREE.MeshStandardMaterial,
     vertexShader: instanced ? woodVertexShader : singleVertexShader,
     fragmentShader: woodFragmentShader,
     uniforms,

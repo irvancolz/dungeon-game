@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { mix, smoothstep } from "../Utils/math";
 
 export default class Ground {
-  constructor({ scene, debug, texture, width, physics, maxHeight }) {
+  constructor({ scene, debug, texture, width, physics, maxHeight = 0 }) {
     this.scene = scene;
     this.debug = debug;
     this.texture = texture;
