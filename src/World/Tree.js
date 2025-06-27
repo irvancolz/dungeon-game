@@ -11,7 +11,6 @@ export default class Tree {
     model,
     physicsWorld,
     leaves,
-    leavesMatcap,
   }) {
     this.scene = scene;
     this.position = position;
@@ -22,7 +21,6 @@ export default class Tree {
 
     // leaves
     this.leavesTexture = leaves;
-    this.leavesMatcap = leavesMatcap;
 
     this.init();
     this.addLeaves();
@@ -66,7 +64,6 @@ export default class Tree {
       position: pos,
       scene: this.scene,
       debug: this.debug,
-      matcap: this.leavesMatcap,
       texture: this.leavesTexture,
       scales: scale,
       name: "tree leaves",

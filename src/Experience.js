@@ -30,7 +30,7 @@ export default class Experience {
     this.canvas = canvas;
     this.scene = new THREE.Scene();
 
-    this.fog = new THREE.FogExp2("#565f67", 0.001);
+    this.fog = new THREE.FogExp2("#565f67", 0.01);
     this.scene.fog = this.fog;
 
     this.backpack = new Backpack();

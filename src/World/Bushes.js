@@ -9,7 +9,6 @@ export default class Bushes {
     texture,
     debug,
     scales,
-    matcap,
     color = "#209420",
     name = "bushes",
   }) {
@@ -19,9 +18,7 @@ export default class Bushes {
     this.texture = texture;
     this.debug = debug;
     this.scales = scales;
-    this.matcap = matcap;
     this.color = color;
-    matcap.colorSpace = THREE.SRGBColorSpace;
     this.name = name;
 
     this.init();

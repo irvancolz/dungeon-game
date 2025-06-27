@@ -64,12 +64,12 @@ export default class World {
     this.addPlayer();
     this.addBushes();
     this.addTree();
-    // this.addGrass();
     this.addHouse();
     // this.addLampPost();
     // this.addTrunks();
     this.addWoodenBoxes();
     // this.addNPC();
+    this.addGrass();
   }
 
   update(elapsed, delta) {
@@ -325,9 +325,9 @@ export default class World {
 
   addGrass() {
     this.grass = new Grass({
-      density: 100,
+      density: 50,
       debug: this.debug,
-      width: this.width,
+      width: 70,
       scene: this.scene,
       position: new THREE.Vector3(0, 0, 0),
     });

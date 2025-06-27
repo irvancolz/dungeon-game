@@ -144,17 +144,29 @@ export default class Grass {
       step: 1,
     }).on("change", (e) => {
       if (!e.last) return;
-      this.positionsArray = [];
-      this.uvsArray = [];
-      this.colorsArray = [];
-      this.indiciesArray = [];
-      this.centersArray = [];
-      this.scene.remove(this.mesh);
-      this.geometry.dispose();
-      this.material.dispose();
-
-      this.init();
+      this.reset();
     });
+    f.addBinding(this, "width", {
+      min: 1,
+      max: 128,
+      step: 10,
+    }).on("change", (e) => {
+      if (!e.last) return;
+      this.reset();
+    });
+  }
+
+  reset() {
+    this.positionsArray = [];
+    this.uvsArray = [];
+    this.colorsArray = [];
+    this.indiciesArray = [];
+    this.centersArray = [];
+    this.scene.remove(this.mesh);
+    this.geometry.dispose();
+    this.material.dispose();
+
+    this.init();
   }
 
   update(playerPos, time) {

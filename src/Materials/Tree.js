@@ -1,6 +1,5 @@
 import * as THREE from "three";
-import trunkVertexShader from "../Shaders/baseInstancedVert.glsl";
-import trunkFragmentShader from "../Shaders/tree/fragment.glsl";
+import treeFragmentShader from "../Shaders/tree/fragment.glsl";
 import CustomShaderMaterial from "three-custom-shader-material/vanilla";
 
 export default function TreeMaterial() {
@@ -12,7 +11,7 @@ export default function TreeMaterial() {
   const material = new CustomShaderMaterial({
     uniforms,
     baseMaterial: THREE.MeshStandardMaterial,
-    fragmentShader: trunkFragmentShader,
+    fragmentShader: treeFragmentShader,
   });
 
   return material;
