@@ -10,7 +10,7 @@ varying vec3 vPosition;
 #include <logdepthbuf_pars_vertex>
 
 void main() {
-    float time = uTime * .005;
+    float time = uTime * .002;
     float windPower = .1;
     float noise = simplexNoise2d(uv);
 
@@ -24,13 +24,13 @@ void main() {
 
     // maybe add randomness in future
     float offset = time * position.y + modelPosition.y + noise;
-    // modelPosition.xz += vec2(sin(uv.x + offset), sin(uv.y + offset)) * windPower;
+    modelPosition.xz += vec2(sin(uv.x + offset), sin(uv.y + offset)) * windPower;
 
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
 
     // gl_Position = projectedPosition;
-    csm_Position = newPosition;
+    csm_PositionRaw = projectedPosition;
 
     #include <logdepthbuf_vertex>  
 

@@ -143,7 +143,7 @@ export default class Bushes {
     this.initMesh();
   }
   update(elapsed) {
-    // this.mesh.rotation.y = elapsed * 0.001;
+    this.material.uniforms.uTime.value = elapsed;
   }
 
   dispose() {

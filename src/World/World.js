@@ -91,6 +91,9 @@ export default class World {
     if (this.bushes) {
       this.bushes.update(elapsed);
     }
+    if (this.tree) {
+      this.tree.update(elapsed);
+    }
     if (this.npc) {
       this.npc.update(delta);
     }
