@@ -67,13 +67,15 @@ export default class World {
     this.addHouse();
     // this.addLampPost();
     // this.addTrunks();
-    this.addWoodenBoxes();
+    // this.addWoodenBoxes();
     // this.addNPC();
     this.addGrass();
   }
 
   update(elapsed, delta) {
     const playerPosition = this.states.playerPosition.getState();
+    const playerDirection = this.states.playerDirection.getState();
+
     if (this.player) {
       this.player.update();
     }
@@ -84,7 +86,7 @@ export default class World {
       this.markers.update(playerPosition);
     }
     if (this.grass) {
-      this.grass.update(playerPosition, elapsed);
+      this.grass.update(elapsed, playerPosition, playerDirection);
     }
     if (this.bushes) {
       this.bushes.update(elapsed);
@@ -327,7 +329,7 @@ export default class World {
     this.grass = new Grass({
       density: 50,
       debug: this.debug,
-      width: 70,
+      width: 50,
       scene: this.scene,
       position: new THREE.Vector3(0, 0, 0),
     });

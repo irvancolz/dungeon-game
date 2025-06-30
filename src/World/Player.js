@@ -69,7 +69,7 @@ export default class Player {
     //light
     this.light = new THREE.PointLight("#ffffff", 35, 50, 1);
     this.light.position.copy(this.position);
-    this.scene.add(this.light);
+    // this.scene.add(this.light);
 
     //character
     this.character = this.model.scene.children[0];
@@ -179,6 +179,7 @@ export default class Player {
 
   turn(degree) {
     this.direction.add({ x: 0, y: degree, z: 0 });
+    this.states.playerDirection.setState(this.direction);
   }
 
   move() {

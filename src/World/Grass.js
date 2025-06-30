@@ -13,7 +13,7 @@ export default class Grass {
     this.width = width;
     this.count = density * width ** 2;
     this.position = position;
-
+    this.rotation = 0;
     this.BLADE_HEIGHT = 0.5;
     this.BLADE_WIDTH = 0.02;
     this.BLADE_HEIGHT_VARIATION = 0.5;
@@ -34,6 +34,7 @@ export default class Grass {
   initMaterial() {
     // this.material = new THREE.MeshBasicMaterial();
     this.material = GrassMaterial();
+    this.material.uniforms.uFieldSize.value = this.width;
   }
 
   initGeometry() {
@@ -56,7 +57,11 @@ export default class Grass {
             this.convertRange(center.z, SURFACE_MIN, SURFACE_MAX, 0, 1),
           ];
 
-          const blade = this.generateBlade(center, i * VERT_PER_BLADE, uv);
+          const blade = this.generateBlade(
+            new THREE.Vector3(),
+            i * VERT_PER_BLADE,
+            uv
+          );
           blade.verts.forEach((vert) => {
             this.positionsArray.push(...vert.pos);
             this.uvsArray.push(...vert.uv);
@@ -169,9 +174,11 @@ export default class Grass {
     this.init();
   }
 
-  update(playerPos, time) {
+  update(time, playerPos, playerDirection) {
     this.material.uniforms.uTime.value = time;
-    // this.mesh.position.set(playerPos.x, 0, playerPos.z);
+
+    this.material.uniforms.uPlayerPosition.value = playerPos;
+    this.mesh.position.set(playerPos.x, 0, playerPos.z);
   }
 
   dispose() {

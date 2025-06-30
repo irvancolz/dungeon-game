@@ -8,5 +8,6 @@ export default class States {
     this.sizes = new Sizes();
     this.playerPosition = createStore(new THREE.Vector3(0, 4, 0));
     this.playerTarget = createStore(new THREE.Vector3(0, 4, 8));
+    this.playerDirection = createStore(new THREE.Vector3(0, 0, 0));
   }
 }
