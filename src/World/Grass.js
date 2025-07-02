@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import GrassMaterial from "../Materials/Grass";
+import States from "../States";
 
 export default class Grass {
   constructor({
@@ -27,13 +28,15 @@ export default class Grass {
     this.indiciesArray = [];
     this.centersArray = [];
 
+    this.states = States.getInstance();
+
     this.init();
     this.initDebug();
   }
 
   initMaterial() {
-    // this.material = new THREE.MeshBasicMaterial();
-    this.material = GrassMaterial();
+    this.material = GrassMaterial(this.states);
+
     this.material.uniforms.uFieldSize.value = this.width;
   }
 
@@ -119,30 +122,6 @@ export default class Grass {
     f.addBinding(opt, "color").on("change", () => {
       this.material.uniforms.uColor.value.set(opt.color);
     });
-    f.addBinding(this.material.uniforms.uWindStrength, "value", {
-      label: "wind strength",
-      min: 0.1,
-      max: 2,
-      step: 0.01,
-    });
-    f.addBinding(this.material.uniforms.uWindSpeed, "value", {
-      label: "wind speed",
-      min: 0.1,
-      max: 5,
-      step: 0.01,
-    });
-    f.addBinding(this.material.uniforms.uWindDirection.value, "x", {
-      label: "wind x",
-      min: -1,
-      max: 1,
-      step: 0.01,
-    });
-    f.addBinding(this.material.uniforms.uWindDirection.value, "y", {
-      label: "wind y",
-      min: -1,
-      max: 1,
-      step: 0.01,
-    });
     f.addBinding(this, "density", {
       min: 1,
       max: 300,
@@ -175,9 +154,7 @@ export default class Grass {
   }
 
   update(time, playerPos, playerDirection) {
-    this.material.uniforms.uTime.value = time;
-
-    this.material.uniforms.uPlayerPosition.value = playerPos;
+    this.states.updateUniforms(this.material.uniforms);
     this.mesh.position.set(playerPos.x, 0, playerPos.z);
   }
 

@@ -14,6 +14,7 @@ import backpackSeeds from "./Seeds/backpack.json";
 import LootExpLlog from "./Interface/LootExpLog/LootExpLog";
 import Controller from "./Utils/Controller";
 import AnimationProvider from "./Utils/AnimationProvider";
+import Stats from "three/examples/jsm/libs/stats.module.js";
 
 let instance = null;
 
@@ -26,7 +27,7 @@ export default class Experience {
 
     this.controller = new Controller();
     this.debug = new Debugger();
-    this.states = new States();
+    this.states = new States(this.debug);
     this.canvas = canvas;
     this.scene = new THREE.Scene();
 
@@ -123,7 +124,9 @@ export default class Experience {
       if (this.world) {
         this.world.update(this.states.time.elapsed, this.states.time.delta);
       }
-
+      if (this.stats) {
+        this.stats.update();
+      }
       this.showPhysicsWorld();
     });
 
@@ -141,9 +144,15 @@ export default class Experience {
 
   addDebugger() {
     if (this.debug.active) {
+      this.stats = new Stats();
+      document.body.appendChild(this.stats.dom);
+
       this.debug.ui.addBinding(this.debugOpt, "showPhysics");
 
-      const fogFolder = this.debug.ui.addFolder({ title: "fog" });
+      const fogFolder = this.debug.ui.addFolder({
+        title: "fog",
+        expanded: false,
+      });
       fogFolder.addBinding(this.debugOpt, "fogColor").on("change", (e) => {
         this.fog.color.set(this.debugOpt.fogColor);
       });

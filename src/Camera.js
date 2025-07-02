@@ -111,7 +111,7 @@ export default class Camera {
       35,
       this.sizes.width / this.sizes.height,
       0.1,
-      600
+      100
     );
     this.target = new THREE.Vector3().copy(this.playerPosition.getState());
 
