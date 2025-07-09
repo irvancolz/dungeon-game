@@ -1,18 +1,19 @@
 import AnimationProvider from "../Utils/AnimationProvider";
+import Canvas from "../Utils/Canvas";
 import EventEmitter from "../Utils/EventEmitter";
 import * as THREE from "three";
 
-class Human extends EventEmitter {
+class Human {
   #STATE_IDLE = "idle";
   #STATE_TALK = "talk";
   #STATE_WALK = "walk";
-  constructor({ scene, model, position, name, quaternion }) {
-    super();
-
+  constructor({ scene, model, position, name = "", quaternion, job = "" }) {
     this.type = "human";
     this.scene = scene;
     this.name = name;
+    this.job = job;
     this.model = model;
+    this.character = this.model.scene.children[0];
     this.position = position;
     this.quaternion = quaternion;
     this.state = this.#STATE_IDLE;
@@ -22,10 +23,10 @@ class Human extends EventEmitter {
   }
 
   init() {
-    this.character = this.model.scene.children[0];
     this.character.position.copy(this.position);
     this.character.quaternion.copy(this.quaternion);
 
+    this.initNameTag();
     this.initMixer();
     this.initAnimation();
     this.updateAnimationState();
@@ -35,6 +36,34 @@ class Human extends EventEmitter {
 
   update(delta) {
     this.mixer.update(delta * 0.001);
+  }
+
+  initNameTag() {
+    this.canvas = new Canvas();
+    this.canvas.write(this.name);
+
+    if (this.job) this.canvas.write(`< ${this.job} >`);
+
+    const offset = new THREE.Vector3(0, 0.5, 0);
+
+    this.nameTag = new THREE.Sprite(
+      new THREE.SpriteMaterial({
+        alphaMap: new THREE.CanvasTexture(this.canvas.canvas),
+      })
+    );
+
+    const box3 = new THREE.Box3();
+    box3.expandByObject(this.character.clone());
+    const dimension = new THREE.Vector3();
+    box3.getSize(dimension);
+    this.nameTag.position
+      .copy(this.position)
+      .add(offset)
+      .add({ x: 0, y: dimension.y, z: 0 });
+
+    this.nameTag.scale.setScalar(1.5);
+
+    this.scene.add(this.nameTag);
   }
 
   dispose() {

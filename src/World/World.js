@@ -22,6 +22,7 @@ import MarkersManager from "../Interface/MarkersManager";
 import { items } from "../Backend/items";
 import Human from "./Human";
 import NPCManager from "./NPCManager";
+import NPCInformation from "../Seeds/NPC";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -68,7 +69,7 @@ export default class World {
     // this.addLampPost();
     // this.addTrunks();
     // this.addWoodenBoxes();
-    // this.addNPC();
+    this.addNPC();
     // this.addGrass();
   }
 
@@ -100,89 +101,26 @@ export default class World {
   }
 
   addNPC() {
-    const box = this.resources.model_zombie.scene.clone();
-
-    const npc1Pos = new THREE.Vector3(0, 0, 0);
-    const npc1 = new Human({
-      position: npc1Pos,
-      model: this.resources.model_zombie_2,
-      name: "old man",
-      scene: this.scene,
-      quaternion: new THREE.Quaternion().setFromAxisAngle(
-        new THREE.Vector3(0, 1, 0),
-        Math.PI
-      ),
-    });
-    this.npc.addNPC(npc1);
-
-    const npc2Pos = new THREE.Vector3(2, 0, 0);
-    const npc2 = new Human({
-      position: npc2Pos,
-      model: this.resources.model_zombie,
-      name: "zombie 2",
-      scene: this.scene,
-      quaternion: new THREE.Quaternion().setFromAxisAngle(
-        new THREE.Vector3(0, 1, 0),
-        Math.PI
-      ),
+    const npcRef = this.map.scene.children.filter((i) => {
+      return i.name.startsWith("NPC");
     });
 
-    const npc1Marker = new Marker({
-      scene: this.scene,
-      label: npc1.name,
-      parent: box,
-      position: npc1Pos,
-      radius: 6,
-    });
+    npcRef.forEach((npc) => {
+      const name = npc.name.split("_");
+      name.splice(0, 1);
 
-    npc1Marker.on("interact", () => {
-      this.camera.focus(npc1Pos);
-      const chatId = this.chat.initConversation([
-        {
-          author: "Traveler",
-          chat: "Excuse me, sir. Do you know where the nearest village is?",
-        },
-        {
-          author: "Old Man",
-          chat: "Ah, you're a bit off the trail, young one. The village lies just beyond the grove to the east.",
-        },
-        {
-          author: "Traveler",
-          chat: "Thank you kindly. It's been a long walk, and I'm running low on food.",
-        },
-        {
-          author: "Old Man",
-          chat: "I see. Here, take these apples from my satchel. They're fresh and sweet—just picked this morning.",
-        },
-        {
-          author: "Traveler",
-          chat: "Really? That's very generous of you. Are you sure?",
-        },
-        {
-          author: "Old Man",
-          chat: "Of course. A traveler should never go hungry on the road. Besides, kindness has a way of circling back.",
-        },
-        {
-          author: "Traveler",
-          chat: "Thank you, sir. I won’t forget this. I hope to repay your kindness one day.",
-        },
-        {
-          author: "Old Man",
-          chat: "No need. Just pass it on when you can. Safe travels, young one.",
-        },
-      ]);
+      const info = NPCInformation.getDetail(name.join("_"));
 
-      this.chat.on("chat:ended", () => {
-        npc1Marker.dispose();
-        this.camera.focusPlayer();
-        const apples = items.toBackpackItem("item007");
-        this.backpack.insert(apples, 3);
+      const person = new Human({
+        scene: this.scene,
+        model: this.resources[info.model],
+        name: info.name,
+        position: npc.position,
+        quaternion: npc.quaternion,
+        job: info.job,
       });
+      this.npc.addNPC(person);
     });
-
-    this.markers.add(npc1Marker);
-
-    this.npc.addNPC(npc2);
   }
 
   addHouse() {

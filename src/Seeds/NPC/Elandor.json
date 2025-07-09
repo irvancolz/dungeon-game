@@ -1,0 +1,7 @@
+{
+  "id": "npc001",
+  "name": "Elandor the Wise",
+  "job": "Herbalist",
+  "description": "A gentle old man who knows every plant in the forest. He offers potions and wisdom to those who seek it.",
+  "model": "model_elandor"
+}

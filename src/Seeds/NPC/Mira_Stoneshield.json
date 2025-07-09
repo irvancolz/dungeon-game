@@ -1,0 +1,7 @@
+{
+  "id": "npc002",
+  "name": "Mira Stoneshield",
+  "job": "Blacksmith",
+  "description": "A tough dwarf woman with unmatched skill in forging weapons. She's loud, loyal, and loves a good challenge.",
+  "model": "model_mirastoneshield"
+}

@@ -1,0 +1,7 @@
+{
+  "id": "npc005",
+  "name": "Captain Rorik",
+  "job": "Guard Captain",
+  "description": "A grizzled veteran who defends the town of Eldermere. Trustworthy, but haunted by an old war.",
+  "model": "model_captrorik"
+}

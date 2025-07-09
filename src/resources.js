@@ -81,11 +81,11 @@ export default [
   {
     path: "/model/zombie_1.glb",
     type: "gltfModel",
-    name: "model_zombie",
+    name: "model_elandor",
   },
   {
     path: "/model/zombie_2.glb",
     type: "gltfModel",
-    name: "model_zombie_2",
+    name: "model_seren",
   },
 ];

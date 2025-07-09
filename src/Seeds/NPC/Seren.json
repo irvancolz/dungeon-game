@@ -1,0 +1,7 @@
+{
+  "id": "npc003",
+  "name": "Seren of the Glade",
+  "job": "Druid",
+  "description": "A mysterious elf who protects the ancient forest. Speaks in riddles and controls wild beasts.",
+  "model": "model_seren"
+}

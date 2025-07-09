@@ -1,0 +1,7 @@
+{
+  "id": "npc004",
+  "name": "Thorn Underfoot",
+  "job": "Merchant",
+  "description": "A cunning halfling trader who always has something rare in his cart—at a price, of course.",
+  "model": "model_thornunderfoot"
+}
