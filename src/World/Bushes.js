@@ -146,7 +146,7 @@ export default class Bushes {
     this.initMesh();
   }
   update(elapsed) {
-    // this.states.updateUniforms(this.material.uniforms);
+    this.states.updateUniforms(this.material.uniforms);
   }
 
   dispose() {

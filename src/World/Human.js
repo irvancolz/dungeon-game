@@ -49,6 +49,7 @@ class Human {
     this.nameTag = new THREE.Sprite(
       new THREE.SpriteMaterial({
         alphaMap: new THREE.CanvasTexture(this.canvas.canvas),
+        depthWrite: false,
       })
     );
 

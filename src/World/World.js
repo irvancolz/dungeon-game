@@ -45,15 +45,7 @@ export default class World {
     this.markers = new MarkersManager();
     this.npc = new NPCManager();
 
-    this.floor = new DebugFloor({
-      scene: this.scene,
-      debug: this.debug,
-      physics: this.physics,
-      width: this.width,
-      texture: this.resources.ground_texture,
-    });
-
-    // this.floor = new Ground({
+    // this.floor = new DebugFloor({
     //   scene: this.scene,
     //   debug: this.debug,
     //   physics: this.physics,
@@ -61,16 +53,24 @@ export default class World {
     //   texture: this.resources.ground_texture,
     // });
 
+    this.floor = new Ground({
+      scene: this.scene,
+      debug: this.debug,
+      physics: this.physics,
+      width: this.width,
+      texture: this.resources.ground_texture,
+    });
+
     this.addFences();
     this.addPlayer();
-    // this.addBushes();
-    // this.addTree();
-    // this.addHouse();
+    this.addBushes();
+    this.addTree();
+    this.addHouse();
     // this.addLampPost();
     // this.addTrunks();
     // this.addWoodenBoxes();
     this.addNPC();
-    // this.addGrass();
+    this.addGrass();
   }
 
   update(elapsed, delta) {
