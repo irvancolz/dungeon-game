@@ -42,6 +42,14 @@ export default class World {
     this.dropManager.setScene(this.scene);
     this.dropManager.setTexture(this.resources.drops_alpha_texture);
 
+    const seed = [];
+    for (let i = 0; i < backpackSeeds.length; i++) {
+      const pos = new THREE.Vector3(i * 5, 0, i * 2);
+      const item = { ...backpackSeeds[i], position: pos };
+      seed.push(item);
+    }
+    this.dropManager.init(seed);
+
     this.markers = new MarkersManager();
     this.npc = new NPCManager();
 

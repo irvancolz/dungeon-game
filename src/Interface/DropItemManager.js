@@ -96,6 +96,7 @@ class DropItemManager {
 
   initMesh() {
     this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh.frustumCulled = false;
   }
 
   updateInstances() {

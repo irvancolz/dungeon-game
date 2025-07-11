@@ -15,6 +15,11 @@ import LootExpLlog from "./Interface/LootExpLog/LootExpLog";
 import Controller from "./Utils/Controller";
 import AnimationProvider from "./Utils/AnimationProvider";
 import Stats from "three/examples/jsm/libs/stats.module.js";
+import EventManager from "./World/EventManager";
+import QuestManager from "./World/QuestManager";
+import Quest from "./World/Quest";
+import QuestObjective from "./World/QuestObjective";
+import PlayerEvent from "./World/PlayerEvent";
 
 let instance = null;
 
@@ -39,6 +44,27 @@ export default class Experience {
 
     this.lootExplog = new LootExpLlog();
     this.animationProvider = new AnimationProvider();
+    this.eventManager = new EventManager();
+    this.questManager = new QuestManager();
+
+    const quest = new Quest({
+      title: "gather potion",
+      dependencies: [],
+      description: "find nearest potion around you to finish this quest",
+      status: Quest.STATUS_IN_PROGRESS,
+    });
+    quest.setObjectives([
+      {
+        type: PlayerEvent.EVENT_COLLECT,
+        value: {
+          id: "item001",
+          name: "Potion of Minor Healing",
+          count: 3,
+        },
+      },
+    ]);
+    this.questManager.add(quest);
+    this.questManager.init();
 
     // background
     const path = "texture/background/";
