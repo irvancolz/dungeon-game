@@ -16,9 +16,8 @@ import Controller from "./Utils/Controller";
 import AnimationProvider from "./Utils/AnimationProvider";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import EventManager from "./World/EventManager";
-import QuestManager from "./World/QuestManager";
-import Quest from "./World/Quest";
-import QuestObjective from "./World/QuestObjective";
+import QuestManager from "./Interface/QuestManager/QuestManager";
+import Quest from "./Interface/Quest/Quest";
 import PlayerEvent from "./World/PlayerEvent";
 
 let instance = null;
@@ -40,29 +39,29 @@ export default class Experience {
     this.scene.fog = this.fog;
 
     this.backpack = new Backpack();
-    this.backpack.init(backpackSeeds.filter((e) => e.id != "item007"));
+    this.backpack.init(backpackSeeds);
 
     this.lootExplog = new LootExpLlog();
     this.animationProvider = new AnimationProvider();
     this.eventManager = new EventManager();
-    this.questManager = new QuestManager();
 
     const quest = new Quest({
       title: "gather potion",
       dependencies: [],
       description: "find nearest potion around you to finish this quest",
       status: Quest.STATUS_IN_PROGRESS,
-    });
-    quest.setObjectives([
-      {
-        type: PlayerEvent.EVENT_COLLECT,
-        value: {
-          id: "item001",
-          name: "Potion of Minor Healing",
-          count: 3,
+      objectives: [
+        {
+          type: PlayerEvent.EVENT_COLLECT,
+          value: {
+            id: "item001",
+            name: "Potion of Minor Healing",
+            count: 3,
+          },
         },
-      },
-    ]);
+      ],
+    });
+    this.questManager = new QuestManager();
     this.questManager.add(quest);
     this.questManager.init();
 

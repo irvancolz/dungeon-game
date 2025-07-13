@@ -1,13 +1,20 @@
-import Backpack from "../Interface/Backpack/Backpack";
-import EventEmitter from "../Utils/EventEmitter";
-import QuestObjective from "./QuestObjective";
+import Backpack from "../Backpack/Backpack";
+import EventEmitter from "../../Utils/EventEmitter";
+import QuestObjective from "../QuestObjective/QuestObjective";
 
 class Quest extends EventEmitter {
   static STATUS_NOT_STARTED = "not_started";
   static STATUS_IN_PROGRESS = "in_progress";
   static STATUS_FINISHED = "finished";
   static STATUS_FAILED = "failed";
-  constructor({ title, description, status, dependencies, rewards }) {
+  constructor({
+    title,
+    description,
+    status,
+    dependencies,
+    rewards,
+    objectives = [],
+  }) {
     super();
 
     this.id = Date.now().toString();
@@ -19,8 +26,10 @@ class Quest extends EventEmitter {
     this.dependencies = dependencies;
     this.currObjective = null;
     this.objectivesCompleted = 0;
+    this.setObjectives(objectives);
 
     this.backpack = new Backpack();
+    this.initUI();
   }
   // todo
   canStart() {
@@ -29,35 +38,24 @@ class Quest extends EventEmitter {
 
   updateProgress(evt) {
     if (this.status != Quest.STATUS_IN_PROGRESS) {
-      console.error(
-        `QUEST ${this.title} : try to update quest not in progress status`
+      console.warn(
+        `QUEST ${this.title} : try to update progress on quest with status ${this.status}`
       );
       return;
     }
 
     this.currObjective.update(evt);
-    // this.currObjective.on("complete", () => {
-    //   console.log("hello");
-
-    //   this.objectivesCompleted++;
-    //   if (this.objectivesCompleted == this.objectives.length) {
-    //     this.complete();
-    //     return;
-    //   }
-
-    //   this.currObjective = this.objectives[this.objectivesCompleted];
-    // });
   }
 
   start() {
     this.objectives.sort((a, b) => b.completed - a.completed);
     if (this.status != Quest.STATUS_NOT_STARTED) {
       const completed = this.objectives.filter((el) => el.completed).length;
-      this.currObjective = this.objectives[completed];
+      this._setCurrentObjective(this.objectives[completed]);
 
       this.objectivesCompleted = completed;
     } else {
-      this.currObjective = this.objectives[0];
+      this._setCurrentObjective(this.objectives[0]);
     }
 
     this.trigger("start");
@@ -86,10 +84,35 @@ class Quest extends EventEmitter {
           return;
         }
 
-        this.currObjective = this.objectives[this.objectivesCompleted];
+        this._setCurrentObjective(this.objectives[this.objectivesCompleted]);
       });
       this.objectives.push(objective);
     });
+  }
+
+  initUI() {
+    this.$ui = document.createElement("div");
+    this.$ui.setAttribute("class", "quest");
+
+    this.$title = document.createElement("p");
+    this.$title.className = "title";
+    this.$title.innerText = this.title;
+
+    this.$objectiveContainer = document.createElement("div");
+    this.$objectiveContainer.className = "objective_container";
+
+    this.$ui.appendChild(this.$title);
+    this.$ui.appendChild(this.$objectiveContainer);
+  }
+
+  _setCurrentObjective(newObj) {
+    if (this.currObjective) {
+      const $oldUI = this.currObjective.$ui;
+      this.$objectiveContainer.removeChild($oldUI);
+    }
+
+    this.currObjective = newObj;
+    this.$objectiveContainer.appendChild(this.currObjective.$ui);
   }
 }
 

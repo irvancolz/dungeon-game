@@ -66,11 +66,6 @@ export default class Player {
   }
 
   init() {
-    //light
-    this.light = new THREE.PointLight("#ffffff", 35, 50, 1);
-    this.light.position.copy(this.position);
-    // this.scene.add(this.light);
-
     //character
     this.character = this.model.scene.children[0];
     this.character.traverse((el) => {
@@ -126,24 +121,6 @@ export default class Player {
       f.addButton({ title: "reset player" }).on("click", () => {
         this.physics.reset();
       });
-      f.addBinding(debugObj, "lightColor").on("change", () => {
-        this.light.color.set(debugObj.lightColor);
-      });
-      f.addBinding(this.light, "intensity", {
-        min: 1,
-        max: 100,
-        step: 1,
-      });
-      f.addBinding(this.light, "distance", {
-        min: 1,
-        max: 100,
-        step: 0.5,
-      });
-      f.addBinding(this.light, "decay", {
-        min: 1,
-        max: 4,
-        step: 0.1,
-      });
     }
   }
 
@@ -173,8 +150,6 @@ export default class Player {
     this.character.position.copy(newPos);
     this.character.rotation.setFromVector3(this.direction);
     this.states.playerPosition.setState(this.character.position);
-
-    this.light.position.copy(newPos);
   }
 
   turn(degree) {

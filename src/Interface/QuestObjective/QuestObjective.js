@@ -1,5 +1,5 @@
-import EventEmitter from "../Utils/EventEmitter";
-import PlayerEvent from "./PlayerEvent";
+import EventEmitter from "../../Utils/EventEmitter";
+import PlayerEvent from "../../World/PlayerEvent";
 
 class QuestObjective extends EventEmitter {
   constructor(type, value) {
@@ -16,6 +16,8 @@ class QuestObjective extends EventEmitter {
 
     // distance based quest
     this.distanceTreshold = 5;
+
+    this.initUI();
   }
 
   update(evt) {
@@ -24,7 +26,6 @@ class QuestObjective extends EventEmitter {
     switch (evt.type) {
       case PlayerEvent.EVENT_COLLECT:
         this.progress = this.progress + evt.value.count / this.value.count;
-
         if (this.progress >= 1) {
           this.complete();
         }
@@ -45,6 +46,7 @@ class QuestObjective extends EventEmitter {
       default:
         break;
     }
+    this._updateContent();
   }
 
   setDistanceTreshold(treshold = 5) {
@@ -54,6 +56,28 @@ class QuestObjective extends EventEmitter {
   complete() {
     this.completed = true;
     this.trigger("complete");
+  }
+
+  initUI() {
+    this.$ui = document.createElement("div");
+    this.$ui.className = "quest_objective";
+    this._updateContent();
+  }
+
+  _getContent() {
+    if (this.type == PlayerEvent.EVENT_COLLECT)
+      return `<span>collect ${this.value.name}</span> <span>${Math.min(
+        this.progress * 100,
+        100
+      )} %</span>`;
+    if (this.type == PlayerEvent.EVENT_TALK)
+      return `<span>talk to ${this.value.name}</span>`;
+    if (this.type == PlayerEvent.EVENT_REACH)
+      return `<span>visit ${this.value.name}</span>`;
+    return "";
+  }
+  _updateContent() {
+    this.$ui.innerHTML = this._getContent();
   }
 }
 
