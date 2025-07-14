@@ -18,49 +18,98 @@ export default class Controller extends EventEmitter {
       interact: false,
       backpack: false,
       fullscreen: false,
+      quest: false,
     };
     this.idle = true;
 
     document.addEventListener("keydown", (e) => {
       const pressed = e.code;
-      if (pressed == "KeyW" || pressed == "ArrowUp") {
-        this.actions.forward = true;
-      } else if (pressed == "KeyA" || pressed == "ArrowLeft") {
-        this.actions.left = true;
-      } else if (pressed == "KeyD" || pressed == "ArrowRight") {
-        this.actions.right = true;
-      } else if (pressed == "KeyS" || pressed == "ArrowDown") {
-        this.actions.backward = true;
-      } else if (pressed == "Space") {
-        this.actions.jump = true;
-      } else if (pressed == "KeyE") {
-        this.actions.interact = true;
-      } else if (pressed == "KeyB") {
-        this.actions.backpack = true;
-      } else if (pressed == "KeyF") {
-        this.actions.fullscreen = true;
+      switch (pressed) {
+        case "KeyW":
+        case "ArrowUp":
+          this.actions.forward = true;
+          break;
+
+        case "KeyA":
+        case "ArrowLeft":
+          this.actions.left = true;
+          break;
+
+        case "KeyD":
+        case "ArrowRight":
+          this.actions.right = true;
+          break;
+
+        case "KeyS":
+        case "ArrowDown":
+          this.actions.backward = true;
+          break;
+
+        case "Space":
+          this.actions.jump = true;
+          break;
+
+        case "KeyE":
+          this.actions.interact = true;
+          break;
+
+        case "KeyB":
+          this.actions.backpack = true;
+          break;
+
+        case "KeyF":
+          this.actions.fullscreen = true;
+          break;
+
+        case "KeyJ":
+          this.actions.quest = true;
+          break;
       }
       this.triggerAction();
     });
 
     document.addEventListener("keyup", (e) => {
-      const pressed = e.code;
-      if (pressed == "KeyW" || pressed == "ArrowUp") {
-        this.actions.forward = false;
-      } else if (pressed == "KeyA" || pressed == "ArrowLeft") {
-        this.actions.left = false;
-      } else if (pressed == "KeyD" || pressed == "ArrowRight") {
-        this.actions.right = false;
-      } else if (pressed == "KeyS" || pressed == "ArrowDown") {
-        this.actions.backward = false;
-      } else if (pressed == "Space") {
-        this.actions.jump = false;
-      } else if (pressed == "KeyE") {
-        this.actions.interact = false;
-      } else if (pressed == "KeyB") {
-        this.actions.backpack = false;
-      } else if (pressed == "KeyF") {
-        this.actions.fullscreen = false;
+      const released = e.code;
+      switch (released) {
+        case "KeyW":
+        case "ArrowUp":
+          this.actions.forward = false;
+          break;
+
+        case "KeyA":
+        case "ArrowLeft":
+          this.actions.left = false;
+          break;
+
+        case "KeyD":
+        case "ArrowRight":
+          this.actions.right = false;
+          break;
+
+        case "KeyS":
+        case "ArrowDown":
+          this.actions.backward = false;
+          break;
+
+        case "Space":
+          this.actions.jump = false;
+          break;
+
+        case "KeyE":
+          this.actions.interact = false;
+          break;
+
+        case "KeyB":
+          this.actions.backpack = false;
+          break;
+
+        case "KeyF":
+          this.actions.fullscreen = false;
+          break;
+
+        case "KeyJ":
+          this.actions.quest = false;
+          break;
       }
       this.triggerAction();
       this.checkIdle();
