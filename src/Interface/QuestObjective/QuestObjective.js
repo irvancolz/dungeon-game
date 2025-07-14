@@ -55,6 +55,7 @@ class QuestObjective extends EventEmitter {
 
   complete() {
     this.completed = true;
+    this.$ui.classList.add("complete");
     this.trigger("complete");
   }
 

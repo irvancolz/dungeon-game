@@ -63,6 +63,7 @@ class Quest extends EventEmitter {
 
   complete() {
     this.status = Quest.STATUS_FINISHED;
+    this.$objectiveContainer.innerHTML = null;
     this.claim();
     this.trigger("complete");
   }

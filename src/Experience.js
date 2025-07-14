@@ -63,7 +63,6 @@ export default class Experience {
     });
     this.questManager = new QuestManager();
     this.questManager.add(quest);
-    this.questManager.init();
 
     // background
     const path = "texture/background/";

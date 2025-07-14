@@ -1,8 +1,27 @@
 .quest {
   padding: 0.25rem 0.5rem;
+  min-height: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  animation: slideIn 0.3s ease-out;
+  transform-origin: top;
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
 
   & .title {
     text-transform: capitalize;
     font-weight: 500;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    scale: 1 0;
+  }
+  100% {
+    scale: 1 1;
   }
 }

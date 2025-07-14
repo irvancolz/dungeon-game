@@ -7,14 +7,67 @@
   right: 1rem;
   height: calc(100vh - 2rem);
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
+  width: 25vw;
+  transition: 0.5s ease-in-out;
 
-  & .quest_wrapper {
-    & > .title {
-      text-transform: capitalize;
-      font-weight: 700;
+  translate: calc(100% + 1rem) 0;
+
+  &[data-opened="true"] {
+    translate: 0 0;
+  }
+
+  & .header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    text-transform: capitalize;
+  }
+
+  & .container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    & .quest_wrapper {
+      & > .title {
+        text-transform: capitalize;
+        font-weight: 700;
+      }
+      & .empty {
+        font-weight: 400;
+        text-align: center;
+        text-transform: capitalize;
+        padding-block: 1rem;
+      }
     }
+  }
+}
+
+#pinned_mission {
+  position: fixed;
+  right: 1rem;
+  top: 1rem;
+  width: 25vw;
+  font-weight: 500;
+  color: var(--color-white);
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.393) 0%,
+    #3737376b 30%,
+    #a9a9a900 100%
+  );
+  padding: 0.75rem;
+  text-transform: capitalize;
+  display: block;
+
+  &:empty {
+    display: none;
+  }
+
+  & .title {
+    font-size: 0.75rem;
+  }
+  & .desc {
+    font-size: 1rem;
   }
 }

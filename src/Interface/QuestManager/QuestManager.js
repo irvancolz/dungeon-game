@@ -1,3 +1,4 @@
+import Controller from "../../Utils/Controller";
 import EventManager from "../../World/EventManager";
 import Quest from "../Quest/Quest";
 
@@ -16,11 +17,13 @@ class QuestManager {
     if (QuestManager.instance) return QuestManager.instance;
     QuestManager.instance = this;
 
+    this.open = false;
     this.quests = quests;
     this.activeQuest = [];
     this.currentQuest = null;
     this.completedQuest = [];
     this.eventManager = EventManager.getInstance();
+    this.controller = new Controller();
 
     this.eventManager.on("update", (e) => {
       this.activeQuest.forEach((quest) => {
@@ -28,10 +31,18 @@ class QuestManager {
       });
     });
 
-    this.initUI();
+    this.controller.on("quest", () => {
+      this._open();
+    });
+
+    this.init();
   }
 
   init() {
+    this._sort();
+    this.initUI();
+  }
+  _sort() {
     this.quests.forEach((quest, i) => {
       switch (quest.status) {
         case Quest.STATUS_IN_PROGRESS:
@@ -46,9 +57,7 @@ class QuestManager {
           break;
       }
     });
-    this.initUI();
   }
-
   start(quest) {
     if (this.currentQuest) {
       const $oldUI = this.currentQuest.$ui;
@@ -56,6 +65,7 @@ class QuestManager {
     }
 
     this.currentQuest = quest;
+    this._updatePinnedMissionUI();
     // this.$ui.appendChild(this.currentQuest.$ui);
     this.activeQuest.push(quest);
     this._updateOnProgressQuestsUI();
@@ -66,26 +76,23 @@ class QuestManager {
     const idx = this.activeQuest.indexOf(quest);
     this.activeQuest.splice(idx, 1);
     this.completedQuest.push(quest);
+    this.currentQuest = this.activeQuest[0] ?? null;
 
+    this._updateOnProgressQuestsUI();
     this._updateFinishedQuestsUI();
+    this._updatePinnedMissionUI();
   }
 
   add(quest) {
     this.quests.push(quest);
+    this._sort();
+    this._updatePinnedMissionUI();
+    this._updateAvailableQuestsUI();
   }
 
   initUI() {
-    this.$ui = document.createElement("div");
-    this.$ui.setAttribute("id", "quest_container");
-
-    this._initQuestSection(
-      this.#ON_PROGRESS.replaceAll("_", " "),
-      this.activeQuest
-    );
-    this._initQuestSection(this.#COMPLETED, this.quests);
-    this._initQuestSection(this.#AVAILABLE, this.completedQuest);
-
-    document.body.appendChild(this.$ui);
+    this._initPinnedMissionUI();
+    this._initQuestListUI();
   }
 
   _initQuestSection(title, quests = []) {
@@ -104,7 +111,7 @@ class QuestManager {
 
     $container.appendChild($title);
     $container.appendChild($list);
-    this.$ui.appendChild($container);
+    this.$questContainer.appendChild($container);
   }
 
   _updateOnProgressQuestsUI() {
@@ -126,6 +133,12 @@ class QuestManager {
     this._fillQuestList($container, this.quests);
   }
   _fillQuestList($container, quests) {
+    const $emptyContent = `<p class="empty">no adventure available here</p>`;
+    if (quests.length < 1) {
+      $container.innerHTML = $emptyContent;
+      return;
+    }
+    $container.innerHTML = null;
     quests.forEach((el) => {
       $container.appendChild(el.$ui);
     });
@@ -134,6 +147,66 @@ class QuestManager {
     this._updateFinishedQuestsUI();
     this._updateAvailableQuestsUI();
     this._updateOnProgressQuestsUI();
+  }
+  _initPinnedMissionUI() {
+    this.$pinnedMission = document.createElement("div");
+    this.$pinnedMission.setAttribute("id", "pinned_mission");
+
+    this.$pinnedMission.addEventListener("click", () => {
+      this._open();
+    });
+    document.body.appendChild(this.$pinnedMission);
+  }
+
+  _updatePinnedMissionUI() {
+    if (!this.currentQuest) {
+      this.$pinnedMission.innerHTML = null;
+      return;
+    }
+    const content = `
+    <p class='title'>${this.currentQuest.title}</p>
+    <p class='desc'>${this.currentQuest.description}</p>
+    `;
+
+    this.$pinnedMission.innerHTML = content;
+  }
+
+  _initQuestListUI() {
+    this.$ui = document.createElement("div");
+    this.$ui.setAttribute("id", "quest_container");
+
+    //header
+    this.$header = document.createElement("div");
+    this.$header.className = "header";
+
+    this.$closeBtn = document.createElement("button");
+    this.$closeBtn.className = ".close_btn";
+    this.$closeBtn.innerText = "x";
+    this.$closeBtn.addEventListener("click", () => {
+      this._close();
+    });
+    this.$header.appendChild(this.$closeBtn);
+    this.$header.append("quest");
+    this.$ui.appendChild(this.$header);
+
+    // quest container
+    this.$questContainer = document.createElement("div");
+    this.$questContainer.className = "container";
+    this._initQuestSection(
+      this.#ON_PROGRESS.replaceAll("_", " "),
+      this.activeQuest
+    );
+    this._initQuestSection(this.#COMPLETED, this.quests);
+    this._initQuestSection(this.#AVAILABLE, this.completedQuest);
+
+    this.$ui.appendChild(this.$questContainer);
+    document.body.appendChild(this.$ui);
+  }
+  _open() {
+    this.$ui.setAttribute("data-opened", true);
+  }
+  _close() {
+    this.$ui.setAttribute("data-opened", false);
   }
 }
 
