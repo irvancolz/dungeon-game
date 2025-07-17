@@ -2,6 +2,17 @@
   background-color: var(--color-white);
   max-width: 30vw;
   width: 25rem;
+  position: relative;
+
+  & .empty {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    translate: 0 -50%;
+  }
+
   .card {
     display: flex;
     flex-direction: column;

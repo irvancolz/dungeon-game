@@ -22,8 +22,7 @@ class ItemDetail {
 
   updateUI() {
     if (!this.item) {
-      this.$ui.innerHTML = "select any item to see detail";
-
+      this.$ui.innerHTML = `<p class="empty">select any item to see detail </p>`;
       return;
     }
 
@@ -43,8 +42,8 @@ class ItemDetail {
             <li class="stats_item">stats 3</li>
         </ul>
         <div class="action">
-        <button class="btn delete_btn">delete</button>
-        <button class="btn sell_btn">sell</button>
+        <button class="btn delete_btn">use</button>
+        <button class="btn sell_btn">drop</button>
         </div>
     </div>
     `;
