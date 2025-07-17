@@ -1,8 +1,11 @@
 .backpack_item {
   position: relative;
   overflow: hidden;
-  border-radius: 0.5rem;
   box-shadow: 0.25rem 0.25rem 0px #00000061;
+  display: block;
+  aspect-ratio: 1;
+  width: 6rem;
+  background-color: var(--color-white);
 
   & .count {
     position: absolute;
@@ -13,7 +16,6 @@
     background-color: var(--color-black);
     color: var(--color-white);
     text-align: center;
-    border-radius: 1000px;
   }
 
   & .img {

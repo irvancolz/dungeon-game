@@ -29,8 +29,13 @@ class ItemDetail {
 
     this.$ui.innerHTML = `
     <div class="card">
-        <img src="${this.item.img}" alt="${this.item.name}" class="img" />
+    <div class="header">
+      <img src="${this.item.img}" alt="${this.item.name}" class="img" />
+      <div class="item">
         <h2 class="name">${this.item.name}</h2>
+        <p class="count">Owned : ${this.item.count}</p>
+      </div>
+    </div>
         <p class="desc">${this.item.description}</p>
         <ul class="stats">
             <li class="stats_item">stats 1</li>
