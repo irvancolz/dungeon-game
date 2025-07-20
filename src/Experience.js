@@ -39,7 +39,11 @@ export default class Experience {
     this.scene.fog = this.fog;
 
     this.backpack = new Backpack();
-    this.backpack.init(backpackSeeds);
+    const seed = [];
+    for (let i = 0; i < 4; i++) {
+      seed.push(...backpackSeeds);
+    }
+    this.backpack.init(seed);
 
     this.lootExplog = new LootExpLlog();
     this.animationProvider = new AnimationProvider();
