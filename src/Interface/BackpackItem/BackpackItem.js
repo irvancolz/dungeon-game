@@ -22,6 +22,7 @@ class BackpackItem extends EventEmitter {
   }
 
   delete() {
+    this.trigger("delete");
     this.count = 0;
   }
 

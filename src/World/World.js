@@ -48,7 +48,7 @@ export default class World {
       const item = { ...backpackSeeds[i], position: pos };
       seed.push(item);
     }
-    // this.dropManager.init(seed);
+    this.dropManager.init(seed);
 
     this.markers = new MarkersManager();
     this.npc = new NPCManager();

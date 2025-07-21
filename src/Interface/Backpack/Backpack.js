@@ -28,7 +28,10 @@ class Backpack {
     for (let i = 0; i < seed.length; i++) {
       const item = items.toBackpackItem(seed[i].id, seed[i].count);
       item.on("select", (id) => {
-        this.$secondaryInterface.changeItem(id);
+        this.$secondaryInterface.changeItem(item);
+      });
+      item.on("delete", () => {
+        this.delete(item);
       });
       this.$ui.append(item.$ui);
       this.items.push(item);
@@ -43,6 +46,9 @@ class Backpack {
       this.$ui.append(item.$ui);
       item.on("select", (id) => {
         this.$secondaryInterface.changeItem(id);
+      });
+      item.on("delete", () => {
+        this.delete(item);
       });
       this.items.push(item);
     } else {
@@ -67,6 +73,7 @@ class Backpack {
     if (!target) return;
     const idx = this.items.indexOf(target);
     this.items.splice(idx, 1);
+    this.$ui.removeChild(item.$ui);
   }
 
   initInterface() {
@@ -114,8 +121,6 @@ class Backpack {
             />
           </svg>`;
     this.$closeBtn.addEventListener("click", () => {
-      console.log("hello");
-
       this.close();
     });
     this.$header.appendChild(this.$closeBtn);

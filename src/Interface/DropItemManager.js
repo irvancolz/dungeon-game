@@ -129,11 +129,6 @@ class DropItemManager {
   }
 
   add(i) {
-    if (!i instanceof DropItem) {
-      console.error("canceled : trying to insert non dropItem into manager");
-      return;
-    }
-
     const item = items.toDropsItem(i.id, i.count, i.position);
     this.items.push(item);
     this.position.push(item.position);

@@ -1,5 +1,5 @@
-import { items } from "../../Backend/items";
-
+import States from "../../States";
+import DropItemManager from "../DropItemManager";
 let instance = null;
 
 class ItemDetail {
@@ -8,8 +8,10 @@ class ItemDetail {
       return instance;
     }
 
+    this.states = new States();
     instance = this;
     this.item = null;
+    this.dropMgr = new DropItemManager();
 
     this.initUI();
   }
@@ -42,23 +44,37 @@ class ItemDetail {
             <li class="stats_item">stats 3</li>
         </ul>
         <div class="action">
-        <button class="btn delete_btn">use</button>
-        <button class="btn sell_btn">drop</button>
+        <button class="btn drop_btn">drop</button>
         </div>
     </div>
     `;
   }
 
-  changeItem(id) {
-    if (!id) {
+  changeItem(item) {
+    if (!item) {
       this.item = null;
       this.updateUI();
       return;
     }
 
-    const newItem = items.get(id);
-    this.item = newItem;
+    this.item = item;
     this.updateUI();
+
+    const $dropBtn = this.$ui.querySelector(".drop_btn");
+    $dropBtn.addEventListener("click", () => {
+      this.drop();
+    });
+  }
+
+  drop() {
+    const drop = {
+      id: this.item.id,
+      count: this.item.count,
+      position: this.states.getPlayerPosition().setY(0),
+    };
+
+    this.item.delete();
+    this.dropMgr.add(drop);
   }
 }
 

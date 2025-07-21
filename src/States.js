@@ -80,4 +80,7 @@ export default class States {
     uniform.uWindSpeed.value = this.windSpeed;
     uniform.uWindDirection.value = this.windDirection;
   }
+  getPlayerPosition() {
+    return new THREE.Vector3().copy(this.playerPosition.getState());
+  }
 }
