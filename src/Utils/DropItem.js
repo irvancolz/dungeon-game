@@ -4,6 +4,7 @@ import Backpack from "../Interface/Backpack/Backpack";
 import EventEmitter from "./EventEmitter";
 import EventManager from "../World/EventManager";
 import PlayerEvent from "../World/PlayerEvent";
+import * as THREE from "three";
 
 class DropItem extends EventEmitter {
   constructor({ id, name, count, position }) {
@@ -17,6 +18,15 @@ class DropItem extends EventEmitter {
     this.eventManager = EventManager.getInstance();
 
     this.initButton();
+    this.init();
+  }
+
+  init() {
+    this.mesh = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(0.25),
+      new THREE.MeshBasicMaterial()
+    );
+    this.mesh.position.copy(this.position.setY(0.25));
   }
 
   initButton() {

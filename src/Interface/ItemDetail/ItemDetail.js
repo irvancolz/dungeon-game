@@ -70,11 +70,13 @@ class ItemDetail {
     const drop = {
       id: this.item.id,
       count: this.item.count,
-      position: this.states.getPlayerPosition().setY(0),
+      position: this.states.getPlayerPosition(),
     };
 
     this.item.delete();
     this.dropMgr.add(drop);
+    this.item = null;
+    this.updateUI();
   }
 }
 
