@@ -50,20 +50,30 @@ class ItemDetail {
     `;
   }
 
-  changeItem(item) {
+  updateSelected(item) {
     if (!item) {
-      this.item = null;
-      this.updateUI();
+      this.reset();
       return;
+    }
+    if (this.item) {
+      this.item.deselect();
     }
 
     this.item = item;
+    if (this.item) {
+      this.item.select();
+    }
     this.updateUI();
 
     const $dropBtn = this.$ui.querySelector(".drop_btn");
     $dropBtn.addEventListener("click", () => {
       this.drop();
     });
+  }
+
+  reset() {
+    this.item = null;
+    this.updateUI();
   }
 
   drop() {
@@ -75,8 +85,7 @@ class ItemDetail {
 
     this.item.delete();
     this.dropMgr.add(drop);
-    this.item = null;
-    this.updateUI();
+    this.reset();
   }
 }
 

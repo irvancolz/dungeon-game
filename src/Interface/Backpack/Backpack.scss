@@ -69,6 +69,11 @@
         align-content: flex-start;
         flex-wrap: wrap;
         gap: 0.5rem;
+
+        & .selected {
+          background-color: #c4c2c2;
+          pointer-events: none;
+        }
       }
     }
   }

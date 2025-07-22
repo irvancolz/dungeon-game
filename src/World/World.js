@@ -25,6 +25,7 @@ import NPCManager from "./NPCManager";
 import NPCInformation from "../Seeds/NPC";
 import QuestManager from "../Interface/QuestManager/QuestManager";
 import hello_world from "../Seeds/quests/hello_world";
+import ItemReceiver from "../Interface/ItemReceiver/ItemReceiver";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -39,6 +40,8 @@ export default class World {
 
     this.chat = new ChatBuble();
     this.backpack = new Backpack();
+    const itemReceiver = ItemReceiver.getInstance();
+    this.backpack.setSecondaryInterface(itemReceiver);
 
     this.dropManager = new DropItemManager();
     this.dropManager.setScene(this.scene);

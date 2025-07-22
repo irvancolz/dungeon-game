@@ -28,7 +28,7 @@ class Backpack {
     for (let i = 0; i < seed.length; i++) {
       const item = items.toBackpackItem(seed[i].id, seed[i].count);
       item.on("select", (id) => {
-        this.$secondaryInterface.changeItem(item);
+        this.secondaryInterface.updateSelected(item);
       });
       item.on("delete", () => {
         this.delete(item);
@@ -45,7 +45,7 @@ class Backpack {
       item.add(count);
       this.$ui.append(item.$ui);
       item.on("select", (id) => {
-        this.$secondaryInterface.changeItem(id);
+        this.secondaryInterface.updateSelected(id);
       });
       item.on("delete", () => {
         this.delete(item);
@@ -63,13 +63,17 @@ class Backpack {
   }
 
   takeout(item, count) {
-    const target = this.find(item);
-    if (!target) return;
+    const target = this.find(item.name);
+    if (!target) return false;
     target.subtract(count);
+    if (target.count <= 0) {
+      this.delete(target);
+    }
+    return true;
   }
 
   delete(item) {
-    const target = this.find(item);
+    const target = this.find(item.name);
     if (!target) return;
     const idx = this.items.indexOf(target);
     this.items.splice(idx, 1);
@@ -82,8 +86,22 @@ class Backpack {
   }
 
   initSecondaryInterface() {
-    this.$secondaryInterface = new ItemDetail();
-    this.$content.appendChild(this.$secondaryInterface.$ui);
+    this.secondaryInterface = new ItemDetail();
+    this.$content.appendChild(this.secondaryInterface.$ui);
+  }
+
+  setSecondaryInterface(newInterface) {
+    if (!newInterface) {
+      console.error(
+        "Backpack : failed change secondary interface into :",
+        newInterface
+      );
+      return;
+    }
+
+    this.$content.removeChild(this.secondaryInterface.$ui);
+    this.$content.appendChild(newInterface.$ui);
+    this.secondaryInterface = newInterface;
   }
 
   initBackpackInterface() {
@@ -136,7 +154,7 @@ class Backpack {
     this.$container.classList.remove("visible");
     this.$container.setAttribute("aria-visible", this.opened);
     this.opened = false;
-    this.$secondaryInterface.changeItem(null);
+    this.secondaryInterface.reset();
   }
 
   open() {

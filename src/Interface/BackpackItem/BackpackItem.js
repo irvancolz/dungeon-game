@@ -17,8 +17,16 @@ class BackpackItem extends EventEmitter {
   }
 
   subtract(count) {
+    if (count > this.count) {
+      console.error(
+        `${this.name} : not suficient amount, required: ${count}, available : ${this.count}`
+      );
+
+      return false;
+    }
     this.count -= count;
     this.$count.innerHTML = this.count;
+    return true;
   }
 
   delete() {
@@ -47,6 +55,12 @@ class BackpackItem extends EventEmitter {
     btn.addEventListener("click", () => {
       this.trigger("select", [this.id]);
     });
+  }
+  select() {
+    this.$ui.classList.add("selected");
+  }
+  deselect() {
+    this.$ui.classList.remove("selected");
   }
 }
 

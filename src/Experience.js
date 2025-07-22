@@ -19,6 +19,7 @@ import EventManager from "./World/EventManager";
 import QuestManager from "./Interface/QuestManager/QuestManager";
 import Quest from "./Interface/Quest/Quest";
 import PlayerEvent from "./World/PlayerEvent";
+import ItemReceiver from "./Interface/ItemReceiver/ItemReceiver";
 
 let instance = null;
 
@@ -40,7 +41,7 @@ export default class Experience {
 
     this.backpack = new Backpack();
     const seed = [];
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < 1; i++) {
       seed.push(...backpackSeeds);
     }
     this.backpack.init(seed);
@@ -48,6 +49,7 @@ export default class Experience {
     this.lootExplog = new LootExpLlog();
     this.animationProvider = new AnimationProvider();
     this.eventManager = new EventManager();
+    this.itemReceiver = new ItemReceiver();
 
     const quest = new Quest({
       title: "gather potion",
