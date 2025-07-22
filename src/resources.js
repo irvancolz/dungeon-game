@@ -88,4 +88,19 @@ export default [
     type: "gltfModel",
     name: "model_seren",
   },
+  {
+    path: "/model/model_thornunderfoot.glb",
+    type: "gltfModel",
+    name: "model_thornunderfoot",
+  },
+  {
+    path: "/model/model_mirastoneshield.glb",
+    type: "gltfModel",
+    name: "model_mirastoneshield",
+  },
+  {
+    path: "/model/model_captrorik.glb",
+    type: "gltfModel",
+    name: "model_captrorik",
+  },
 ];
