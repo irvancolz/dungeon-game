@@ -1,6 +1,7 @@
 import EventEmitter from "../../Utils/EventEmitter";
 import NPCManager from "../../World/NPCManager";
 import PlayerEvent from "../../World/PlayerEvent";
+import Backpack from "../Backpack/Backpack";
 
 class QuestObjective extends EventEmitter {
   constructor(type, value) {
@@ -11,7 +12,10 @@ class QuestObjective extends EventEmitter {
 
     this.value = value;
     this.type = type;
+    this.backpack = new Backpack();
 
+    // for display
+    this.count = 0;
     // collection based quest
     this.progress = 0;
 
@@ -27,19 +31,22 @@ class QuestObjective extends EventEmitter {
 
     switch (evt.type) {
       case PlayerEvent.EVENT_COLLECT:
-        this.progress = this.progress + evt.value.count / this.value.count;
+        this.progress += evt.value.count / this.value.count;
+        this.count += evt.value.count;
         if (this.progress >= 1) {
           this.complete();
         }
         break;
 
       case PlayerEvent.EVENT_REACH:
+        this.count += 1;
         if (this.value.distance(evt.value) <= this.distanceTreshold) {
           this.complete();
         }
         break;
 
       case PlayerEvent.EVENT_TALK:
+        this.count += 1;
         if (evt.value.name == this.value.name) {
           this.complete();
         }
@@ -67,25 +74,36 @@ class QuestObjective extends EventEmitter {
     this._updateContent();
   }
 
-  _getContent() {
+  checkBackpack() {
+    if (this.type != PlayerEvent.EVENT_COLLECT) return;
+    const stored = this.backpack.find(this.value.name);
+    if (stored) {
+      this.count += stored.count;
+      this.progress += stored.count / this.value.count;
+    }
+    if (this.progress >= 1) {
+      this.complete();
+    }
+  }
+
+  getContent() {
     if (this.type == PlayerEvent.EVENT_COLLECT)
-      return `<span>collect ${this.value.name}</span> <span>${Math.min(
-        this.progress * 100,
-        100
-      )} %</span>`;
+      return `<span>[${this.count} / ${this.value.count}]</span> <span>collect ${this.value.name}</span>`;
     if (this.type == PlayerEvent.EVENT_TALK)
-      return `<span>talk to ${this.value.name}</span>`;
+      return `<span>[${this.count} / 1]</span> <span>talk to ${this.value.name}</span>`;
     if (this.type == PlayerEvent.EVENT_REACH)
-      return `<span>visit ${this.value.name}</span>`;
+      return `<span>[${this.count} / 1]</span> <span>visit ${this.value.name}</span>`;
     return "";
   }
   _updateContent() {
-    this.$ui.innerHTML = this._getContent();
+    this.$ui.innerHTML = this.getContent();
   }
   apply() {
     if (this.type == PlayerEvent.EVENT_TALK) {
       const target = this.npcManager.find(this.value.name);
-      target.setConversation(this.value.chat);
+      if (target) {
+        target.setConversation(this.value.chat);
+      }
     }
   }
 }

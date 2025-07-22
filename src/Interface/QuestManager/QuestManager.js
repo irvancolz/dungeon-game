@@ -44,11 +44,18 @@ class QuestManager {
   }
   _sort() {
     this.quests.forEach((quest, i) => {
+      quest.on("complete", () => {
+        this._updateQuestsListsUI();
+        this.complete(quest);
+      });
+      quest.on("update", () => {
+        this._updateQuestsListsUI();
+        this._updatePinnedMissionUI();
+      });
       switch (quest.status) {
         case Quest.STATUS_IN_PROGRESS:
           this.start(quest);
           this.quests.splice(i, 1);
-          quest.on("complete", () => this.complete(quest));
           break;
         case Quest.STATUS_FINISHED:
           this.completedQuest.push(quest);
@@ -163,6 +170,9 @@ class QuestManager {
     const content = `
     <p class='title'>${this.currentQuest.title}</p>
     <p class='desc'>${this.currentQuest.description}</p>
+    <p class='objective'>
+    ${this.currentQuest.getCurrentObjUI()}
+    <p>
     `;
 
     this.$pinnedMission.innerHTML = content;

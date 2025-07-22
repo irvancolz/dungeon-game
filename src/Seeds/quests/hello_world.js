@@ -25,7 +25,7 @@ const detail = {
       type: PlayerEvent.EVENT_COLLECT,
       value: {
         id: "item003",
-        name: "Red Apple",
+        name: "Apples",
         count: 1,
       },
     },

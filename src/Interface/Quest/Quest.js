@@ -43,8 +43,8 @@ class Quest extends EventEmitter {
       );
       return;
     }
-
     this.currObjective.update(evt);
+    this.trigger("update");
   }
 
   start() {
@@ -107,18 +107,24 @@ class Quest extends EventEmitter {
   }
 
   _setCurrentObjective(newObj) {
+    // swap UI
     if (this.currObjective) {
       const $oldUI = this.currObjective.$ui;
       this.$objectiveContainer.removeChild($oldUI);
     }
 
     this.currObjective = newObj;
+    if (this.currObjective) {
+      this.$objectiveContainer.appendChild(this.currObjective.$ui);
+    }
 
     if (this.status == Quest.STATUS_IN_PROGRESS && this.currObjective) {
       this.currObjective.apply();
     }
-
-    this.$objectiveContainer.appendChild(this.currObjective.$ui);
+  }
+  getCurrentObjUI() {
+    if (this.currObjective) return this.currObjective.getContent();
+    return null;
   }
 }
 

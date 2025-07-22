@@ -58,8 +58,8 @@ class Backpack {
     this.notification.addNotification(`${item.name} x ${count}`);
   }
 
-  find(item) {
-    return this.items.find((e) => e.id == item.id);
+  find(name) {
+    return this.items.find((e) => e.name == name);
   }
 
   takeout(item, count) {
