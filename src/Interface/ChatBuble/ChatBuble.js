@@ -1,13 +1,27 @@
 import EventEmitter from "../../Utils/EventEmitter";
+import EventManager from "../../World/EventManager";
+import PlayerEvent from "../../World/PlayerEvent";
 
 export default class ChatBuble extends EventEmitter {
+  static instance;
+
+  static getInstance() {
+    return ChatBuble.instance;
+  }
+
   constructor() {
     super();
+
+    if (ChatBuble.instance) return ChatBuble.instance;
+    ChatBuble.instance = this;
+
     this.visible = false;
     this.conversation = [];
     this.activeChat = 0;
     this.$container = document.getElementById("chat_bubble");
     this.id = 0;
+    this.author = "";
+    this.eventManager = EventManager.getInstance();
 
     this.init();
   }
@@ -48,6 +62,11 @@ export default class ChatBuble extends EventEmitter {
     this.activeChat = 0;
 
     this.trigger("chat:ended", [this.id]);
+    this.eventManager.trigger("update", [
+      new PlayerEvent(PlayerEvent.EVENT_TALK, {
+        name: this.author,
+      }),
+    ]);
   }
 
   next() {
@@ -63,7 +82,8 @@ export default class ChatBuble extends EventEmitter {
     this.updateChat();
   }
 
-  initConversation(chat = []) {
+  initConversation(chat = [], author) {
+    this.author = author;
     this.conversation = chat;
     this.id = Date.now();
 

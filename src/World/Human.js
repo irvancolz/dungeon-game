@@ -1,13 +1,19 @@
+import ChatBuble from "../Interface/ChatBuble/ChatBuble";
 import AnimationProvider from "../Utils/AnimationProvider";
 import Canvas from "../Utils/Canvas";
 import EventEmitter from "../Utils/EventEmitter";
 import * as THREE from "three";
+import EventManager from "./EventManager";
+import PlayerEvent from "./PlayerEvent";
+import Button from "../Interface/Button/Button";
+import States from "../States";
 
-class Human {
+class Human extends EventEmitter {
   #STATE_IDLE = "idle";
   #STATE_TALK = "talk";
   #STATE_WALK = "walk";
   constructor({ scene, model, position, name = "", quaternion, job = "" }) {
+    super();
     this.type = "human";
     this.scene = scene;
     this.name = name;
@@ -18,27 +24,37 @@ class Human {
     this.quaternion = quaternion;
     this.state = this.#STATE_IDLE;
     this.animationProvider = new AnimationProvider();
+    this.eventManager = EventManager.getInstance();
+    this.states = States.getInstance();
 
-    this.init();
+    this._init();
   }
 
-  init() {
+  _init() {
     this.character.position.copy(this.position);
     this.character.quaternion.copy(this.quaternion);
 
-    this.initNameTag();
-    this.initMixer();
-    this.initAnimation();
-    this.updateAnimationState();
+    this._initChat();
+    this._initNameTag();
+    this._initMixer();
+    this._initAnimation();
+    this._updateAnimationState();
 
     this.scene.add(this.character);
   }
 
+  _initChat() {
+    this.conversation = [];
+    this.chat = ChatBuble.getInstance();
+  }
   update(delta) {
     this.mixer.update(delta * 0.001);
+    if (this.button) {
+      this.button.update(this.states.getPlayerPosition());
+    }
   }
 
-  initNameTag() {
+  _initNameTag() {
     this.canvas = new Canvas();
     this.canvas.write(this.name);
 
@@ -71,22 +87,23 @@ class Human {
     this.scene.remove(this.character);
   }
 
-  updateState(state) {
+  _updateState(state) {
     if (state == this.state) return;
     this.state = state;
+    this._updateAnimationState();
   }
 
-  initMixer() {
+  _initMixer() {
     this.mixer = new THREE.AnimationMixer(this.character);
   }
 
-  initAnimation() {
+  _initAnimation() {
     this.animations = this.animationProvider.getAnimations(
       this.mixer,
       this.type
     );
   }
-  updateAnimationState() {
+  _updateAnimationState() {
     const animations = [];
     for (const name in this.animations) {
       if (name.split("_")[2] != this.state) continue;
@@ -96,6 +113,14 @@ class Human {
     animations.forEach((a) => {
       a.reset();
       a.play();
+    });
+  }
+  setConversation(c = []) {
+    this.conversation = c;
+
+    this.button = new Button({ position: this.position, label: this.name });
+    this.button.on("select", () => {
+      this.chatId = this.chat.initConversation(this.conversation, this.name);
     });
   }
 }

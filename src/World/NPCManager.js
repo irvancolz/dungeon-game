@@ -9,6 +9,17 @@ class NPCManager {
     this.members = [];
   }
 
+  find(name) {
+    const npc = this.members.find(
+      (el) => el.name.toLowerCase() == name.toLowerCase()
+    );
+    if (!npc) {
+      console.error(`NPC not found : ${name}`);
+      return null;
+    }
+    return npc;
+  }
+
   addNPC(npc) {
     this.members.push(npc);
   }

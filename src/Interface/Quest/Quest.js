@@ -77,7 +77,7 @@ class Quest extends EventEmitter {
   }
   setObjectives(obj = []) {
     obj.forEach((e) => {
-      const objective = new QuestObjective(e.type, e.value);
+      const objective = new QuestObjective(e.type, e.value, e.onComplete);
       objective.on("complete", () => {
         this.objectivesCompleted++;
         if (this.objectivesCompleted == this.objectives.length) {
@@ -113,6 +113,11 @@ class Quest extends EventEmitter {
     }
 
     this.currObjective = newObj;
+
+    if (this.status == Quest.STATUS_IN_PROGRESS && this.currObjective) {
+      this.currObjective.apply();
+    }
+
     this.$objectiveContainer.appendChild(this.currObjective.$ui);
   }
 }

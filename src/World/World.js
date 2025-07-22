@@ -23,6 +23,8 @@ import { items } from "../Backend/items";
 import Human from "./Human";
 import NPCManager from "./NPCManager";
 import NPCInformation from "../Seeds/NPC";
+import QuestManager from "../Interface/QuestManager/QuestManager";
+import hello_world from "../Seeds/quests/hello_world";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -48,7 +50,7 @@ export default class World {
       const item = { ...backpackSeeds[i], position: pos };
       seed.push(item);
     }
-    this.dropManager.init(seed);
+    this.dropManager.init([]);
 
     this.markers = new MarkersManager();
     this.npc = new NPCManager();
@@ -77,8 +79,11 @@ export default class World {
     // this.addLampPost();
     // this.addTrunks();
     // this.addWoodenBoxes();
-    // this.addNPC();
+    this.addNPC();
     // this.addGrass();
+
+    this.questManager = QuestManager.getInstance();
+    this.questManager.add(hello_world);
   }
 
   update(elapsed, delta) {

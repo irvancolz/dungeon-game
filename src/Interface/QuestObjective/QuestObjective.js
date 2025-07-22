@@ -1,4 +1,5 @@
 import EventEmitter from "../../Utils/EventEmitter";
+import NPCManager from "../../World/NPCManager";
 import PlayerEvent from "../../World/PlayerEvent";
 
 class QuestObjective extends EventEmitter {
@@ -16,6 +17,7 @@ class QuestObjective extends EventEmitter {
 
     // distance based quest
     this.distanceTreshold = 5;
+    this.npcManager = new NPCManager();
 
     this.initUI();
   }
@@ -79,6 +81,12 @@ class QuestObjective extends EventEmitter {
   }
   _updateContent() {
     this.$ui.innerHTML = this._getContent();
+  }
+  apply() {
+    if (this.type == PlayerEvent.EVENT_TALK) {
+      const target = this.npcManager.find(this.value.name);
+      target.setConversation(this.value.chat);
+    }
   }
 }
 

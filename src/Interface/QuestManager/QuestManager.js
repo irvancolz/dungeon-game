@@ -32,7 +32,7 @@ class QuestManager {
     });
 
     this.controller.on("quest", () => {
-      this._open();
+      this._toggle();
     });
 
     this.init();
@@ -59,16 +59,10 @@ class QuestManager {
     });
   }
   start(quest) {
-    if (this.currentQuest) {
-      const $oldUI = this.currentQuest.$ui;
-      // this.$ui.removeChild($oldUI);
-    }
-
-    this.currentQuest = quest;
-    this._updatePinnedMissionUI();
-    // this.$ui.appendChild(this.currentQuest.$ui);
     this.activeQuest.push(quest);
-    this._updateOnProgressQuestsUI();
+
+    this._setCurrentQuest(quest);
+
     quest.start();
   }
 
@@ -76,10 +70,13 @@ class QuestManager {
     const idx = this.activeQuest.indexOf(quest);
     this.activeQuest.splice(idx, 1);
     this.completedQuest.push(quest);
-    this.currentQuest = this.activeQuest[0] ?? null;
 
+    this._setCurrentQuest(this.activeQuest[0] ?? null);
+  }
+
+  _setCurrentQuest(quest) {
+    this.currentQuest = quest;
     this._updateOnProgressQuestsUI();
-    this._updateFinishedQuestsUI();
     this._updatePinnedMissionUI();
   }
 
@@ -201,6 +198,10 @@ class QuestManager {
 
     this.$ui.appendChild(this.$questContainer);
     document.body.appendChild(this.$ui);
+  }
+  _toggle() {
+    this.open = !this.open;
+    this.$ui.setAttribute("data-opened", this.open);
   }
   _open() {
     this.$ui.setAttribute("data-opened", true);
