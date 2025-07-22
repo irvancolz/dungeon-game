@@ -4,7 +4,7 @@ import PlayerEvent from "../../World/PlayerEvent";
 import Backpack from "../Backpack/Backpack";
 
 class QuestObjective extends EventEmitter {
-  constructor(type, value) {
+  constructor(type, value, onComplete) {
     super();
 
     this.id = Date.now().toString();
@@ -13,6 +13,7 @@ class QuestObjective extends EventEmitter {
     this.value = value;
     this.type = type;
     this.backpack = new Backpack();
+    this.onComplete = onComplete;
 
     // for display
     this.count = 0;
@@ -66,6 +67,9 @@ class QuestObjective extends EventEmitter {
     this.completed = true;
     this.$ui.classList.add("complete");
     this.trigger("complete");
+    if (this.onComplete) {
+      this.onComplete.apply(this);
+    }
   }
 
   initUI() {

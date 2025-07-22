@@ -6,9 +6,11 @@ const detail = {
   description:
     "Introduce yourself to the townsfolk and lend a hand where needed.",
   status: Quest.STATUS_IN_PROGRESS,
+  onComplete: () => console.log("quest finished"),
   objectives: [
     {
       type: PlayerEvent.EVENT_TALK,
+      onComplete: () => console.log("objective finished"),
       value: {
         id: "npc001",
         name: "Elandor the Wise",

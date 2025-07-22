@@ -14,6 +14,7 @@ class Quest extends EventEmitter {
     dependencies,
     rewards,
     objectives = [],
+    onComplete,
   }) {
     super();
 
@@ -26,6 +27,7 @@ class Quest extends EventEmitter {
     this.dependencies = dependencies;
     this.currObjective = null;
     this.objectivesCompleted = 0;
+    this.onComplete = onComplete;
     this.setObjectives(objectives);
 
     this.backpack = new Backpack();
@@ -66,6 +68,9 @@ class Quest extends EventEmitter {
     this.$objectiveContainer.innerHTML = null;
     this.claim();
     this.trigger("complete");
+    if (this.onComplete) {
+      this.onComplete.apply(this);
+    }
   }
 
   claim() {
