@@ -106,6 +106,7 @@ class QuestObjective extends EventEmitter {
     if (this.type == PlayerEvent.EVENT_TALK) {
       const target = this.npcManager.find(this.value.name);
       if (target) {
+        target.setMarker();
         target.setConversation(this.value.chat);
       }
     }

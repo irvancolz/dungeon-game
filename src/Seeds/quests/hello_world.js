@@ -1,5 +1,8 @@
 import Quest from "../../Interface/Quest/Quest";
+import NPCManager from "../../World/NPCManager";
 import PlayerEvent from "../../World/PlayerEvent";
+
+const npcManager = new NPCManager();
 
 const detail = {
   title: "Welcome to Eldermere",
@@ -10,7 +13,10 @@ const detail = {
   objectives: [
     {
       type: PlayerEvent.EVENT_TALK,
-      onComplete: () => console.log("objective finished"),
+      onComplete: () => {
+        const npc = npcManager.find("Elandor the Wise");
+        npc.disable();
+      },
       value: {
         id: "npc001",
         name: "Elandor the Wise",

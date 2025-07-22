@@ -7,6 +7,7 @@ import EventManager from "./EventManager";
 import PlayerEvent from "./PlayerEvent";
 import Button from "../Interface/Button/Button";
 import States from "../States";
+import Marker from "../Interface/Marker";
 
 class Human extends EventEmitter {
   #STATE_IDLE = "idle";
@@ -48,9 +49,13 @@ class Human extends EventEmitter {
     this.chat = ChatBuble.getInstance();
   }
   update(delta) {
+    const playerPosition = this.states.getPlayerPosition();
     this.mixer.update(delta * 0.001);
+    if (this.marker) {
+      this.marker.update(playerPosition);
+    }
     if (this.button) {
-      this.button.update(this.states.getPlayerPosition());
+      this.button.update(playerPosition);
     }
   }
 
@@ -117,11 +122,35 @@ class Human extends EventEmitter {
   }
   setConversation(c = []) {
     this.conversation = c;
-
-    this.button = new Button({ position: this.position, label: this.name });
-    this.button.on("select", () => {
-      this.chatId = this.chat.initConversation(this.conversation, this.name);
+  }
+  setMarker() {
+    this.marker = new Marker({
+      position: this.position,
+      label: this.name,
+      parent: this.character,
+      scene: this.scene,
     });
+    this.marker.addOffset(new THREE.Vector3(0, 0.75, 0));
+    this.marker.on("interact", () => {
+      this.talk();
+    });
+  }
+  setButton() {
+    this.button = new Button({
+      position: this.position,
+      label: this.name,
+    });
+    this.button.on("select", () => {
+      this.talk();
+    });
+  }
+  talk() {
+    this.chat.initConversation(this.conversation, this.name);
+  }
+  disable() {
+    if (this.button) this.button.dispose();
+    if (this.marker) this.marker.dispose();
+    this.setConversation([]);
   }
 }
 

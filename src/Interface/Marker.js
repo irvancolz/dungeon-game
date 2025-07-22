@@ -83,13 +83,16 @@ class Marker extends EventEmitter {
 
     const box3 = new THREE.Box3();
     box3.expandByObject(this.parent);
-    const dimension = new THREE.Vector3();
-    box3.getSize(dimension);
+    this.dimension = new THREE.Vector3();
+    box3.getSize(this.dimension);
+    this._updatePosition();
+  }
 
+  _updatePosition() {
     this.mesh.position
       .copy(this.position)
       .add(this.offset)
-      .add({ x: 0, y: dimension.y, z: 0 });
+      .add({ x: 0, y: this.dimension.y, z: 0 });
   }
 
   init() {
@@ -117,6 +120,10 @@ class Marker extends EventEmitter {
         this.trigger("dispose");
       },
     });
+  }
+  addOffset(sum) {
+    this.offset.add(sum);
+    this._updatePosition();
   }
 }
 
