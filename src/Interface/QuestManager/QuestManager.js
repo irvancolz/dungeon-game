@@ -69,8 +69,6 @@ class QuestManager {
     this.activeQuest.push(quest);
 
     this._setCurrentQuest(quest);
-
-    quest.start();
   }
 
   complete(quest) {
@@ -83,6 +81,7 @@ class QuestManager {
 
   _setCurrentQuest(quest) {
     this.currentQuest = quest;
+    this.currentQuest.start();
     this._updateOnProgressQuestsUI();
     this._updatePinnedMissionUI();
   }

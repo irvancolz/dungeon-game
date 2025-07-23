@@ -30,7 +30,7 @@ import Backpack from "../Backpack/Backpack";
 */
 
 class QuestObjective extends EventEmitter {
-  constructor(type, value, onComplete) {
+  constructor({ type, value, onComplete, onStart }) {
     super();
 
     this.id = Date.now().toString();
@@ -40,6 +40,7 @@ class QuestObjective extends EventEmitter {
     this.type = type;
     this.backpack = new Backpack();
     this.onComplete = onComplete;
+    this.onStart = onStart;
 
     // for display
     this.count = 0;
@@ -51,6 +52,11 @@ class QuestObjective extends EventEmitter {
     this.npcManager = new NPCManager();
 
     this.initUI();
+  }
+
+  start() {
+    this.trigger("start");
+    if (this.onStart) this.onStart.apply(this);
   }
 
   _validate(evt) {

@@ -59,7 +59,6 @@ class Quest extends EventEmitter {
     } else {
       this._setCurrentObjective(this.objectives[0]);
     }
-
     this.trigger("start");
   }
 
@@ -82,7 +81,12 @@ class Quest extends EventEmitter {
   }
   setObjectives(obj = []) {
     obj.forEach((e) => {
-      const objective = new QuestObjective(e.type, e.value, e.onComplete);
+      const objective = new QuestObjective({
+        type: e.type,
+        value: e.value,
+        onComplete: e.onComplete,
+        onStart: e.onStart,
+      });
       objective.on("complete", () => {
         this.objectivesCompleted++;
         if (this.objectivesCompleted == this.objectives.length) {
@@ -124,6 +128,7 @@ class Quest extends EventEmitter {
     }
 
     if (this.status == Quest.STATUS_IN_PROGRESS && this.currObjective) {
+      this.currObjective.start();
       this.currObjective.apply();
     }
   }

@@ -56,7 +56,12 @@ class ItemReceiver {
   }
 
   _validate() {
-    if (this.requirements.length <= 0) return true;
+    if (this.requirements.length <= 0) {
+      console.warn(
+        "ITEM RECEIVER: no requirements specified event get validated"
+      );
+      return true;
+    }
     let valid = 0;
     this.requirements.forEach((req) => {
       this.items.forEach((i) => {

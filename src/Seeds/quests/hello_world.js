@@ -17,51 +17,26 @@ const detail = {
   status: Quest.STATUS_IN_PROGRESS,
   onComplete: () => console.log("quest finished"),
   objectives: [
-    // {
-    //   type: PlayerEvent.EVENT_TALK,
-    //   onComplete: () => {
-    //     const npc = npcManager.find("Elandor the Wise");
-    //     npc.disable();
-    //     npc.setButton();
-    //     npc.setConversation([
-    //       {
-    //         author: "Elandor",
-    //         chat: "Do you get the Apples?",
-    //       },
-    //     ]);
-    //   },
-    //   value: {
-    //     id: "npc001",
-    //     name: "Elandor the Wise",
-    //     chat: [
-    //       { author: "Player", chat: "Hello, are you Elandor?" },
-    //       {
-    //         author: "Elandor",
-    //         chat: "Indeed I am. Welcome, traveler. Might you bring me a Red Apple for my potion?",
-    //       },
-    //     ],
-    //   },
-    // },
     {
-      type: PlayerEvent.EVENT_COLLECT,
+      type: PlayerEvent.EVENT_TALK,
       onComplete: () => {
         const npc = npcManager.find("Elandor the Wise");
         npc.disable();
-        npc.setConversation([
+      },
+      value: {
+        id: "npc001",
+        name: "Elandor the Wise",
+        chat: [
+          { author: "Player", chat: "Hello, are you Elandor?" },
           {
             author: "Elandor",
-            chat: "Do you get the Apples?",
+            chat: "Indeed I am. Welcome, traveler. Might you bring me a Red Apple for my potion?",
           },
-        ]);
-        npc.setMarker();
-        npc.chat.on("chat:started", () => {
-          itemReceiver.setRequirements([
-            { id: "item003", name: "Apples", count: 1 },
-          ]);
-          backpack.setSecondaryInterface(itemReceiver);
-          backpack.open();
-        });
+        ],
       },
+    },
+    {
+      type: PlayerEvent.EVENT_COLLECT,
       value: {
         id: "item003",
         name: "Apples",
@@ -70,10 +45,40 @@ const detail = {
     },
     {
       type: PlayerEvent.EVENT_GIVE,
+      onStart: () => {
+        itemReceiver.setRequirements([
+          {
+            id: "item003",
+            name: "Apples",
+            count: 1,
+          },
+        ]);
+        backpack.setSecondaryInterface(itemReceiver);
+
+        const npc = npcManager.find("Elandor the Wise");
+        npc.setMarker();
+        npc.setConversation([
+          {
+            author: "Elandor",
+            chat: "Do you get the Apples?",
+          },
+        ]);
+        npc.chat.on("chat:started", () => {
+          backpack.open();
+        });
+      },
       onComplete: () => {
+        backpack.setSecondaryInterface(itemDetail);
+        backpack.close();
+
         const npc = npcManager.find("Elandor the Wise");
         npc.disable();
-        backpack.setSecondaryInterface(itemDetail);
+        npc.chat.initConversation([
+          {
+            author: "Elandor",
+            chat: "Thankyou now bring this to  mia",
+          },
+        ]);
       },
       value: [
         {
