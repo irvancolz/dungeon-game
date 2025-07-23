@@ -150,7 +150,6 @@ class Human extends EventEmitter {
   disable() {
     if (this.button) this.button.dispose();
     if (this.marker) this.marker.dispose();
-    this.setConversation([]);
   }
 }
 

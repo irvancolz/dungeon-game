@@ -1,4 +1,5 @@
 import EventManager from "../../World/EventManager";
+import PlayerEvent from "../../World/PlayerEvent";
 import Backpack from "../Backpack/Backpack";
 
 class ItemReceiver {
@@ -11,6 +12,7 @@ class ItemReceiver {
 
     ItemReceiver.instance = this;
 
+    this.requirements = [];
     this.items = [];
     this.initUI();
     this.source = new Backpack();
@@ -29,21 +31,39 @@ class ItemReceiver {
     this.$actions = document.createElement("div");
     this.$actions.className = "actions";
     this.$actions.innerHTML = `
-     <button class="btn confirm_btn">confirm</button>
+     <button class="btn confirm_btn disabled">confirm</button>
      <button class="btn cancel_btn">cancel</button>
     `;
 
-    const confirmBtn = this.$actions.querySelector(".confirm_btn");
-    confirmBtn.addEventListener("click", () => {
-      this.items.forEach((i) => {
-        this.source.takeout(i, i.count);
-      });
-      this.reset();
+    this.$confirmBtn = this.$actions.querySelector(".confirm_btn");
+    this.$confirmBtn.addEventListener("click", () => {
+      this._claim();
     });
     const cancelBtn = this.$actions.querySelector(".cancel_btn");
     cancelBtn.addEventListener("click", () => {
       this.reset();
     });
+  }
+
+  _claim() {
+    this.eventManager.trigger("update", [
+      new PlayerEvent(PlayerEvent.EVENT_GIVE, this.requirements),
+    ]);
+    this.requirements.forEach((i) => {
+      this.source.takeout(i, i.count);
+    });
+    this.reset();
+  }
+
+  _validate() {
+    if (this.requirements.length <= 0) return true;
+    let valid = 0;
+    this.requirements.forEach((req) => {
+      this.items.forEach((i) => {
+        if (req.name == i.name && req.count <= i.count) valid++;
+      });
+    });
+    return valid == this.requirements.length;
   }
 
   updateSelected(item) {
@@ -58,6 +78,16 @@ class ItemReceiver {
     this.items.push(item);
     item.select();
     this.$list.appendChild(item.$ui.cloneNode(true));
+
+    const valid = this._validate();
+    if (valid) {
+      this.$confirmBtn.classList.remove("disabled");
+    } else {
+      this.$confirmBtn.classList.add("disabled");
+    }
+  }
+  setRequirements(items) {
+    this.requirements = items;
   }
 
   reset() {

@@ -1,8 +1,14 @@
+import Backpack from "../../Interface/Backpack/Backpack";
 import Quest from "../../Interface/Quest/Quest";
 import NPCManager from "../../World/NPCManager";
 import PlayerEvent from "../../World/PlayerEvent";
+import ItemReceiver from "../../Interface/ItemReceiver/ItemReceiver";
+import ItemDetail from "../../Interface/ItemDetail/ItemDetail";
 
 const npcManager = new NPCManager();
+const backpack = new Backpack();
+const itemReceiver = new ItemReceiver();
+const itemDetail = new ItemDetail();
 
 const detail = {
   title: "Welcome to Eldermere",
@@ -11,31 +17,72 @@ const detail = {
   status: Quest.STATUS_IN_PROGRESS,
   onComplete: () => console.log("quest finished"),
   objectives: [
+    // {
+    //   type: PlayerEvent.EVENT_TALK,
+    //   onComplete: () => {
+    //     const npc = npcManager.find("Elandor the Wise");
+    //     npc.disable();
+    //     npc.setButton();
+    //     npc.setConversation([
+    //       {
+    //         author: "Elandor",
+    //         chat: "Do you get the Apples?",
+    //       },
+    //     ]);
+    //   },
+    //   value: {
+    //     id: "npc001",
+    //     name: "Elandor the Wise",
+    //     chat: [
+    //       { author: "Player", chat: "Hello, are you Elandor?" },
+    //       {
+    //         author: "Elandor",
+    //         chat: "Indeed I am. Welcome, traveler. Might you bring me a Red Apple for my potion?",
+    //       },
+    //     ],
+    //   },
+    // },
     {
-      type: PlayerEvent.EVENT_TALK,
+      type: PlayerEvent.EVENT_COLLECT,
       onComplete: () => {
         const npc = npcManager.find("Elandor the Wise");
         npc.disable();
-      },
-      value: {
-        id: "npc001",
-        name: "Elandor the Wise",
-        chat: [
-          { author: "Player", chat: "Hello, are you Elandor?" },
+        npc.setConversation([
           {
             author: "Elandor",
-            chat: "Indeed I am. Welcome, traveler. Might you bring me a Red Apple for my potion?",
+            chat: "Do you get the Apples?",
           },
-        ],
+        ]);
+        npc.setMarker();
+        npc.chat.on("chat:started", () => {
+          itemReceiver.setRequirements([
+            { id: "item003", name: "Apples", count: 1 },
+          ]);
+          backpack.setSecondaryInterface(itemReceiver);
+          backpack.open();
+        });
       },
-    },
-    {
-      type: PlayerEvent.EVENT_COLLECT,
       value: {
         id: "item003",
         name: "Apples",
         count: 1,
       },
+    },
+    {
+      type: PlayerEvent.EVENT_GIVE,
+      onComplete: () => {
+        const npc = npcManager.find("Elandor the Wise");
+        npc.disable();
+        backpack.setSecondaryInterface(itemDetail);
+      },
+      value: [
+        {
+          id: "item003",
+          name: "Apples",
+          count: 1,
+          receiver: "elandor",
+        },
+      ],
     },
     {
       type: PlayerEvent.EVENT_TALK,

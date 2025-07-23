@@ -74,6 +74,7 @@ export default class ChatBuble extends EventEmitter {
     this.visible = true;
     this.$container.classList.add("visible");
     this.updateChat();
+    this.trigger("chat:started");
   }
 
   initConversation(chat = []) {

@@ -22,10 +22,16 @@
     gap: 1rem;
 
     & .btn {
+      --col: var(--color-black);
       flex-grow: 1;
-      border: 2px solid var(--color-black);
+      border: 2px solid var(--col);
+      color: var(--col);
       padding: 0.5rem 1.5rem;
       text-transform: uppercase;
+
+      &.disabled {
+        --col: #949494;
+      }
     }
   }
 
