@@ -26,35 +26,29 @@ class Backpack {
 
   init(seed = []) {
     for (let i = 0; i < seed.length; i++) {
-      const item = items.toBackpackItem(seed[i].id, seed[i].count);
-      item.on("select", (id) => {
-        this.secondaryInterface.updateSelected(item);
-      });
-      item.on("delete", () => {
-        this.delete(item);
-      });
-      this.$ui.append(item.$ui);
-      this.items.push(item);
+      this._addNewItem(seed[i]);
     }
+  }
+
+  _addNewItem(item) {
+    const newItem = items.toBackpackItem(item.id, item.count);
+    this.$ui.append(newItem.$ui);
+    newItem.on("select", (id) => {
+      this.secondaryInterface.updateSelected(newItem);
+    });
+    newItem.on("delete", () => {
+      this.delete(newItem);
+    });
+    this.items.push(newItem);
   }
 
   insert(item, count) {
     const target = this.find(item);
-
     if (!target) {
-      item.add(count);
-      this.$ui.append(item.$ui);
-      item.on("select", (id) => {
-        this.secondaryInterface.updateSelected(id);
-      });
-      item.on("delete", () => {
-        this.delete(item);
-      });
-      this.items.push(item);
+      this._addNewItem(item);
     } else {
       target.add(count);
     }
-
     this.notification.addNotification(`${item.name} x ${count}`);
   }
 

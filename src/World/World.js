@@ -41,11 +41,10 @@ export default class World {
     this.chat = new ChatBuble();
     this.backpack = new Backpack();
     const itemReceiver = ItemReceiver.getInstance();
-    this.backpack.setSecondaryInterface(itemReceiver);
+    // this.backpack.setSecondaryInterface(itemReceiver);
 
     this.dropManager = new DropItemManager();
     this.dropManager.setScene(this.scene);
-    this.dropManager.setTexture(this.resources.drops_alpha_texture);
 
     const seed = [];
     for (let i = 0; i < backpackSeeds.length; i++) {

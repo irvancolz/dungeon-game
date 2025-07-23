@@ -72,11 +72,15 @@ class ItemDetail {
   }
 
   reset() {
+    if (this.item) {
+      this.item.deselect();
+    }
     this.item = null;
     this.updateUI();
   }
 
   drop() {
+    this.item.deselect();
     const drop = {
       id: this.item.id,
       count: this.item.count,

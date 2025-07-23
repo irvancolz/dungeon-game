@@ -1,4 +1,6 @@
 import { items } from "../Backend/items";
+import EventManager from "../World/EventManager";
+import PlayerEvent from "../World/PlayerEvent";
 
 let instance = null;
 class DropItemManager {
@@ -6,6 +8,7 @@ class DropItemManager {
     if (instance != null) return instance;
 
     instance = this;
+    this.eventManager = new EventManager();
 
     this.items = [];
   }
@@ -46,8 +49,17 @@ class DropItemManager {
 
     item.on("taken", () => {
       const idx = this.items.indexOf(item);
+
       this.items.splice(idx, 1);
       this.scene.remove(item.mesh);
+
+      this.eventManager.trigger("update", [
+        new PlayerEvent(PlayerEvent.EVENT_COLLECT, {
+          id: item.id,
+          name: item.name,
+          count: item.count,
+        }),
+      ]);
     });
   }
 }

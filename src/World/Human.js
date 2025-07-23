@@ -3,8 +3,6 @@ import AnimationProvider from "../Utils/AnimationProvider";
 import Canvas from "../Utils/Canvas";
 import EventEmitter from "../Utils/EventEmitter";
 import * as THREE from "three";
-import EventManager from "./EventManager";
-import PlayerEvent from "./PlayerEvent";
 import Button from "../Interface/Button/Button";
 import States from "../States";
 import Marker from "../Interface/Marker";
@@ -25,7 +23,6 @@ class Human extends EventEmitter {
     this.quaternion = quaternion;
     this.state = this.#STATE_IDLE;
     this.animationProvider = new AnimationProvider();
-    this.eventManager = EventManager.getInstance();
     this.states = States.getInstance();
 
     this._init();
@@ -47,6 +44,9 @@ class Human extends EventEmitter {
   _initChat() {
     this.conversation = [];
     this.chat = ChatBuble.getInstance();
+    this.chat.on("chat:ended", () => {
+      this.trigger("chat:ended");
+    });
   }
   update(delta) {
     const playerPosition = this.states.getPlayerPosition();
@@ -145,7 +145,7 @@ class Human extends EventEmitter {
     });
   }
   talk() {
-    this.chat.initConversation(this.conversation, this.name);
+    this.chat.initConversation(this.conversation);
   }
   disable() {
     if (this.button) this.button.dispose();

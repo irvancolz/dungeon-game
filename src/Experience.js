@@ -39,6 +39,7 @@ export default class Experience {
     this.fog = new THREE.FogExp2("#565f67", 0.01);
     this.scene.fog = this.fog;
 
+    this.eventManager = new EventManager();
     this.backpack = new Backpack();
     const seed = [];
     for (let i = 0; i < 1; i++) {
@@ -48,7 +49,7 @@ export default class Experience {
 
     this.lootExplog = new LootExpLlog();
     this.animationProvider = new AnimationProvider();
-    this.eventManager = new EventManager();
+
     this.itemReceiver = new ItemReceiver();
 
     const quest = new Quest({

@@ -1,3 +1,4 @@
+import EventManager from "../../World/EventManager";
 import Backpack from "../Backpack/Backpack";
 
 class ItemReceiver {
@@ -13,6 +14,7 @@ class ItemReceiver {
     this.items = [];
     this.initUI();
     this.source = new Backpack();
+    this.eventManager = EventManager.getInstance();
   }
 
   initUI() {

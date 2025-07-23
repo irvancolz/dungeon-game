@@ -2,8 +2,6 @@ import { items } from "../Backend/items";
 import Button from "../Interface/Button/Button";
 import Backpack from "../Interface/Backpack/Backpack";
 import EventEmitter from "./EventEmitter";
-import EventManager from "../World/EventManager";
-import PlayerEvent from "../World/PlayerEvent";
 import * as THREE from "three";
 
 class DropItem extends EventEmitter {
@@ -15,7 +13,6 @@ class DropItem extends EventEmitter {
     this.position = position;
     this.backpack = new Backpack();
     this.taken = false;
-    this.eventManager = EventManager.getInstance();
 
     this.initButton();
     this.init();
@@ -35,13 +32,6 @@ class DropItem extends EventEmitter {
       if (this.taken) return;
       this.take();
       this.trigger("taken");
-      this.eventManager.trigger("update", [
-        new PlayerEvent(PlayerEvent.EVENT_COLLECT, {
-          id: this.id,
-          name: this.name,
-          count: this.count,
-        }),
-      ]);
     });
   }
 
