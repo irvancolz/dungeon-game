@@ -63,7 +63,7 @@ const detail = {
             chat: "Do you get the Apples?",
           },
         ]);
-        npc.chat.on("chat:started", () => {
+        npc.conversation.on("chat:start", () => {
           backpack.open();
         });
       },
@@ -73,12 +73,13 @@ const detail = {
 
         const npc = npcManager.find("Elandor the Wise");
         npc.disable();
-        npc.chat.initConversation([
+        npc.setConversation([
           {
             author: "Elandor",
             chat: "Thankyou now bring this to  mia",
           },
         ]);
+        npc.talk();
       },
       value: [
         {

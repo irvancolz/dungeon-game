@@ -1,4 +1,4 @@
-import ChatBuble from "../Interface/ChatBuble/ChatBuble";
+import ConversationManager from "../Interface/ConversationManager/ConversationManager";
 import AnimationProvider from "../Utils/AnimationProvider";
 import Canvas from "../Utils/Canvas";
 import EventEmitter from "../Utils/EventEmitter";
@@ -6,6 +6,9 @@ import * as THREE from "three";
 import Button from "../Interface/Button/Button";
 import States from "../States";
 import Marker from "../Interface/Marker";
+import Conversation from "../Interface/ConversationManager/Conversation";
+import EventManager from "./EventManager";
+import PlayerEvent from "./PlayerEvent";
 
 class Human extends EventEmitter {
   #STATE_IDLE = "idle";
@@ -24,6 +27,7 @@ class Human extends EventEmitter {
     this.state = this.#STATE_IDLE;
     this.animationProvider = new AnimationProvider();
     this.states = States.getInstance();
+    this.eventManager = EventManager.getInstance();
 
     this._init();
   }
@@ -43,10 +47,7 @@ class Human extends EventEmitter {
 
   _initChat() {
     this.conversation = [];
-    this.chat = ChatBuble.getInstance();
-    this.chat.on("chat:ended", () => {
-      this.trigger("chat:ended");
-    });
+    this.chat = ConversationManager.getInstance();
   }
   update(delta) {
     const playerPosition = this.states.getPlayerPosition();
@@ -121,7 +122,15 @@ class Human extends EventEmitter {
     });
   }
   setConversation(c = []) {
-    this.conversation = c;
+    this.conversation = new Conversation(c);
+
+    this.conversation.on("chat:end", () => {
+      this.eventManager.trigger("update", [
+        new PlayerEvent(PlayerEvent.EVENT_TALK, {
+          name: this.name,
+        }),
+      ]);
+    });
   }
   setMarker() {
     this.marker = new Marker({

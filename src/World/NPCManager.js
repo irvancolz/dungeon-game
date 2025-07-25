@@ -1,6 +1,3 @@
-import * as THREE from "three";
-import EventManager from "./EventManager";
-import PlayerEvent from "./PlayerEvent";
 let instance = null;
 class NPCManager {
   constructor() {
@@ -9,7 +6,6 @@ class NPCManager {
     instance = this;
 
     this.members = [];
-    this.eventManager = new EventManager();
   }
 
   find(name) {
@@ -25,13 +21,6 @@ class NPCManager {
 
   addNPC(npc) {
     this.members.push(npc);
-    npc.on("chat:ended", () => {
-      this.eventManager.trigger("update", [
-        new PlayerEvent(PlayerEvent.EVENT_TALK, {
-          name: npc.name,
-        }),
-      ]);
-    });
   }
 
   update(delta) {

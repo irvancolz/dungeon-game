@@ -26,6 +26,7 @@ class QuestManager {
     this.controller = new Controller();
 
     this.eventManager.on("update", (e) => {
+      console.log(e);
       this.activeQuest.forEach((quest) => {
         quest.updateProgress(e);
       });

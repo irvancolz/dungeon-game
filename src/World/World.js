@@ -11,7 +11,7 @@ import Bushes from "./Bushes";
 import Tree from "./Tree";
 import LampPost from "./LampPost";
 import WoodenBox from "./WoodenBox";
-import ChatBuble from "../Interface/ChatBuble/ChatBuble";
+import ConversationManager from "../Interface/ConversationManager/ConversationManager";
 import Marker from "../Interface/Marker";
 import Camera from "../Camera";
 import Backpack from "../Interface/Backpack/Backpack";
@@ -38,7 +38,7 @@ export default class World {
     this.width = 128;
     this.camera = new Camera({});
 
-    this.chat = new ChatBuble();
+    this.chat = new ConversationManager();
     this.backpack = new Backpack();
     const itemReceiver = ItemReceiver.getInstance();
     // this.backpack.setSecondaryInterface(itemReceiver);

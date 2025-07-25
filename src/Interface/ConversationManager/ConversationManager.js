@@ -2,22 +2,19 @@ import EventEmitter from "../../Utils/EventEmitter";
 import EventManager from "../../World/EventManager";
 import PlayerEvent from "../../World/PlayerEvent";
 
-export default class ChatBuble extends EventEmitter {
+export default class ConversationManager {
   static instance;
 
   static getInstance() {
-    return ChatBuble.instance;
+    return ConversationManager.instance;
   }
 
   constructor() {
-    super();
-
-    if (ChatBuble.instance) return ChatBuble.instance;
-    ChatBuble.instance = this;
+    if (ConversationManager.instance) return ConversationManager.instance;
+    ConversationManager.instance = this;
 
     this.visible = false;
-    this.conversation = [];
-    this.activeChat = 0;
+    this.conversation = null;
     this.$container = document.getElementById("chat_bubble");
     this.id = 0;
     this.eventManager = EventManager.getInstance();
@@ -57,14 +54,11 @@ export default class ChatBuble extends EventEmitter {
     this.$nextBtn.classList.add("visible");
     this.$container.setAttribute("aria-visible", this.visible);
 
-    // reset conversation to begining
-    this.activeChat = 0;
-
-    this.trigger("chat:ended", [this.id]);
+    this.conversation.reset();
   }
 
   next() {
-    this.activeChat++;
+    this.conversation.next();
     this.updateActionBtn();
     this.updateChat();
   }
@@ -74,11 +68,11 @@ export default class ChatBuble extends EventEmitter {
     this.visible = true;
     this.$container.classList.add("visible");
     this.updateChat();
-    this.trigger("chat:started");
   }
 
-  initConversation(chat = []) {
-    this.conversation = chat;
+  initConversation(conversation) {
+    this.conversation = conversation;
+    this.conversation.start();
     this.id = Date.now();
 
     this.open();
@@ -88,19 +82,19 @@ export default class ChatBuble extends EventEmitter {
 
   updateChat() {
     this.$container.setAttribute("aria-visible", this.visible);
+    const convo = this.conversation.current();
 
-    this.$author.innerHTML = this.conversation[this.activeChat].author;
-    this.$chat.innerHTML = this.conversation[this.activeChat].chat;
+    this.$author.innerHTML = convo.author;
+    this.$chat.innerHTML = convo.chat;
 
     const height = this.$chat.getBoundingClientRect().height;
     if (height > 0) {
       this.$chat.style.setProperty("--chat-height", height + "px");
-      this.trigger("chat:update");
     }
   }
 
   updateActionBtn() {
-    if (this.activeChat < this.conversation.length - 1) return;
+    if (!this.conversation.last) return;
     this.$nextBtn.classList.remove("visible");
     this.$closeBtn.classList.add("visible");
   }
