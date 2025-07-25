@@ -19,7 +19,6 @@ import DropItem from "../Utils/DropItem";
 import DropItemManager from "../Interface/DropItemManager";
 import backpackSeeds from "../Seeds/backpack.json";
 import MarkersManager from "../Interface/MarkersManager";
-import { items } from "../Backend/items";
 import Human from "./Human";
 import NPCManager from "./NPCManager";
 import NPCInformation from "../Seeds/NPC";

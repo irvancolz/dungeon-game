@@ -85,6 +85,7 @@ class ItemDetail {
       id: this.item.id,
       count: this.item.count,
       position: this.states.getPlayerPosition(),
+      name: this.item.name,
     };
 
     this.item.delete();

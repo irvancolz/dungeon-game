@@ -1,4 +1,4 @@
-import { items } from "../Backend/items";
+import { itemsUtils } from "../Backend/items";
 import Button from "../Interface/Button/Button";
 import Backpack from "../Interface/Backpack/Backpack";
 import EventEmitter from "./EventEmitter";
@@ -36,7 +36,7 @@ class DropItem extends EventEmitter {
   }
 
   take() {
-    const item = items.toBackpackItem(this.id, this.count);
+    const item = itemsUtils.toBackpackItem(this.name, this.count);
     this.backpack.insert(item, this.count);
     this.taken = true;
     this.dispose();

@@ -1,4 +1,4 @@
-import { items } from "../Backend/items";
+import { itemsUtils } from "../Backend/items";
 import EventManager from "../World/EventManager";
 import PlayerEvent from "../World/PlayerEvent";
 
@@ -43,7 +43,7 @@ class DropItemManager {
   }
 
   add(i) {
-    const item = items.toDropsItem(i.id, i.count, i.position);
+    const item = itemsUtils.toDropsItem(i.name, i.count, i.position);
     this.items.push(item);
     this.scene.add(item.mesh);
 

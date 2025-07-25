@@ -1,4 +1,4 @@
-import { items as itemUtils } from "../../Backend/items";
+import { itemsUtils } from "../../Backend/items";
 import Controller from "../../Utils/Controller";
 import ItemDetail from "../ItemDetail/ItemDetail";
 import LootExpLog from "../LootExpLog/LootExpLog";
@@ -31,7 +31,7 @@ class Backpack {
   }
 
   _addNewItem(item) {
-    const newItem = itemUtils.toBackpackItem(item.id, item.count);
+    const newItem = itemsUtils.toBackpackItem(item.name, item.count);
     this.$ui.append(newItem.$ui);
     newItem.on("select", (id) => {
       this.secondaryInterface.updateSelected(newItem);

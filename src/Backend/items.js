@@ -2,10 +2,8 @@ import data from "../Seeds/backpack.json";
 import BackpackItem from "../Interface/BackpackItem/BackpackItem";
 import DropItem from "../Utils/DropItem";
 
-function getAll() {}
-
-function toBackpackItem(id, count) {
-  const data = get(id);
+function toBackpackItem(name, count) {
+  const data = get(name);
   return new BackpackItem({
     name: data.name,
     img: data.img,
@@ -15,8 +13,8 @@ function toBackpackItem(id, count) {
   });
 }
 
-function toDropsItem(id, count, position) {
-  const data = get(id);
+function toDropsItem(name, count, position) {
+  const data = get(name);
 
   return new DropItem({
     id: data.id,
@@ -26,13 +24,13 @@ function toDropsItem(id, count, position) {
   });
 }
 
-function get(id) {
-  const res = data.find((e) => e.id == id);
+function get(name) {
+  const res = data.find((e) => e.name == name);
   if (res) return res;
-  console.error("data not found, id :", id);
+  console.error("data not found, id :", name);
 }
 
-export const items = {
+export const itemsUtils = {
   get,
   toBackpackItem,
   toDropsItem,
