@@ -1,4 +1,4 @@
-import { items } from "../../Backend/items";
+import { items as itemUtils } from "../../Backend/items";
 import Controller from "../../Utils/Controller";
 import ItemDetail from "../ItemDetail/ItemDetail";
 import LootExpLog from "../LootExpLog/LootExpLog";
@@ -16,7 +16,7 @@ class Backpack {
     this.controller = new Controller();
 
     this.items = [];
-
+    this.filter = [];
     this.controller.on("backpack", () => {
       this.toggle();
     });
@@ -31,7 +31,7 @@ class Backpack {
   }
 
   _addNewItem(item) {
-    const newItem = items.toBackpackItem(item.id, item.count);
+    const newItem = itemUtils.toBackpackItem(item.id, item.count);
     this.$ui.append(newItem.$ui);
     newItem.on("select", (id) => {
       this.secondaryInterface.updateSelected(newItem);
@@ -165,6 +165,20 @@ class Backpack {
     } else {
       this.open();
     }
+  }
+  setFilter(items = []) {
+    this.filter = items;
+    this._applyFilter();
+  }
+
+  _applyFilter() {
+    if (this.filter.length <= 0) {
+      this.items.forEach((el) => el.enabled());
+      return;
+    }
+    this.items.forEach((el) => {
+      if (!this.filter.find((f) => f.name == el.name)) el.disabled();
+    });
   }
 }
 

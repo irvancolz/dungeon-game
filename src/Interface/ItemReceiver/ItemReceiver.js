@@ -93,6 +93,7 @@ class ItemReceiver {
   }
   setRequirements(items) {
     this.requirements = items;
+    this.source.setFilter(this.requirements);
   }
 
   reset() {

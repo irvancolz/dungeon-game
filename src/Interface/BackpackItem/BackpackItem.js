@@ -62,6 +62,12 @@ class BackpackItem extends EventEmitter {
   deselect() {
     this.$ui.classList.remove("selected");
   }
+  disabled() {
+    this.$ui.classList.add("disabled");
+  }
+  enabled() {
+    this.$ui.classList.remove("disabled");
+  }
 }
 
 export default BackpackItem;

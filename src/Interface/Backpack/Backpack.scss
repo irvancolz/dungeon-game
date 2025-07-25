@@ -74,6 +74,11 @@
           background-color: #c4c2c2;
           pointer-events: none;
         }
+
+        & .disabled {
+          pointer-events: none;
+          filter: grayscale(100%);
+        }
       }
     }
   }
