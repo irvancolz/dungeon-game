@@ -133,6 +133,7 @@ class QuestObjective extends EventEmitter {
     if (this.onComplete) {
       this.onComplete.apply(this);
     }
+    this.cleanup();
   }
 
   initUI() {
@@ -180,6 +181,14 @@ class QuestObjective extends EventEmitter {
       if (target) {
         target.setMarker();
         target.setConversation(this.value.chat);
+      }
+    }
+  }
+  cleanup() {
+    if (this.type == PlayerEvent.EVENT_TALK) {
+      const target = this.npcManager.find(this.value.name);
+      if (target) {
+        target.disable();
       }
     }
   }

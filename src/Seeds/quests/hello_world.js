@@ -19,10 +19,7 @@ const detail = {
   objectives: [
     {
       type: PlayerEvent.EVENT_TALK,
-      onComplete: () => {
-        const npc = npcManager.find("Elandor the Wise");
-        npc.disable();
-      },
+      onComplete: () => {},
       value: {
         id: "npc001",
         name: "Elandor the Wise",
