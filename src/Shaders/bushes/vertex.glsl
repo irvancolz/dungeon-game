@@ -11,9 +11,6 @@ varying vec3 vPosition;
 void main() {
 
     vec3 newPosition = position;
-
-    float angle = atan(newPosition.x - cameraPosition.x, newPosition.z - cameraPosition.z);
-    newPosition.xz = getRotatePivot2d(newPosition.xz, angle, aCenter.xz);
     // // Final postion
     vec4 modelPosition = modelMatrix * instanceMatrix * vec4(newPosition, 1.);
 

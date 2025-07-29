@@ -12,7 +12,7 @@ class Conversation extends EventEmitter {
   next() {
     this.progress++;
     this.last = this.progress == this.chat.length - 1;
-    this.trigger("chat:update");
+    this.trigger("chat:update", [this.progress]);
     if (this.last) {
       this._finish();
     }

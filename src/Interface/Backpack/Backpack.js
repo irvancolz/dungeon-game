@@ -43,7 +43,8 @@ class Backpack {
   }
 
   insert(item, count) {
-    const target = this.find(item);
+    const target = this.find(item.name);
+    item.count = count;
     if (!target) {
       this._addNewItem(item);
     } else {
