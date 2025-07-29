@@ -20,6 +20,7 @@ import QuestManager from "./Interface/QuestManager/QuestManager";
 import Quest from "./Interface/Quest/Quest";
 import PlayerEvent from "./World/PlayerEvent";
 import ItemReceiver from "./Interface/ItemReceiver/ItemReceiver";
+import ControlsLegend from "./Interface/ControlsLegend/ControlsLegend";
 
 let instance = null;
 
@@ -51,6 +52,7 @@ export default class Experience {
     this.animationProvider = new AnimationProvider();
 
     this.itemReceiver = new ItemReceiver();
+    this.controlsLegend = new ControlsLegend();
 
     const quest = new Quest({
       title: "gather potion",

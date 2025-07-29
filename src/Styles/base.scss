@@ -33,3 +33,11 @@ button.disabled {
   flex-direction: column;
   gap: 0.5rem;
 }
+
+#debugger {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  width: 30vw;
+  max-width: 20rem;
+}

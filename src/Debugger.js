@@ -10,6 +10,7 @@ export default class Debugger {
     if (this.active) {
       this.ui = new Pane({
         title: "Dungeon Adventure",
+        container: document.getElementById("debugger"),
       });
     }
   }
