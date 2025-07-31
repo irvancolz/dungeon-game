@@ -1,17 +1,8 @@
-import DebugFloor from "./DebugFloor";
-import Graves from "./Graves";
 import Player from "./Player";
-import Ground from "./Ground";
 import Grass from "./Grass";
 import * as THREE from "three";
-import Fence from "./Fence";
-import House from "./House";
-import Bushes from "./Bushes";
-import Tree from "./Tree";
 import LampPost from "./LampPost";
 import WoodenBox from "./WoodenBox";
-import Human from "./Human";
-import NPCInformation from "../Seeds/NPC";
 
 export default class World {
   constructor() {
@@ -293,19 +284,19 @@ export default class World {
     });
   }
 
-  // update in future
-  addGraves() {
-    this.gravesRef = this.map.scene.children.filter((i) => {
-      return i.name.startsWith("Grave");
-    });
+  // // update in future
+  // addGraves() {
+  //   this.gravesRef = this.map.scene.children.filter((i) => {
+  //     return i.name.startsWith("Grave");
+  //   });
 
-    this.graves = new Graves({
-      positions: this.gravesRef.map((i) => i.position),
-      model: this.resources.grave,
-      scene: this.scene,
-      debug: this.debug,
-    });
-  }
+  //   this.graves = new Graves({
+  //     positions: this.gravesRef.map((i) => i.position),
+  //     model: this.resources.grave,
+  //     scene: this.scene,
+  //     debug: this.debug,
+  //   });
+  // }
 
   addGrass() {
     this.grass = new Grass({
