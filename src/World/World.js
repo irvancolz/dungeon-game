@@ -254,25 +254,25 @@ export default class World {
   //   });
   // }
 
-  addTree() {
-    const bushesRefs = this.map.scene.children.filter((i) => {
-      return i.name.startsWith("Tree");
-    });
+  // addTree() {
+  //   const bushesRefs = this.map.scene.children.filter((i) => {
+  //     return i.name.startsWith("Tree");
+  //   });
 
-    const positionRefs = bushesRefs.map((i) => i.position);
-    const rotationRefs = bushesRefs.map((i) => i.quaternion);
+  //   const positionRefs = bushesRefs.map((i) => i.position);
+  //   const rotationRefs = bushesRefs.map((i) => i.quaternion);
 
-    this.tree = new Tree({
-      position: positionRefs,
-      quaternion: rotationRefs,
-      scene: this.scene,
-      model: this.resources.model_tree,
-      debug: this.debug,
-      physicsWorld: this.physics,
-      leaves: this.resources.leaves_texture,
-      leavesMatcap: this.resources.bushes_matcap_texture,
-    });
-  }
+  //   this.tree = new Tree({
+  //     position: positionRefs,
+  //     quaternion: rotationRefs,
+  //     scene: this.scene,
+  //     model: this.resources.model_tree,
+  //     debug: this.debug,
+  //     physicsWorld: this.physics,
+  //     leaves: this.resources.leaves_texture,
+  //     leavesMatcap: this.resources.bushes_matcap_texture,
+  //   });
+  // }
 
   addWoodenBoxes() {
     const woodenBoxesref = this.map.scene.children.filter((i) => {

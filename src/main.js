@@ -9,6 +9,7 @@ import Ground from "./World/Ground";
 import Fence from "./World/Fence";
 import House from "./World/House";
 import Bushes from "./World/Bushes";
+import Tree from "./World/Tree";
 
 const canvas = document.getElementById("canvas");
 
@@ -63,6 +64,17 @@ function startGame() {
       texture: refferencesAssets.resources.leaves_texture,
     });
     world.add(bush);
+
+    // tree
+    const treeReff = refferencesProvider.getRefferences("Bushes");
+    const tree = new Tree({
+      scales: treeReff.map((e) => e.scale),
+      position: treeReff.map((e) => e.position),
+      quaternion: treeReff.map((e) => e.quaternion),
+      leaves: refferencesAssets.resources.leaves_texture,
+      model: refferencesAssets.resources.model_tree,
+    });
+    world.add(tree);
 
     const experience = new Experience(canvas, world);
     experience.setResources(assets.resources);

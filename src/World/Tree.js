@@ -2,29 +2,16 @@ import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
 import TreeMaterial from "../Materials/Tree";
 import Bushes from "./Bushes";
-export default class Tree {
-  constructor({
-    scene,
-    position,
-    quaternion,
-    debug,
-    model,
-    physicsWorld,
-    leaves,
-  }) {
-    this.scene = scene;
+import WorldObject from "../Utils/WorldObject";
+export default class Tree extends WorldObject {
+  constructor({ position, quaternion, model, leaves }) {
+    super();
     this.position = position;
     this.quaternion = quaternion;
-    this.debug = debug;
     this.model = model;
-    this.physicsWorld = physicsWorld;
 
     // leaves
     this.leavesTexture = leaves;
-
-    this.init();
-    this.addLeaves();
-    this.addDebug();
   }
 
   addDebug() {
@@ -62,13 +49,15 @@ export default class Tree {
 
     this.leaves = new Bushes({
       position: pos,
-      scene: this.scene,
-      debug: this.debug,
       texture: this.leavesTexture,
       scales: scale,
       name: "tree leaves",
       color: "#af2879",
     });
+    this.leaves.setScene(this.scene);
+    this.leaves.setDebugger(this.debug);
+    this.leaves.setStates(this.states);
+    this.leaves.init();
   }
 
   init() {
@@ -95,11 +84,14 @@ export default class Tree {
       const colliderDesc = RAPIER.ColliderDesc.capsule(colliderHalfHeight, 0.3)
         .setTranslation(dummy.position.x, colliderHalfHeight, dummy.position.z)
         .setRotation(dummy.quaternion);
-      this.physicsWorld.world.createCollider(colliderDesc);
+      this.physics.world.createCollider(colliderDesc);
 
       dummy.updateMatrix();
       this.mesh.setMatrixAt(i, dummy.matrix);
     }
+
+    this.addLeaves();
+    this.addDebug();
   }
 
   update(elapsed) {
