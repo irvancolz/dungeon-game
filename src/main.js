@@ -8,6 +8,7 @@ import DebugFloor from "./World/DebugFloor";
 import Ground from "./World/Ground";
 import Fence from "./World/Fence";
 import House from "./World/House";
+import Bushes from "./World/Bushes";
 
 const canvas = document.getElementById("canvas");
 
@@ -52,6 +53,16 @@ function startGame() {
       quaternion: houseReff.map((e) => e.quaternion),
     });
     world.add(house);
+
+    // bushes
+    const bushReff = refferencesProvider.getRefferences("Bushes");
+    const bush = new Bushes({
+      scales: bushReff.map((e) => e.scale),
+      position: bushReff.map((e) => e.position),
+      quaternion: bushReff.map((e) => e.quaternion),
+      texture: refferencesAssets.resources.leaves_texture,
+    });
+    world.add(bush);
 
     const experience = new Experience(canvas, world);
     experience.setResources(assets.resources);

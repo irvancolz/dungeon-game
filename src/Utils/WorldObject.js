@@ -1,7 +1,6 @@
 class WorldObject {
   constructor() {
     this.isWorldObj = true;
-    this.mesh = null;
   }
   setScene(scene) {
     this.scene = scene;
@@ -11,6 +10,9 @@ class WorldObject {
   }
   setPhysics(physics) {
     this.physics = physics;
+  }
+  setStates(state) {
+    this.states = state;
   }
 
   init() {}

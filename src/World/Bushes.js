@@ -2,30 +2,23 @@ import * as THREE from "three";
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import BushesMaterial from "../Materials/Bushes";
 import States from "../States";
+import WorldObject from "../Utils/WorldObject";
 
-export default class Bushes {
+export default class Bushes extends WorldObject {
   constructor({
     position,
-    scene,
     texture,
-    debug,
     scales,
     color = "#209420",
     name = "bushes",
   }) {
+    super();
     this.position = position;
-    this.scene = scene;
     this.height = 1;
     this.texture = texture;
-    this.debug = debug;
     this.scales = scales;
     this.color = color;
     this.name = name;
-
-    this.states = States.getInstance();
-
-    this.init();
-    this.addDebug();
   }
 
   addDebug() {
@@ -146,6 +139,7 @@ export default class Bushes {
     this.initGeometry();
     this.initMaterial();
     this.initMesh();
+    this.addDebug();
   }
   update(elapsed) {
     this.states.updateUniforms(this.material.uniforms);
@@ -156,6 +150,5 @@ export default class Bushes {
     this.mesh.dispose();
     this.geometry.dispose();
     this.material.dispose();
-    this.leaves.dispose;
   }
 }

@@ -41,6 +41,11 @@ export default class World {
       this.floor.dispose();
     }
     this.floor = floor;
+    if (this.physics && this.scene && this.debug) {
+      this.floor.setPhysics(this.physics);
+      this.floor.setScene(this.scene);
+      this.floor.setDebugger(this.debug);
+    }
   }
   init() {
     this.floor.init();
@@ -53,6 +58,9 @@ export default class World {
       }
       if (obj.setPhysics) {
         obj.setPhysics(this.physics);
+      }
+      if (obj.setStates) {
+        obj.setStates(this.states);
       }
       obj.init();
     });
