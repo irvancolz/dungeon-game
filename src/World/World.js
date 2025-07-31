@@ -307,21 +307,21 @@ export default class World {
       position: new THREE.Vector3(0, 0, 0),
     });
   }
-  addLampPost() {
-    const lampRefs = this.map.scene.children.filter((i) => {
-      return i.name.startsWith("LampPost");
-    });
+  // addLampPost() {
+  //   const lampRefs = this.map.scene.children.filter((i) => {
+  //     return i.name.startsWith("LampPost");
+  //   });
 
-    const positionRefs = lampRefs.map((i) => i.position);
-    const rotationRefs = lampRefs.map((i) => i.quaternion);
+  //   const positionRefs = lampRefs.map((i) => i.position);
+  //   const rotationRefs = lampRefs.map((i) => i.quaternion);
 
-    this.lampPost = new LampPost({
-      scene: this.scene,
-      debug: this.debug,
-      position: positionRefs,
-      quaternion: rotationRefs,
-      model: this.resources.model_lamp_post,
-      texture: this.resources.lamppost_texture,
-    });
-  }
+  //   this.lampPost = new LampPost({
+  //     scene: this.scene,
+  //     debug: this.debug,
+  //     position: positionRefs,
+  //     quaternion: rotationRefs,
+  //     model: this.resources.model_lamp_post,
+  //     texture: this.resources.lamppost_texture,
+  //   });
+  // }
 }

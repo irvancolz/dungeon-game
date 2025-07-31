@@ -10,6 +10,7 @@ import Fence from "./World/Fence";
 import House from "./World/House";
 import Bushes from "./World/Bushes";
 import Tree from "./World/Tree";
+import LampPost from "./World/LampPost";
 
 const canvas = document.getElementById("canvas");
 
@@ -75,6 +76,16 @@ function startGame() {
       model: refferencesAssets.resources.model_tree,
     });
     world.add(tree);
+
+    //lamppost
+    const lamppostReff = refferencesProvider.getRefferences("LampPost");
+    const lampPost = new LampPost({
+      model: refferencesAssets.resources.model_lamp_post,
+      texture: refferencesAssets.resources.lamppost_texture,
+      position: lamppostReff.map((e) => e.position),
+      quaternion: lamppostReff.map((e) => e.quaternion),
+    });
+    world.add(lampPost);
 
     const experience = new Experience(canvas, world);
     experience.setResources(assets.resources);

@@ -1,26 +1,17 @@
 import * as THREE from "three";
 import EmissiveMaterial from "../Materials/Emissive";
+import WorldObject from "../Utils/WorldObject";
 
-export default class LampPost {
-  constructor({
-    model,
-    texture,
-    scene,
-    debug,
-    position = [],
-    quaternion = [],
-  }) {
+export default class LampPost extends WorldObject {
+  constructor({ model, texture, position = [], quaternion = [] }) {
+    super();
     this.model = model.scene;
-    this.scene = scene;
-    this.debug = debug;
     this.position = position;
     this.quaternion = quaternion;
     this.instances = [];
     this.texture = texture;
     this.texture.colorSpace = THREE.SRGBColorSpace;
     this.texture.flipY = false;
-
-    this.init();
   }
 
   init() {
