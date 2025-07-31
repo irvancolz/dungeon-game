@@ -6,9 +6,14 @@ class WorldObject {
   setScene(scene) {
     this.scene = scene;
   }
-  init() {
-    this.scene.add(this.mesh);
+  setDebugger(debug) {
+    this.debug = debug;
   }
+  setPhysics(physics) {
+    this.physics = physics;
+  }
+
+  init() {}
 }
 
 export default WorldObject;

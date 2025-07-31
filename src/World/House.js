@@ -1,42 +1,20 @@
 import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
 import EmissiveMaterial from "../Materials/Emissive";
-import WoodDarkMaterial from "../Materials/WoodDark";
-import WallMaterial from "../Materials/Wall";
+import WorldObject from "../Utils/WorldObject";
 
-export default class House {
-  constructor({
-    scene,
-    model,
-    physics,
-    position = [],
-    quaternion = [],
-    debug,
-    texture,
-  }) {
-    this.scene = scene;
+export default class House extends WorldObject {
+  constructor({ model, position = [], quaternion = [], texture }) {
+    super();
     this.model = model;
     this.position = position;
     this.quaternion = quaternion;
-    this.physicsWorld = physics;
-    this.debug = debug;
     this.texture = texture;
-
-    this.windowMaterial = EmissiveMaterial(
-      "#907418",
-      0.217,
-      this.debug,
-      "window"
-    );
-
     this.texture.colorSpace = THREE.SRGBColorSpace;
     this.texture.flipY = false;
     this.material = new THREE.MeshStandardMaterial({
       map: this.texture,
     });
-
-    this.init();
-    this.addDebug();
   }
 
   addDebug() {
@@ -47,6 +25,12 @@ export default class House {
   }
 
   init() {
+    this.windowMaterial = EmissiveMaterial(
+      "#907418",
+      0.217,
+      this.debug,
+      "window"
+    );
     for (let i = 0; i < this.position.length; i++) {
       const group = new THREE.Group();
       this.model.scene.children.forEach((el) => {
@@ -63,18 +47,28 @@ export default class House {
       group.quaternion.copy(this.quaternion[i]);
       this.scene.add(group);
 
-      // physics
-      const houseHeight = 2;
-      const houseHalfWidth = 3.2;
-      const houseHalfDepth = 4.8;
-      const colliderDesc = RAPIER.ColliderDesc.cuboid(
-        houseHalfWidth,
-        houseHeight,
-        houseHalfDepth
-      )
-        .setTranslation(this.position[i].x, houseHeight, this.position[i].z)
-        .setRotation(this.quaternion[i]);
-      this.physicsWorld.world.createCollider(colliderDesc);
+      this._addPhysics(
+        this.position[i].x,
+        this.position[i].z,
+        this.quaternion[i]
+      );
     }
+
+    this.addDebug();
+  }
+
+  _addPhysics(x, z, quaternion) {
+    // physics
+    const houseHeight = 2;
+    const houseHalfWidth = 3.2;
+    const houseHalfDepth = 4.8;
+    const colliderDesc = RAPIER.ColliderDesc.cuboid(
+      houseHalfWidth,
+      houseHeight,
+      houseHalfDepth
+    )
+      .setTranslation(x, houseHeight, z)
+      .setRotation(quaternion);
+    this.physics.world.createCollider(colliderDesc);
   }
 }

@@ -1,21 +1,12 @@
 import RAPIER from "@dimforge/rapier3d";
 import DebugFloorMaterial from "../Materials/DebugFloor";
 import * as THREE from "three";
+import WorldObject from "../Utils/WorldObject";
 
-export default class DebugFloor {
+export default class DebugFloor extends WorldObject {
   constructor({ width }) {
+    super();
     this.width = width;
-  }
-
-  setScene(scene) {
-    this.scene = scene;
-  }
-
-  setDebugger(debug) {
-    this.debug = debug;
-  }
-  setPhysics(physics) {
-    this.physics = physics;
   }
 
   initDebug() {

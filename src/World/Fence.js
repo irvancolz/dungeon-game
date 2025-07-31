@@ -1,27 +1,14 @@
 import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
 import WoodDarkMaterial from "../Materials/WoodDark";
+import WorldObject from "../Utils/WorldObject";
 
-export default class Fence {
-  constructor({
-    model,
-    scene,
-    physics,
-    noise,
-    position = [],
-    quaternion = [],
-    debug,
-  }) {
+export default class Fence extends WorldObject {
+  constructor({ model, position = [], quaternion = [] }) {
+    super();
     this.model = model;
-    this.scene = scene;
     this.position = position;
     this.quaternion = quaternion;
-    this.physicsWorld = physics;
-    this.noise = noise;
-    this.debug = debug;
-
-    this.init();
-    this.addDebug();
   }
 
   addDebug() {
@@ -60,22 +47,26 @@ export default class Fence {
       dummy.position.copy(this.position[i]);
       dummy.position.y = 0;
 
-      // physics
-      const fenceHeight = 1;
-      // sorry the model is rather deep than wide :(
-      const fenceHalfWidth = 0.1;
-      const fenceHalfDepth = 2;
-      const colliderDesc = RAPIER.ColliderDesc.cuboid(
-        fenceHalfWidth,
-        fenceHeight,
-        fenceHalfDepth
-      )
-        .setTranslation(dummy.position.x, fenceHeight, dummy.position.z)
-        .setRotation(dummy.quaternion);
-      const collider = this.physicsWorld.world.createCollider(colliderDesc);
+      this._addPhysics(dummy.position.x, dummy.position.z, dummy.quaternion);
 
       dummy.updateMatrix();
       this.mesh.setMatrixAt(i, dummy.matrix);
     }
+    this.addDebug();
+  }
+  _addPhysics(x, z, quaternion) {
+    // physics
+    const fenceHeight = 1;
+    // sorry the model is rather deep than wide :(
+    const fenceHalfWidth = 0.1;
+    const fenceHalfDepth = 2;
+    const colliderDesc = RAPIER.ColliderDesc.cuboid(
+      fenceHalfWidth,
+      fenceHeight,
+      fenceHalfDepth
+    )
+      .setTranslation(x, fenceHeight, z)
+      .setRotation(quaternion);
+    this.physics.world.createCollider(colliderDesc);
   }
 }

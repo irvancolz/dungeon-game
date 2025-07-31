@@ -2,29 +2,17 @@ import RAPIER from "@dimforge/rapier3d";
 import GroundMaterial from "../Materials/Ground";
 import * as THREE from "three";
 import { mix, smoothstep } from "../Utils/math";
+import WorldObject from "../Utils/WorldObject";
 
-export default class Ground {
+export default class Ground extends WorldObject {
   constructor({ texture, width, maxHeight = 0 }) {
-    this.scene = scene;
-    this.debug = debug;
+    super();
     this.texture = texture;
     this.size = width;
     this.physicsFieldSize = this.size + 1;
-    this.physics = physics;
     this.maxHeight = maxHeight;
 
-    // this.extractTextureMap();
-  }
-
-  setScene(scene) {
-    this.scene = scene;
-  }
-
-  setDebugger(debug) {
-    this.debug = debug;
-  }
-  setPhysics(physics) {
-    this.physics = physics;
+    this.extractTextureMap();
   }
 
   initMaterial() {
@@ -47,9 +35,6 @@ export default class Ground {
     const ctx = canvas.getContext("2d");
 
     ctx.drawImage(this.texture.image, 0, 0);
-
-    canvas.style.position = "fixed";
-    canvas.style.zIndex = 1000;
 
     const img = ctx.getImageData(0, 0, this.size, this.size);
 

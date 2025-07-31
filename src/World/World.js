@@ -16,7 +16,6 @@ import NPCInformation from "../Seeds/NPC";
 
 export default class World {
   constructor() {
-    this.width = 128;
     // every object in world
     this.environments = [];
 
@@ -45,8 +44,16 @@ export default class World {
   }
   init() {
     this.floor.init();
-
     this.environments.forEach((obj) => {
+      if (obj.setScene) {
+        obj.setScene(this.scene);
+      }
+      if (obj.setDebugger) {
+        obj.setDebugger(this.debug);
+      }
+      if (obj.setPhysics) {
+        obj.setPhysics(this.physics);
+      }
       obj.init();
     });
   }
@@ -57,7 +64,6 @@ export default class World {
         this.add(arguments[i]);
       }
     } else {
-      item.setScene(this.scene);
       this.environments.push(item);
     }
   }
@@ -123,53 +129,53 @@ export default class World {
   }
 
   dispose() {
-    this.graves.dispose();
-    this.player.dispose();
+    // this.graves.dispose();
+    // this.player.dispose();
   }
 
   // ====================
-  addNPC() {
-    const npcRef = this.map.scene.children.filter((i) => {
-      return i.name.startsWith("NPC");
-    });
+  // addNPC() {
+  //   const npcRef = this.map.scene.children.filter((i) => {
+  //     return i.name.startsWith("NPC");
+  //   });
 
-    npcRef.forEach((npc) => {
-      const name = npc.name.split("_");
-      name.splice(0, 1);
+  //   npcRef.forEach((npc) => {
+  //     const name = npc.name.split("_");
+  //     name.splice(0, 1);
 
-      const info = NPCInformation.getDetail(name.join("_"));
+  //     const info = NPCInformation.getDetail(name.join("_"));
 
-      const person = new Human({
-        scene: this.scene,
-        model: this.resources[info.model],
-        name: info.name,
-        position: npc.position,
-        quaternion: npc.quaternion,
-        job: info.job,
-      });
-      this.npc.addNPC(person);
-    });
-  }
+  //     const person = new Human({
+  //       scene: this.scene,
+  //       model: this.resources[info.model],
+  //       name: info.name,
+  //       position: npc.position,
+  //       quaternion: npc.quaternion,
+  //       job: info.job,
+  //     });
+  //     this.npc.addNPC(person);
+  //   });
+  // }
 
-  addHouse() {
-    const housesRef = this.map.scene.children.filter((i) => {
-      return i.name.startsWith("House");
-    });
+  // addHouse() {
+  //   const housesRef = this.map.scene.children.filter((i) => {
+  //     return i.name.startsWith("House");
+  //   });
 
-    const positionRefs = housesRef.map((i) => i.position);
-    const rotationRefs = housesRef.map((i) => i.quaternion);
+  //   const positionRefs = housesRef.map((i) => i.position);
+  //   const rotationRefs = housesRef.map((i) => i.quaternion);
 
-    this.house = new House({
-      scene: this.scene,
-      model: this.resources.model_house,
-      position: positionRefs,
-      quaternion: rotationRefs,
-      physics: this.physics,
-      debug: this.debug,
-      roofTexture: this.resources.roof_texture,
-      texture: this.resources.house_texture,
-    });
-  }
+  //   this.house = new House({
+  //     scene: this.scene,
+  //     model: this.resources.model_house,
+  //     position: positionRefs,
+  //     quaternion: rotationRefs,
+  //     physics: this.physics,
+  //     debug: this.debug,
+  //     roofTexture: this.resources.roof_texture,
+  //     texture: this.resources.house_texture,
+  //   });
+  // }
 
   addPlayer() {
     const playerRef = this.map.scene.children.find((i) => {
@@ -186,23 +192,23 @@ export default class World {
     });
   }
 
-  addFences() {
-    const fenceRefs = this.map.scene.children.filter((i) => {
-      return i.name.startsWith("ModelFence");
-    });
+  // addFences() {
+  //   const fenceRefs = this.map.scene.children.filter((i) => {
+  //     return i.name.startsWith("ModelFence");
+  //   });
 
-    const positionRefs = fenceRefs.map((i) => i.position);
-    const rotationRefs = fenceRefs.map((i) => i.quaternion);
+  //   const positionRefs = fenceRefs.map((i) => i.position);
+  //   const rotationRefs = fenceRefs.map((i) => i.quaternion);
 
-    this.fences = new Fence({
-      model: this.resources.model_fence_wooden,
-      scene: this.scene,
-      position: positionRefs,
-      quaternion: rotationRefs,
-      physics: this.physics,
-      debug: this.debug,
-    });
-  }
+  //   this.fences = new Fence({
+  //     model: this.resources.model_fence_wooden,
+  //     scene: this.scene,
+  //     position: positionRefs,
+  //     quaternion: rotationRefs,
+  //     physics: this.physics,
+  //     debug: this.debug,
+  //   });
+  // }
 
   addBushes() {
     const bushesRefs = this.map.scene.children.filter((i) => {
