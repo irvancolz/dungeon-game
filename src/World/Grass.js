@@ -1,15 +1,10 @@
 import * as THREE from "three";
 import GrassMaterial from "../Materials/Grass";
-import States from "../States";
+import WorldObject from "../Utils/WorldObject";
 
-export default class Grass {
-  constructor({
-    density,
-    scene,
-    debug,
-    width,
-    position = new THREE.Vector3(),
-  }) {
+export default class Grass extends WorldObject {
+  constructor({ density, width, position = new THREE.Vector3() }) {
+    super();
     this.density = density;
     this.width = width;
     this.count = density * width ** 2;
@@ -19,19 +14,11 @@ export default class Grass {
     this.BLADE_WIDTH = 0.02;
     this.BLADE_HEIGHT_VARIATION = 0.5;
 
-    this.scene = scene;
-    this.debug = debug;
-
     this.positionsArray = [];
     this.uvsArray = [];
     this.colorsArray = [];
     this.indiciesArray = [];
     this.centersArray = [];
-
-    this.states = States.getInstance();
-
-    this.init();
-    this.initDebug();
   }
 
   initMaterial() {
@@ -108,6 +95,9 @@ export default class Grass {
     // this.mesh.castShadow = true;
 
     this.scene.add(this.mesh);
+    if (!this.debug) {
+      this.initDebug();
+    }
   }
 
   initDebug() {

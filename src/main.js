@@ -11,6 +11,7 @@ import House from "./World/House";
 import Bushes from "./World/Bushes";
 import Tree from "./World/Tree";
 import LampPost from "./World/LampPost";
+import Grass from "./World/Grass";
 
 const canvas = document.getElementById("canvas");
 
@@ -86,6 +87,13 @@ function startGame() {
       quaternion: lamppostReff.map((e) => e.quaternion),
     });
     world.add(lampPost);
+
+    // grass
+    const grass = new Grass({
+      density: 10,
+      width: 10,
+    });
+    world.add(grass);
 
     const experience = new Experience(canvas, world);
     experience.setResources(assets.resources);

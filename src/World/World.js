@@ -1,7 +1,4 @@
 import Player from "./Player";
-import Grass from "./Grass";
-import * as THREE from "three";
-import LampPost from "./LampPost";
 import WoodenBox from "./WoodenBox";
 
 export default class World {
@@ -298,15 +295,15 @@ export default class World {
   //   });
   // }
 
-  addGrass() {
-    this.grass = new Grass({
-      density: 10,
-      debug: this.debug,
-      width: 10,
-      scene: this.scene,
-      position: new THREE.Vector3(0, 0, 0),
-    });
-  }
+  // addGrass() {
+  //   this.grass = new Grass({
+  //     density: 10,
+  //     debug: this.debug,
+  //     width: 10,
+  //     scene: this.scene,
+  //     position: new THREE.Vector3(0, 0, 0),
+  //   });
+  // }
   // addLampPost() {
   //   const lampRefs = this.map.scene.children.filter((i) => {
   //     return i.name.startsWith("LampPost");
