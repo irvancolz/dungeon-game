@@ -153,7 +153,7 @@ export default class Grass {
     this.init();
   }
 
-  update(time, playerPos, playerDirection) {
+  update(playerPos) {
     this.states.updateUniforms(this.material.uniforms);
     this.mesh.position.set(playerPos.x, 0, playerPos.z);
   }

@@ -37,8 +37,9 @@ class NPCManager {
   }
 
   dispose() {
-    this.members.forEach((el) => {
+    this.members.forEach((el, i) => {
       el.dispose();
+      this.members.splice(i, 1);
     });
   }
 }

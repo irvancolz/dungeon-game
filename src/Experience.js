@@ -10,18 +10,19 @@ import WorldPhysics from "./Physics/World";
 import resources from "./resources";
 import Composer from "./Composer";
 import Backpack from "./Interface/Backpack/Backpack";
-import backpackSeeds from "./Seeds/backpack.json";
 import LootExpLlog from "./Interface/LootExpLog/LootExpLog";
 import Controller from "./Utils/Controller";
 import AnimationProvider from "./Utils/AnimationProvider";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import EventManager from "./World/EventManager";
 import QuestManager from "./Interface/QuestManager/QuestManager";
-import Quest from "./Interface/Quest/Quest";
-import PlayerEvent from "./World/PlayerEvent";
 import ItemReceiver from "./Interface/ItemReceiver/ItemReceiver";
 import ControlsLegend from "./Interface/ControlsLegend/ControlsLegend";
 import InformationPanel from "./Interface/InformationPanel/InformationPanel";
+import ConversationManager from "./Interface/ConversationManager/ConversationManager";
+import DropItemManager from "./Interface/DropItemManager";
+import MarkersManager from "./Interface/MarkersManager";
+import NPCManager from "./World/NPCManager";
 
 let instance = null;
 
@@ -31,49 +32,109 @@ export default class Experience {
       return instance;
     }
     instance = this;
-
-    this.controller = new Controller();
-    this.debug = new Debugger();
-    this.states = new States(this.debug);
     this.canvas = canvas;
-    this.scene = new THREE.Scene();
 
-    this.fog = new THREE.FogExp2("#565f67", 0.01);
-    this.scene.fog = this.fog;
+    this._initUtils();
+    this._loadAssets();
+    this._initPhysics();
+    this._initInterface();
+    this._init3DExperience();
+    this._initQuest();
+    this._initDebug();
 
-    this.eventManager = new EventManager();
-    this.backpack = new Backpack();
-    const seed = [];
-    for (let i = 0; i < 1; i++) {
-      seed.push(...backpackSeeds);
-    }
-    this.backpack.init(seed);
+    this.resources.on("finish:loaded", () => {
+      this.animationProvider.addPlaylist(
+        this.resources.resources.model_elandor.animations
+      );
 
-    this.lootExplog = new LootExpLlog();
-    this.animationProvider = new AnimationProvider();
-
-    this.itemReceiver = new ItemReceiver();
-    this.controlsLegend = new ControlsLegend();
-    this.informationPanel = new InformationPanel();
-
-    const quest = new Quest({
-      title: "gather potion",
-      dependencies: [],
-      description: "find nearest potion around you to finish this quest",
-      status: Quest.STATUS_IN_PROGRESS,
-      objectives: [
-        {
-          type: PlayerEvent.EVENT_COLLECT,
-          value: {
-            id: "item001",
-            name: "Potion of Minor Healing",
-            count: 3,
-          },
-        },
-      ],
+      this._initWorld();
     });
-    this.questManager = new QuestManager();
-    this.questManager.add(quest);
+
+    this.states.time.on("tick", () => {
+      // on tick
+      this.camera.update();
+      this.renderer.update();
+      // this.composer.update();
+      if (this.physics) {
+        this.physics.update();
+      }
+      if (this.world) {
+        this.world.update(this.states.time.elapsed, this.states.time.delta);
+      }
+      if (this.stats) {
+        this.stats.update();
+      }
+      if (this.debugOpt.showPhysics) {
+        this._updatePhysicsDebugger();
+      }
+    });
+
+    this.states.sizes.on("resize", () => {
+      // on resize
+      this.camera.resize();
+      this.renderer.resize();
+      // this.composer.resize();
+    });
+
+    this.controller.on("fullscreen", () => {
+      document.body.requestFullscreen();
+    });
+  }
+
+  _initDebug() {
+    this.debugOpt = {
+      showPhysics: false,
+      showAxes: true,
+      fogColor: "#565f67",
+    };
+    if (this.debug.active) {
+      this.stats = new Stats();
+      document.body.appendChild(this.stats.dom);
+
+      this.debug.ui
+        .addBinding(this.debugOpt, "showPhysics")
+        .on("change", () => {
+          this._updatePhysicsDebugger();
+        });
+
+      const fogFolder = this.debug.ui.addFolder({
+        title: "fog",
+        expanded: false,
+      });
+      fogFolder.addBinding(this.debugOpt, "fogColor").on("change", (e) => {
+        this.fog.color.set(this.debugOpt.fogColor);
+      });
+      fogFolder.addBinding(this.fog, "density", {
+        min: 0.001,
+        max: 0.1,
+        step: 0.001,
+      });
+    }
+
+    // physics
+    this.debugPhysics = new THREE.LineSegments(
+      new THREE.BufferGeometry(),
+      new THREE.LineBasicMaterial({ color: 0xffffff, vertexColors: true })
+    );
+    this.debugPhysics.frustumCulled = false;
+    this.scene.add(this.debugPhysics);
+  }
+
+  _updatePhysicsDebugger() {
+    const { vertices, colors } = this.physics.world.debugRender();
+    this.debugPhysics.geometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(vertices, 3)
+    );
+    this.debugPhysics.geometry.setAttribute(
+      "color",
+      new THREE.BufferAttribute(colors, 4)
+    );
+    this.debugPhysics.visible = this.debugOpt.showPhysics;
+  }
+
+  _init3DExperience() {
+    this.scene = new THREE.Scene();
 
     // background
     const path = "texture/background/";
@@ -89,15 +150,10 @@ export default class Experience {
 
     const background = new THREE.CubeTextureLoader().load(urls);
     background.mapping = THREE.CubeRefractionMapping;
-
     this.scene.background = background;
 
-    this.debugOpt = {
-      showPhysics: false,
-      showAxes: true,
-      fogColor: "#565f67",
-    };
-    this.addDebugger();
+    this.fog = new THREE.FogExp2("#565f67", 0.01);
+    this.scene.fog = this.fog;
 
     this.camera = new Camera({
       scene: this.scene,
@@ -123,92 +179,49 @@ export default class Experience {
       size: this.states.sizes,
       debug: this.debug,
     });
+  }
 
-    this.resources = new ResourcesLoader(resources);
+  _initInterface() {
+    this.backpack = new Backpack();
+    this.lootExplog = new LootExpLlog();
+    this.itemReceiver = new ItemReceiver();
+    this.controlsLegend = new ControlsLegend();
+    this.informationPanel = new InformationPanel();
+  }
 
+  _initUtils() {
+    this.controller = new Controller();
+    this.debug = new Debugger();
+    this.states = new States(this.debug);
+    this.eventManager = new EventManager();
+    this.animationProvider = new AnimationProvider();
+    this.chat = new ConversationManager();
+
+    this.dropManager = new DropItemManager();
+    this.dropManager.setScene(this.scene);
+    this.dropManager.init([]);
+
+    this.markers = new MarkersManager();
+    this.npc = new NPCManager();
+  }
+
+  _initQuest() {
+    this.questManager = new QuestManager();
+  }
+  _initPhysics() {
     this.physics = new WorldPhysics();
-
-    this.resources.on("finish:loaded", () => {
-      this.animationProvider.addPlaylist(
-        this.resources.resources.model_elandor.animations
-      );
-
-      this.world = new World({
-        scene: this.scene,
-        debug: this.debug,
-        resources: this.resources.resources,
-        physics: this.physics,
-        states: this.states,
-      });
-    });
-
-    this.debugPhysics = new THREE.LineSegments(
-      new THREE.BufferGeometry(),
-      new THREE.LineBasicMaterial({ color: 0xffffff, vertexColors: true })
-    );
-    this.debugPhysics.frustumCulled = false;
-    this.scene.add(this.debugPhysics);
-
-    this.states.time.on("tick", () => {
-      // on tick
-      this.camera.update();
-      this.renderer.update();
-      this.physics.update();
-      // this.composer.update();
-
-      if (this.world) {
-        this.world.update(this.states.time.elapsed, this.states.time.delta);
-      }
-      if (this.stats) {
-        this.stats.update();
-      }
-      this.showPhysicsWorld();
-    });
-
-    this.states.sizes.on("resize", () => {
-      // on resize
-      this.camera.resize();
-      this.renderer.resize();
-      // this.composer.resize();
-    });
-
-    this.controller.on("fullscreen", () => {
-      document.body.requestFullscreen();
+  }
+  _initWorld() {
+    this.world = new World({
+      scene: this.scene,
+      debug: this.debug,
+      resources: this.resources.resources,
+      physics: this.physics,
+      states: this.states,
     });
   }
 
-  addDebugger() {
-    if (this.debug.active) {
-      this.stats = new Stats();
-      document.body.appendChild(this.stats.dom);
-
-      this.debug.ui.addBinding(this.debugOpt, "showPhysics");
-
-      const fogFolder = this.debug.ui.addFolder({
-        title: "fog",
-        expanded: false,
-      });
-      fogFolder.addBinding(this.debugOpt, "fogColor").on("change", (e) => {
-        this.fog.color.set(this.debugOpt.fogColor);
-      });
-      fogFolder.addBinding(this.fog, "density", {
-        min: 0.001,
-        max: 0.1,
-        step: 0.001,
-      });
-    }
-  }
-
-  showPhysicsWorld() {
-    const { vertices, colors } = this.physics.world.debugRender();
-    this.debugPhysics.geometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(vertices, 3)
-    );
-    this.debugPhysics.geometry.setAttribute(
-      "color",
-      new THREE.BufferAttribute(colors, 4)
-    );
-    this.debugPhysics.visible = this.debugOpt.showPhysics;
+  _loadAssets() {
+    this.resources = new ResourcesLoader(resources);
   }
 }

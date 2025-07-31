@@ -11,20 +11,8 @@ import Bushes from "./Bushes";
 import Tree from "./Tree";
 import LampPost from "./LampPost";
 import WoodenBox from "./WoodenBox";
-import ConversationManager from "../Interface/ConversationManager/ConversationManager";
-import Marker from "../Interface/Marker";
-import Camera from "../Camera";
-import Backpack from "../Interface/Backpack/Backpack";
-import DropItem from "../Utils/DropItem";
-import DropItemManager from "../Interface/DropItemManager";
-import backpackSeeds from "../Seeds/backpack.json";
-import MarkersManager from "../Interface/MarkersManager";
 import Human from "./Human";
-import NPCManager from "./NPCManager";
 import NPCInformation from "../Seeds/NPC";
-import QuestManager from "../Interface/QuestManager/QuestManager";
-import hello_world from "../Seeds/quests/hello_world";
-import ItemReceiver from "../Interface/ItemReceiver/ItemReceiver";
 
 export default class World {
   constructor({ scene, debug, resources, physics, states }) {
@@ -35,26 +23,6 @@ export default class World {
     this.physics = physics;
     this.states = states;
     this.width = 128;
-    this.camera = new Camera({});
-
-    this.chat = new ConversationManager();
-    this.backpack = new Backpack();
-    const itemReceiver = ItemReceiver.getInstance();
-    // this.backpack.setSecondaryInterface(itemReceiver);
-
-    this.dropManager = new DropItemManager();
-    this.dropManager.setScene(this.scene);
-
-    const seed = [];
-    for (let i = 0; i < backpackSeeds.length; i++) {
-      const pos = new THREE.Vector3(i * 5, 0, i * 2);
-      const item = { ...backpackSeeds[i], position: pos };
-      seed.push(item);
-    }
-    this.dropManager.init([]);
-
-    this.markers = new MarkersManager();
-    this.npc = new NPCManager();
 
     this.floor = new DebugFloor({
       scene: this.scene,
@@ -74,17 +42,14 @@ export default class World {
 
     this.addFences();
     this.addPlayer();
-    // this.addBushes();
-    // this.addTree();
-    // this.addHouse();
-    // this.addLampPost();
+    this.addBushes();
+    this.addTree();
+    this.addHouse();
+    this.addLampPost();
     // this.addTrunks();
     // this.addWoodenBoxes();
     // this.addNPC();
     // this.addGrass();
-
-    this.questManager = QuestManager.getInstance();
-    this.questManager.add(hello_world);
   }
 
   update(elapsed, delta) {
@@ -101,7 +66,7 @@ export default class World {
       this.markers.update(playerPosition);
     }
     if (this.grass) {
-      this.grass.update(elapsed, playerPosition, playerDirection);
+      this.grass.update(playerPosition);
     }
     if (this.bushes) {
       this.bushes.update(elapsed);
