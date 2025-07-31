@@ -3,7 +3,6 @@ import Graves from "./Graves";
 import Player from "./Player";
 import Ground from "./Ground";
 import Grass from "./Grass";
-import Trunk from "./Trunk";
 import * as THREE from "three";
 import Fence from "./Fence";
 import House from "./House";
@@ -218,42 +217,42 @@ export default class World {
   //   });
   // }
 
-  addBushes() {
-    const bushesRefs = this.map.scene.children.filter((i) => {
-      return i.name.startsWith("Bushes");
-    });
+  // addBushes() {
+  //   const bushesRefs = this.map.scene.children.filter((i) => {
+  //     return i.name.startsWith("Bushes");
+  //   });
 
-    const positionRefs = bushesRefs.map((i) => i.position);
-    const scaleRefs = bushesRefs.map((i) => i.scale);
+  //   const positionRefs = bushesRefs.map((i) => i.position);
+  //   const scaleRefs = bushesRefs.map((i) => i.scale);
 
-    this.bushes = new Bushes({
-      position: positionRefs,
-      scene: this.scene,
-      texture: this.resources.leaves_texture,
-      debug: this.debug,
-      scales: scaleRefs,
-      matcap: this.resources.bushes_matcap_texture,
-    });
-  }
+  //   this.bushes = new Bushes({
+  //     position: positionRefs,
+  //     scene: this.scene,
+  //     texture: this.resources.leaves_texture,
+  //     debug: this.debug,
+  //     scales: scaleRefs,
+  //     matcap: this.resources.bushes_matcap_texture,
+  //   });
+  // }
 
-  addTrunks() {
-    const trunkRefs = this.map.scene.children.filter((i) => {
-      return i.name.startsWith("Trunk");
-    });
+  // addTrunks() {
+  //   const trunkRefs = this.map.scene.children.filter((i) => {
+  //     return i.name.startsWith("Trunk");
+  //   });
 
-    const positionRefs = trunkRefs.map((i) => i.position);
-    const rotationRefs = trunkRefs.map((i) => i.quaternion);
+  //   const positionRefs = trunkRefs.map((i) => i.position);
+  //   const rotationRefs = trunkRefs.map((i) => i.quaternion);
 
-    this.trunks = new Trunk({
-      position: positionRefs,
-      quaternion: rotationRefs,
-      scene: this.scene,
-      debug: this.debug,
-      physics: this.physics,
-      model: this.resources.model_trunk,
-      noiseTexture: this.resources.noise_texture,
-    });
-  }
+  //   this.trunks = new Trunk({
+  //     position: positionRefs,
+  //     quaternion: rotationRefs,
+  //     scene: this.scene,
+  //     debug: this.debug,
+  //     physics: this.physics,
+  //     model: this.resources.model_trunk,
+  //     noiseTexture: this.resources.noise_texture,
+  //   });
+  // }
 
   addTree() {
     const bushesRefs = this.map.scene.children.filter((i) => {
