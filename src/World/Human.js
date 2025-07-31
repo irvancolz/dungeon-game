@@ -14,25 +14,28 @@ class Human extends EventEmitter {
   #STATE_IDLE = "idle";
   #STATE_TALK = "talk";
   #STATE_WALK = "walk";
-  constructor({ scene, model, position, name = "", quaternion, job = "" }) {
+  constructor({ position, name = "", quaternion, job = "", model }) {
     super();
     this.type = "human";
-    this.scene = scene;
     this.name = name;
     this.job = job;
-    this.model = model;
-    this.character = this.model.scene.children[0];
+    this.setModel(model);
     this.position = position;
     this.quaternion = quaternion;
     this.state = this.#STATE_IDLE;
     this.animationProvider = new AnimationProvider();
     this.states = States.getInstance();
     this.eventManager = EventManager.getInstance();
-
-    this._init();
+  }
+  setModel(model) {
+    this.model = model;
+    this.character = this.model.scene.children[0];
+  }
+  setScene(scene) {
+    this.scene = scene;
   }
 
-  _init() {
+  init() {
     this.character.position.copy(this.position);
     this.character.quaternion.copy(this.quaternion);
 
@@ -91,6 +94,7 @@ class Human extends EventEmitter {
 
   dispose() {
     this.scene.remove(this.character);
+    this.scene.remove(this.nameTag);
   }
 
   _updateState(state) {

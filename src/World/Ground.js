@@ -4,7 +4,7 @@ import * as THREE from "three";
 import { mix, smoothstep } from "../Utils/math";
 
 export default class Ground {
-  constructor({ scene, debug, texture, width, physics, maxHeight = 0 }) {
+  constructor({ texture, width, maxHeight = 0 }) {
     this.scene = scene;
     this.debug = debug;
     this.texture = texture;
@@ -13,10 +13,18 @@ export default class Ground {
     this.physics = physics;
     this.maxHeight = maxHeight;
 
-    this.extractTextureMap();
+    // this.extractTextureMap();
+  }
 
-    this.init();
-    this.addDebug();
+  setScene(scene) {
+    this.scene = scene;
+  }
+
+  setDebugger(debug) {
+    this.debug = debug;
+  }
+  setPhysics(physics) {
+    this.physics = physics;
   }
 
   initMaterial() {
@@ -98,6 +106,8 @@ export default class Ground {
     this.mesh.receiveShadow = true;
 
     this.scene.add(this.mesh);
+
+    this.addDebug();
   }
 
   addDebug() {

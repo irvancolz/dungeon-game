@@ -15,22 +15,10 @@ import Human from "./Human";
 import NPCInformation from "../Seeds/NPC";
 
 export default class World {
-  constructor({ scene, debug, resources, physics, states }) {
-    this.scene = scene;
-    this.debug = debug;
-    this.resources = resources;
-    this.map = resources.village_map;
-    this.physics = physics;
-    this.states = states;
+  constructor() {
     this.width = 128;
-
-    this.floor = new DebugFloor({
-      scene: this.scene,
-      debug: this.debug,
-      physics: this.physics,
-      width: this.width,
-      texture: this.resources.ground_texture,
-    });
+    // every object in world
+    this.environments = [];
 
     // this.floor = new Ground({
     //   scene: this.scene,
@@ -39,46 +27,107 @@ export default class World {
     //   width: this.width,
     //   texture: this.resources.ground_texture,
     // });
+  }
 
-    this.addFences();
-    this.addPlayer();
-    this.addBushes();
-    this.addTree();
-    this.addHouse();
-    this.addLampPost();
-    // this.addTrunks();
-    // this.addWoodenBoxes();
-    // this.addNPC();
-    // this.addGrass();
+  // _initFloor() {
+  //   this.floor = new DebugFloor({
+  //     scene: this.scene,
+  //     debug: this.debug,
+  //     physics: this.physics,
+  //     width: this.width,
+  //   });
+  // }
+  setFloor(floor) {
+    if (this.floor) {
+      this.floor.dispose();
+    }
+    this.floor = floor;
+  }
+  init() {
+    this.floor.init();
+
+    this.environments.forEach((obj) => {
+      obj.init();
+    });
+  }
+
+  add(item) {
+    if (arguments.length > 1) {
+      for (let i = 0; i < arguments.length; i++) {
+        this.add(arguments[i]);
+      }
+    } else {
+      item.setScene(this.scene);
+      this.environments.push(item);
+    }
+  }
+
+  getPlayerPos() {
+    return this.states.playerPosition.getState();
+  }
+
+  getElapsed() {
+    return this.states.time.elapsed;
+  }
+  getDelta() {
+    return this.states.time.delta;
+  }
+
+  setPhysics(phsc) {
+    this.physics = phsc;
+    this.floor.setPhysics(this.physics);
+  }
+
+  setStates(state) {
+    this.states = state;
+  }
+
+  setScene(scene) {
+    this.scene = scene;
+    this.floor.setScene(this.scene);
+  }
+
+  setDebugger(debug) {
+    this.debug = debug;
+    this.floor.setDebugger(this.debug);
+  }
+
+  setResources(src) {
+    this.resources = src;
   }
 
   update(elapsed, delta) {
-    const playerPosition = this.states.playerPosition.getState();
-    const playerDirection = this.states.playerDirection.getState();
-
-    if (this.player) {
-      this.player.update();
-    }
-    if (this.dropManager) {
-      this.dropManager.update(playerPosition);
-    }
-    if (this.markers) {
-      this.markers.update(playerPosition);
-    }
-    if (this.grass) {
-      this.grass.update(playerPosition);
-    }
-    if (this.bushes) {
-      this.bushes.update(elapsed);
-    }
-    if (this.tree) {
-      this.tree.update(elapsed);
-    }
-    if (this.npc) {
-      this.npc.update(delta);
-    }
+    // const playerPosition = this.states.playerPosition.getState();
+    // const playerDirection = this.states.playerDirection.getState();
+    // if (this.player) {
+    //   this.player.update();
+    // }
+    // if (this.dropManager) {
+    //   this.dropManager.update(playerPosition);
+    // }
+    // if (this.markers) {
+    //   this.markers.update(playerPosition);
+    // }
+    // if (this.grass) {
+    //   this.grass.update(playerPosition);
+    // }
+    // if (this.bushes) {
+    //   this.bushes.update(elapsed);
+    // }
+    // if (this.tree) {
+    //   this.tree.update(elapsed);
+    // }
+    // if (this.npc) {
+    //   this.npc.update(delta);
+    // }
   }
 
+  dispose() {
+    this.graves.dispose();
+    this.player.dispose();
+  }
+
+  // ====================
   addNPC() {
     const npcRef = this.map.scene.children.filter((i) => {
       return i.name.startsWith("NPC");
@@ -270,10 +319,5 @@ export default class World {
       model: this.resources.model_lamp_post,
       texture: this.resources.lamppost_texture,
     });
-  }
-
-  dispose() {
-    this.graves.dispose();
-    this.player.dispose();
   }
 }

@@ -27,28 +27,20 @@ import NPCManager from "./World/NPCManager";
 let instance = null;
 
 export default class Experience {
-  constructor(canvas) {
+  constructor(canvas, world) {
     if (instance) {
       return instance;
     }
     instance = this;
     this.canvas = canvas;
+    this.world = world;
 
     this._initUtils();
-    this._loadAssets();
     this._initPhysics();
     this._initInterface();
     this._init3DExperience();
     this._initQuest();
     this._initDebug();
-
-    this.resources.on("finish:loaded", () => {
-      this.animationProvider.addPlaylist(
-        this.resources.resources.model_elandor.animations
-      );
-
-      this._initWorld();
-    });
 
     this.states.time.on("tick", () => {
       // on tick
@@ -203,6 +195,7 @@ export default class Experience {
 
     this.markers = new MarkersManager();
     this.npc = new NPCManager();
+    this.npc.setScene(this.scene);
   }
 
   _initQuest() {
@@ -221,7 +214,35 @@ export default class Experience {
     });
   }
 
-  _loadAssets() {
-    this.resources = new ResourcesLoader(resources);
+  setResources(src) {
+    this.resources = src;
+  }
+
+  setWorld(world) {
+    this.world = world;
+    this.init();
+  }
+
+  setNPCAnimations(anim) {
+    this.animationProvider.addPlaylist(anim);
+  }
+
+  setNPC(npcs) {
+    this.npc.addNPC(npcs);
+  }
+
+  init() {
+    this.npc.setResources(this.resources);
+    this.npc.init();
+
+    // setup world
+
+    this.world.setPhysics(this.physics);
+    this.world.setScene(this.scene);
+    this.world.setResources(this.resources);
+    this.world.setStates(this.states);
+    this.world.setDebugger(this.debug);
+    this.world.add(...this.npc.members);
+    this.world.init();
   }
 }

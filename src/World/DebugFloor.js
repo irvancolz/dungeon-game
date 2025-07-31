@@ -3,14 +3,19 @@ import DebugFloorMaterial from "../Materials/DebugFloor";
 import * as THREE from "three";
 
 export default class DebugFloor {
-  constructor({ scene, debug, physics, width }) {
-    this.scene = scene;
-    this.debug = debug;
-    this.physics = physics;
+  constructor({ width }) {
     this.width = width;
+  }
 
-    this.init();
-    this.initDebug();
+  setScene(scene) {
+    this.scene = scene;
+  }
+
+  setDebugger(debug) {
+    this.debug = debug;
+  }
+  setPhysics(physics) {
+    this.physics = physics;
   }
 
   initDebug() {
@@ -60,5 +65,7 @@ export default class DebugFloor {
     this.geometry.rotateX(-Math.PI * 0.5);
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.scene.add(this.mesh);
+
+    this.initDebug();
   }
 }
