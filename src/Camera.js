@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import gsap from "gsap";
+import States from "./States";
 
 let instance = null;
 export default class Camera {
@@ -9,7 +10,7 @@ export default class Camera {
     }
 
     instance = this;
-
+    this.states = States.getInstance();
     this.scene = scene;
     this.sizes = sizes;
     this.canvas = canvas;
@@ -28,6 +29,8 @@ export default class Camera {
     this.addDebug();
 
     document.addEventListener("wheel", (e) => {
+      const hasOverlay = this.states.hasOverlay.getState().value;
+      if (hasOverlay) return;
       const delta = e.wheelDelta;
 
       // +1 if down, -1 if up

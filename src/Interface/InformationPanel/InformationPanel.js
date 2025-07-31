@@ -1,13 +1,15 @@
 import Showdown from "showdown";
 import markdown from "../../../readme.md?raw";
 import Controller from "../../Utils/Controller";
+import States from "../../States";
 
 class InformationPanel {
   constructor() {
-    this.opened = true;
+    this.opened = false;
     this.parser = new Showdown.Converter();
     this.parser.setFlavor("github");
     this.controller = new Controller();
+    this.states = States.getInstance();
 
     this.controller.on("info", () => {
       this._toggle();
@@ -25,7 +27,10 @@ class InformationPanel {
   }
 
   _toggle() {
+    const hasOverlay = this.states.hasOverlay.getState().value;
+    if (!this.opened && hasOverlay) return;
     this.opened = !this.opened;
+    this.states.hasOverlay.setState({ value: this.opened });
     this.$ui.setAttribute("data-visible", this.opened);
   }
 

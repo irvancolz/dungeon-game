@@ -17,6 +17,7 @@ export default class States {
     this.debug = debug;
     this.time = new Time();
     this.sizes = new Sizes();
+    this.hasOverlay = createStore({ value: false });
 
     //player
     this.playerPosition = createStore(new THREE.Vector3(0, 4, 0));
