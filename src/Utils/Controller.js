@@ -19,6 +19,7 @@ export default class Controller extends EventEmitter {
       backpack: false,
       fullscreen: false,
       quest: false,
+      info: false,
     };
     this.idle = true;
 
@@ -63,6 +64,9 @@ export default class Controller extends EventEmitter {
 
         case "KeyJ":
           this.actions.quest = true;
+          break;
+        case "KeyI":
+          this.actions.info = true;
           break;
       }
       this.triggerAction();
@@ -109,6 +113,9 @@ export default class Controller extends EventEmitter {
 
         case "KeyJ":
           this.actions.quest = false;
+          break;
+        case "KeyI":
+          this.actions.info = false;
           break;
       }
       this.triggerAction();

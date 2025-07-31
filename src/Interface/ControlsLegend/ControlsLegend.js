@@ -20,6 +20,10 @@ class ControlsLegend {
       label: "quest",
       key: ["j"],
     },
+    {
+      label: "info",
+      key: ["i"],
+    },
   ];
 
   constructor() {
