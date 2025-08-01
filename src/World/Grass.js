@@ -85,17 +85,17 @@ export default class Grass extends WorldObject {
     this.geometry.computeVertexNormals();
   }
 
-  init() {
+  init(debug = true) {
     this.initMaterial();
     this.initGeometry();
 
     this.mesh = new THREE.Mesh(this.geometry, this.material);
     this.mesh.frustumCulled = false;
-    this.mesh.receiveShadow = true;
+    // this.mesh.receiveShadow = true;
     // this.mesh.castShadow = true;
 
     this.scene.add(this.mesh);
-    if (!this.debug) {
+    if (debug) {
       this.initDebug();
     }
   }
@@ -140,7 +140,7 @@ export default class Grass extends WorldObject {
     this.geometry.dispose();
     this.material.dispose();
 
-    this.init();
+    this.init(false);
   }
 
   update(playerPos) {

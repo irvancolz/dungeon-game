@@ -13,6 +13,7 @@ import Tree from "./World/Tree";
 import LampPost from "./World/LampPost";
 import Grass from "./World/Grass";
 import WoodenBox from "./World/WoodenBox";
+import Player from "./World/Player";
 
 const canvas = document.getElementById("canvas");
 
@@ -30,6 +31,15 @@ function startGame() {
   const assets = new ResourcesLoader(resources);
   assets.on("finish:loaded", () => {
     const world = new World();
+
+    // player
+    const playerReff = refferencesProvider.getRefferences("Player");
+    const player = new Player({
+      model: refferencesAssets.resources.player,
+      position: playerReff[0].position,
+    });
+
+    world.add(player);
 
     // floor
     const floor = new Ground({

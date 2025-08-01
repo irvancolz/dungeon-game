@@ -1,27 +1,25 @@
 import PlayerPhysics from "../Physics/Player";
 import * as THREE from "three";
 import Controller from "../Utils/Controller";
+import WorldObject from "../Utils/WorldObject";
 
-export default class Player {
+export default class Player extends WorldObject {
   #STATE_IDLE = "idle";
   #STATE_JUMP = "jump";
   #STATE_RUN = "run";
   #STATE_FALL = "fall";
 
-  constructor({ scene, model, physics, debug, states }) {
-    this.scene = scene;
+  constructor({ model, position = new THREE.Vector3() }) {
+    super();
     this.model = model;
-    this.states = states;
-    this.physicsWorld = physics;
-    this.position = this.states.playerPosition.getState();
     this.controls = new Controller();
-    this.debug = debug;
     this.mvSpeed = 6;
     this.turningPower = Math.PI / 18;
     this.direction = new THREE.Vector3(0, 0, 0);
     this.moveDirection = new THREE.Vector3(0, 0, 0);
     this.jumpPower = 9;
     this.state = null;
+    this.setPosition(position);
 
     this.controls.on("idle", () => {
       this.updateState(this.#STATE_IDLE);
@@ -59,13 +57,10 @@ export default class Player {
     this.controls.on("jump", () => {
       this.jump();
     });
-
-    this.init();
-    this.initAnimation();
-    this.addDebug();
   }
 
   init() {
+    // this.setPosition(this.position);
     //character
     this.character = this.model.scene.children[0];
     this.character.traverse((el) => {
@@ -88,10 +83,13 @@ export default class Player {
 
     // physics and debug physics
     this.physics = new PlayerPhysics({
-      world: this.physicsWorld.world,
+      world: this.physics.world,
       position: this.position,
       height: dimension.y,
     });
+
+    this.initAnimation();
+    this.addDebug();
   }
 
   addDebug() {
@@ -224,5 +222,15 @@ export default class Player {
     this.animations.current = newAnimation;
   }
 
-  dispose() {}
+  dispose() {
+    console.log("Player : dispose method not implemented");
+  }
+
+  setPosition(pos) {
+    this.position = pos;
+
+    if (this.states) {
+      this.states.playerPosition.setState(pos);
+    }
+  }
 }
