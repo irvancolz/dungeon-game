@@ -12,10 +12,16 @@ class WorldPhysics {
 
     WorldPhysics.instance = this;
     this.gravity = { x: 0.0, y: -9.81, z: 0.0 };
+  }
+  init() {
     this.world = new RAPIER.World(this.gravity);
   }
   update() {
     this.world.step();
+  }
+  dispose() {
+    this.world.free();
+    this.world = null;
   }
 }
 

@@ -12,6 +12,7 @@ import Bushes from "./World/Bushes";
 import Tree from "./World/Tree";
 import LampPost from "./World/LampPost";
 import Grass from "./World/Grass";
+import WoodenBox from "./World/WoodenBox";
 
 const canvas = document.getElementById("canvas");
 
@@ -94,6 +95,16 @@ function startGame() {
       width: 10,
     });
     world.add(grass);
+
+    // wooden box
+    const woodBoxReff = refferencesProvider.getRefferences("ModelWoode");
+    const woodBox = new WoodenBox({
+      model: refferencesAssets.resources.model_wooden_box,
+      alpha: refferencesAssets.resources.wooden_box_alpha_texture,
+      position: woodBoxReff.map((e) => e.position),
+      quaternion: woodBoxReff.map((e) => e.quaternion),
+    });
+    world.add(woodBox);
 
     const experience = new Experience(canvas, world);
     experience.setResources(assets.resources);

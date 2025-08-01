@@ -23,15 +23,8 @@ import ConversationManager from "./Interface/ConversationManager/ConversationMan
 import DropItemManager from "./Interface/DropItemManager";
 import MarkersManager from "./Interface/MarkersManager";
 import NPCManager from "./World/NPCManager";
-
-let instance = null;
-
 export default class Experience {
   constructor(canvas, world) {
-    if (instance) {
-      return instance;
-    }
-    instance = this;
     this.canvas = canvas;
     this.world = world;
 
@@ -203,6 +196,7 @@ export default class Experience {
   }
   _initPhysics() {
     this.physics = new WorldPhysics();
+    this.physics.init();
   }
   _initWorld() {
     this.world = new World({
@@ -220,6 +214,11 @@ export default class Experience {
 
   setWorld(world) {
     this.world = world;
+
+    // restart the physics world too...?
+    this.physics.dispose();
+    this.physics.init();
+
     this.init();
   }
 

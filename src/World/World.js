@@ -262,24 +262,24 @@ export default class World {
   //   });
   // }
 
-  addWoodenBoxes() {
-    const woodenBoxesref = this.map.scene.children.filter((i) => {
-      return i.name.startsWith("ModelWoodenBox");
-    });
+  // addWoodenBoxes() {
+  //   const woodenBoxesref = this.map.scene.children.filter((i) => {
+  //     return i.name.startsWith("ModelWoodenBox");
+  //   });
 
-    const positionRefs = woodenBoxesref.map((i) => i.position);
-    const rotationRefs = woodenBoxesref.map((i) => i.quaternion);
+  //   const positionRefs = woodenBoxesref.map((i) => i.position);
+  //   const rotationRefs = woodenBoxesref.map((i) => i.quaternion);
 
-    this.woodenBoxes = new WoodenBox({
-      model: this.resources.model_wooden_box,
-      debug: this.debug,
-      physics: this.physics,
-      position: positionRefs,
-      quaternion: rotationRefs,
-      scene: this.scene,
-      alpha: this.resources.wooden_box_alpha_texture,
-    });
-  }
+  //   this.woodenBoxes = new WoodenBox({
+  //     model: this.resources.model_wooden_box,
+  //     debug: this.debug,
+  //     physics: this.physics,
+  //     position: positionRefs,
+  //     quaternion: rotationRefs,
+  //     scene: this.scene,
+  //     alpha: this.resources.wooden_box_alpha_texture,
+  //   });
+  // }
 
   // // update in future
   // addGraves() {

@@ -2,19 +2,15 @@ import RAPIER from "@dimforge/rapier3d";
 import * as THREE from "three";
 import WoodDarkMaterial from "../Materials/WoodDark";
 import WoodLightMaterial from "../Materials/WoodLight";
+import WorldObject from "../Utils/WorldObject";
 
-export default class WoodenBox {
-  constructor({ model, scene, physics, position, quaternion, debug, alpha }) {
+export default class WoodenBox extends WorldObject {
+  constructor({ model, position, quaternion, alpha }) {
+    super();
     this.model = model;
-    this.scene = scene;
-    this.physicsWorld = physics;
     this.position = position;
     this.quaternion = quaternion;
-    this.debug = debug;
     this.alphaTexture = alpha;
-
-    this.init();
-    this.addDebug();
   }
 
   addDebug() {
@@ -68,7 +64,7 @@ export default class WoodenBox {
       const colliderDesc = RAPIER.ColliderDesc.cuboid(0.5, 0.5, 0.5)
         .setTranslation(position.x, position.y, position.z)
         .setRotation(quaternion);
-      this.physicsWorld.world.createCollider(colliderDesc);
+      this.physics.world.createCollider(colliderDesc);
     }
   }
 
@@ -76,7 +72,12 @@ export default class WoodenBox {
     this.initGeometry();
     this.initMaterial();
     this.initMesh();
+    this.addDebug();
   }
 
-  dispose() {}
+  dispose() {
+    this.scene.remove(this.mesh);
+    this.material.dispose();
+    this.geometry.dispose();
+  }
 }
