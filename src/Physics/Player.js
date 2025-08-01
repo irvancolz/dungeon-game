@@ -4,14 +4,13 @@ import * as THREE from "three";
  * Reference : https://github.com/Lunakepio/mario-3D-controller/blob/main/src/PlayerController.jsx#L67
  */
 export default class PlayerPhysics {
-  constructor({ world, debug, height, position }) {
-    this.debug = debug;
+  constructor({ world, height, position }) {
     this.world = world;
     this.initialPosition = position;
     this.position = position;
     this.height = height;
     this.floating = false;
-    this.radius = 0.5;
+    this.radius = height * 0.25;
 
     this.init();
   }
@@ -46,9 +45,10 @@ export default class PlayerPhysics {
   update() {
     const rayOrigin = this.body.translation();
     const ray = new RAPIER.Ray(rayOrigin, { x: 0, y: -2, z: 0 });
+    const toi = 1;
     const hit = this.world.castRayAndGetNormal(
       ray,
-      1,
+      toi,
       false,
       undefined,
       undefined,

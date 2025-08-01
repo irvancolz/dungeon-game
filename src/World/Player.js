@@ -60,7 +60,6 @@ export default class Player extends WorldObject {
   }
 
   init() {
-    // this.setPosition(this.position);
     //character
     this.character = this.model.scene.children[0];
     this.character.traverse((el) => {
@@ -82,7 +81,7 @@ export default class Player extends WorldObject {
     this.scene.add(this.character);
 
     // physics and debug physics
-    this.physics = new PlayerPhysics({
+    this.physicsReff = new PlayerPhysics({
       world: this.physics.world,
       position: this.position,
       height: dimension.y,
@@ -117,13 +116,13 @@ export default class Player extends WorldObject {
         step: 0.5,
       });
       f.addButton({ title: "reset player" }).on("click", () => {
-        this.physics.reset();
+        this.physicsReff.reset();
       });
     }
   }
 
   update() {
-    this.physics.update();
+    this.physicsReff.update();
     this.moveBackward = this.controls.actions.backward;
 
     // keep move if button pressed
@@ -133,15 +132,15 @@ export default class Player extends WorldObject {
 
     this.mixer.update(this.states.time.delta * 0.001);
 
-    const newPos = this.physics.body.translation();
+    const newPos = this.physicsReff.body.translation();
 
     const prevY = this.character.position.y;
     const newY = newPos.y;
     const distY = newY - prevY;
 
-    if (distY <= 0 && this.physics.floating) {
+    if (distY <= 0 && this.physicsReff.floating) {
       this.updateState(this.#STATE_FALL);
-    } else if (!this.physics.floating && this.controls.idle) {
+    } else if (!this.physicsReff.floating && this.controls.idle) {
       this.updateState(this.#STATE_IDLE);
     }
 
@@ -156,7 +155,7 @@ export default class Player extends WorldObject {
   }
 
   move() {
-    if (this.state == this.#STATE_JUMP || this.physics.floating) return;
+    if (this.state == this.#STATE_JUMP || this.physicsReff.floating) return;
 
     this.updateState(this.#STATE_RUN);
     this.moveDirection.set(
@@ -164,19 +163,19 @@ export default class Player extends WorldObject {
       0,
       Math.cos(this.direction.y)
     );
-    this.physics.move(this.moveDirection.multiplyScalar(this.mvSpeed));
+    this.physicsReff.move(this.moveDirection.multiplyScalar(this.mvSpeed));
   }
 
   jump() {
     if (
       this.state == this.#STATE_FALL ||
       this.state == this.#STATE_JUMP ||
-      this.physics.floating
+      this.physicsReff.floating
     )
       return;
     this.updateState(this.#STATE_JUMP);
     setTimeout(() => {
-      this.physics.jump(this.jumpPower);
+      this.physicsReff.jump(this.jumpPower);
     }, 200);
   }
 

@@ -97,7 +97,10 @@ export default class World {
     this.resources = src;
   }
 
-  update(elapsed, delta) {
+  update() {
+    this.environments.forEach((obj) => {
+      obj.update();
+    });
     // const playerPosition = this.states.playerPosition.getState();
     // const playerDirection = this.states.playerDirection.getState();
     // if (this.player) {
@@ -124,6 +127,9 @@ export default class World {
   }
 
   dispose() {
+    this.environments.forEach((obj) => {
+      obj.dispose();
+    });
     // this.graves.dispose();
     // this.player.dispose();
   }
@@ -172,20 +178,20 @@ export default class World {
   //   });
   // }
 
-  addPlayer() {
-    const playerRef = this.map.scene.children.find((i) => {
-      return i.name.startsWith("Player");
-    });
+  // addPlayer() {
+  //   const playerRef = this.map.scene.children.find((i) => {
+  //     return i.name.startsWith("Player");
+  //   });
 
-    this.states.playerPosition.setState(playerRef.position);
-    this.player = new Player({
-      scene: this.scene,
-      model: this.resources.player,
-      physics: this.physics,
-      debug: this.debug,
-      states: this.states,
-    });
-  }
+  //   this.states.playerPosition.setState(playerRef.position);
+  //   this.player = new Player({
+  //     scene: this.scene,
+  //     model: this.resources.player,
+  //     physics: this.physics,
+  //     debug: this.debug,
+  //     states: this.states,
+  //   });
+  // }
 
   // addFences() {
   //   const fenceRefs = this.map.scene.children.filter((i) => {

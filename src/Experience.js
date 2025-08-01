@@ -44,7 +44,7 @@ export default class Experience {
         this.physics.update();
       }
       if (this.world) {
-        this.world.update(this.states.time.elapsed, this.states.time.delta);
+        this.world.update();
       }
       if (this.stats) {
         this.stats.update();
@@ -68,7 +68,7 @@ export default class Experience {
 
   _initDebug() {
     this.debugOpt = {
-      showPhysics: false,
+      showPhysics: true,
       showAxes: true,
       fogColor: "#565f67",
     };

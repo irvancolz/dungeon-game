@@ -49,72 +49,72 @@ function startGame() {
     // const floor = new DebugFloor({ width: 124 });
     world.setFloor(floor);
 
-    // fences
-    const fencesReff = refferencesProvider.getRefferences("ModelFence");
-    const fences = new Fence({
-      model: refferencesAssets.resources.model_fence_wooden,
-      position: fencesReff.map((e) => e.position),
-      quaternion: fencesReff.map((e) => e.quaternion),
-    });
-    world.add(fences);
+    // // fences
+    // const fencesReff = refferencesProvider.getRefferences("ModelFence");
+    // const fences = new Fence({
+    //   model: refferencesAssets.resources.model_fence_wooden,
+    //   position: fencesReff.map((e) => e.position),
+    //   quaternion: fencesReff.map((e) => e.quaternion),
+    // });
+    // world.add(fences);
 
-    // houses
-    const houseReff = refferencesProvider.getRefferences("House");
-    const house = new House({
-      model: refferencesAssets.resources.model_house,
-      texture: refferencesAssets.resources.house_texture,
-      position: houseReff.map((e) => e.position),
-      quaternion: houseReff.map((e) => e.quaternion),
-    });
-    world.add(house);
+    // // houses
+    // const houseReff = refferencesProvider.getRefferences("House");
+    // const house = new House({
+    //   model: refferencesAssets.resources.model_house,
+    //   texture: refferencesAssets.resources.house_texture,
+    //   position: houseReff.map((e) => e.position),
+    //   quaternion: houseReff.map((e) => e.quaternion),
+    // });
+    // world.add(house);
 
-    // bushes
-    const bushReff = refferencesProvider.getRefferences("Bushes");
-    const bush = new Bushes({
-      scales: bushReff.map((e) => e.scale),
-      position: bushReff.map((e) => e.position),
-      quaternion: bushReff.map((e) => e.quaternion),
-      texture: refferencesAssets.resources.leaves_texture,
-    });
-    world.add(bush);
+    // // bushes
+    // const bushReff = refferencesProvider.getRefferences("Bushes");
+    // const bush = new Bushes({
+    //   scales: bushReff.map((e) => e.scale),
+    //   position: bushReff.map((e) => e.position),
+    //   quaternion: bushReff.map((e) => e.quaternion),
+    //   texture: refferencesAssets.resources.leaves_texture,
+    // });
+    // world.add(bush);
 
-    // tree
-    const treeReff = refferencesProvider.getRefferences("Bushes");
-    const tree = new Tree({
-      scales: treeReff.map((e) => e.scale),
-      position: treeReff.map((e) => e.position),
-      quaternion: treeReff.map((e) => e.quaternion),
-      leaves: refferencesAssets.resources.leaves_texture,
-      model: refferencesAssets.resources.model_tree,
-    });
-    world.add(tree);
+    // // tree
+    // const treeReff = refferencesProvider.getRefferences("Bushes");
+    // const tree = new Tree({
+    //   scales: treeReff.map((e) => e.scale),
+    //   position: treeReff.map((e) => e.position),
+    //   quaternion: treeReff.map((e) => e.quaternion),
+    //   leaves: refferencesAssets.resources.leaves_texture,
+    //   model: refferencesAssets.resources.model_tree,
+    // });
+    // world.add(tree);
 
-    //lamppost
-    const lamppostReff = refferencesProvider.getRefferences("LampPost");
-    const lampPost = new LampPost({
-      model: refferencesAssets.resources.model_lamp_post,
-      texture: refferencesAssets.resources.lamppost_texture,
-      position: lamppostReff.map((e) => e.position),
-      quaternion: lamppostReff.map((e) => e.quaternion),
-    });
-    world.add(lampPost);
+    // //lamppost
+    // const lamppostReff = refferencesProvider.getRefferences("LampPost");
+    // const lampPost = new LampPost({
+    //   model: refferencesAssets.resources.model_lamp_post,
+    //   texture: refferencesAssets.resources.lamppost_texture,
+    //   position: lamppostReff.map((e) => e.position),
+    //   quaternion: lamppostReff.map((e) => e.quaternion),
+    // });
+    // world.add(lampPost);
 
-    // grass
-    const grass = new Grass({
-      density: 10,
-      width: 10,
-    });
-    world.add(grass);
+    // // grass
+    // const grass = new Grass({
+    //   density: 10,
+    //   width: 10,
+    // });
+    // world.add(grass);
 
-    // wooden box
-    const woodBoxReff = refferencesProvider.getRefferences("ModelWoode");
-    const woodBox = new WoodenBox({
-      model: refferencesAssets.resources.model_wooden_box,
-      alpha: refferencesAssets.resources.wooden_box_alpha_texture,
-      position: woodBoxReff.map((e) => e.position),
-      quaternion: woodBoxReff.map((e) => e.quaternion),
-    });
-    world.add(woodBox);
+    // // wooden box
+    // const woodBoxReff = refferencesProvider.getRefferences("ModelWoode");
+    // const woodBox = new WoodenBox({
+    //   model: refferencesAssets.resources.model_wooden_box,
+    //   alpha: refferencesAssets.resources.wooden_box_alpha_texture,
+    //   position: woodBoxReff.map((e) => e.position),
+    //   quaternion: woodBoxReff.map((e) => e.quaternion),
+    // });
+    // world.add(woodBox);
 
     const experience = new Experience(canvas, world);
     experience.setResources(assets.resources);
