@@ -34,13 +34,14 @@ class QuestManager {
     this.controller.on("quest", () => {
       this._toggle();
     });
-
-    this.init();
   }
 
   init() {
     this._sort();
     this.initUI();
+    this.activeQuest.forEach((q) => {
+      this.start(q);
+    });
   }
   _sort() {
     this.quests.forEach((quest, i) => {
@@ -54,20 +55,19 @@ class QuestManager {
       });
       switch (quest.status) {
         case Quest.STATUS_IN_PROGRESS:
-          this.start(quest);
+          this.activeQuest.push(quest);
           this.quests.splice(i, 1);
           break;
         case Quest.STATUS_FINISHED:
           this.completedQuest.push(quest);
           this.quests.splice(i, 1);
+          break;
         default:
           break;
       }
     });
   }
   start(quest) {
-    this.activeQuest.push(quest);
-
     this._setCurrentQuest(quest);
   }
 
@@ -87,10 +87,13 @@ class QuestManager {
   }
 
   add(quest) {
-    this.quests.push(quest);
-    this._sort();
-    this._updatePinnedMissionUI();
-    this._updateAvailableQuestsUI();
+    if (arguments.length > 1) {
+      for (let i = 0; i < arguments.length; i++) {
+        this.add(arguments[i]);
+      }
+    } else {
+      this.quests.push(quest);
+    }
   }
 
   initUI() {

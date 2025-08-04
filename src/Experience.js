@@ -24,9 +24,10 @@ import DropItemManager from "./Interface/DropItemManager";
 import MarkersManager from "./Interface/MarkersManager";
 import NPCManager from "./World/NPCManager";
 export default class Experience {
-  constructor(canvas, world) {
+  constructor(canvas, world, quests = []) {
     this.canvas = canvas;
     this.world = world;
+    this.quests = quests;
 
     this._initUtils();
     this._initPhysics();
@@ -36,6 +37,8 @@ export default class Experience {
     this._initDebug();
 
     this.states.time.on("tick", () => {
+      const palyerPos = this.states.getPlayerPosition();
+
       // on tick
       this.camera.update();
       this.renderer.update();
@@ -51,6 +54,9 @@ export default class Experience {
       }
       if (this.debugOpt.showPhysics) {
         this._updatePhysicsDebugger();
+      }
+      if (this.dropManager) {
+        this.dropManager.update(palyerPos);
       }
     });
 
@@ -164,6 +170,14 @@ export default class Experience {
       size: this.states.sizes,
       debug: this.debug,
     });
+
+    this.dropManager = new DropItemManager();
+    this.dropManager.setScene(this.scene);
+    this.dropManager.init([]);
+
+    this.markers = new MarkersManager();
+    this.npc = new NPCManager();
+    this.npc.setScene(this.scene);
   }
 
   _initInterface() {
@@ -181,18 +195,10 @@ export default class Experience {
     this.eventManager = new EventManager();
     this.animationProvider = new AnimationProvider();
     this.chat = new ConversationManager();
-
-    this.dropManager = new DropItemManager();
-    this.dropManager.setScene(this.scene);
-    this.dropManager.init([]);
-
-    this.markers = new MarkersManager();
-    this.npc = new NPCManager();
-    this.npc.setScene(this.scene);
   }
 
   _initQuest() {
-    this.questManager = new QuestManager();
+    this.questManager = new QuestManager(this.quests);
   }
   _initPhysics() {
     this.physics = new WorldPhysics();
@@ -235,7 +241,6 @@ export default class Experience {
     this.npc.init();
 
     // setup world
-
     this.world.setPhysics(this.physics);
     this.world.setScene(this.scene);
     this.world.setResources(this.resources);
@@ -243,5 +248,16 @@ export default class Experience {
     this.world.setDebugger(this.debug);
     this.world.add(...this.npc.members);
     this.world.init();
+
+    //quest
+    this.questManager.init();
+  }
+
+  addQuest(quest) {
+    this.questManager.add(quest);
+  }
+
+  fillBackpack(items) {
+    this.backpack.init(items);
   }
 }

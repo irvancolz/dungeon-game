@@ -14,11 +14,12 @@ import LampPost from "./World/LampPost";
 import Grass from "./World/Grass";
 import WoodenBox from "./World/WoodenBox";
 import Player from "./World/Player";
+import hello_world from "./Seeds/quests/hello_world";
+import backpack_seeds from "./Seeds/backpack.json";
 
 const canvas = document.getElementById("canvas");
 
 const refferencesAssets = new ResourcesLoader(resources);
-let world;
 
 refferencesAssets.on("finish:loaded", () => {
   startGame();
@@ -31,7 +32,7 @@ function startGame() {
 
   const assets = new ResourcesLoader(resources);
   assets.on("finish:loaded", () => {
-    world = new World();
+    const world = new World();
 
     // player
     const playerReff = refferencesProvider.getRefferences("Player");
@@ -126,13 +127,12 @@ function startGame() {
       experience.setNPC(npc);
     });
 
+    // quest
+    experience.addQuest(hello_world);
+    experience.fillBackpack(backpack_seeds);
+
     experience.init();
 
     window.experience = experience;
   });
 }
-
-window.addEventListener("keydown", (e) => {
-  if (e.code != "KeyG") return;
-  world.dispose();
-});
