@@ -52,8 +52,9 @@ class Human extends EventEmitter {
     this.conversation = [];
     this.chat = ConversationManager.getInstance();
   }
-  update(delta) {
-    const playerPosition = this.states.getPlayerPosition();
+  update(src) {
+    const delta = src.getDelta();
+    const playerPosition = src.getPlayerPosition();
     this.mixer.update(delta * 0.001);
     if (this.marker) {
       this.marker.update(playerPosition);

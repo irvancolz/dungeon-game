@@ -9,6 +9,7 @@ export default class Tree extends WorldObject {
     this.position = position;
     this.quaternion = quaternion;
     this.model = model;
+    this.colliders = [];
 
     // leaves
     this.leavesTexture = leaves;
@@ -84,7 +85,8 @@ export default class Tree extends WorldObject {
       const colliderDesc = RAPIER.ColliderDesc.capsule(colliderHalfHeight, 0.3)
         .setTranslation(dummy.position.x, colliderHalfHeight, dummy.position.z)
         .setRotation(dummy.quaternion);
-      this.physics.world.createCollider(colliderDesc);
+      const collider = this.physics.world.createCollider(colliderDesc);
+      this.colliders.push(collider);
 
       dummy.updateMatrix();
       this.mesh.setMatrixAt(i, dummy.matrix);
@@ -94,7 +96,17 @@ export default class Tree extends WorldObject {
     this.addDebug();
   }
 
-  update(elapsed) {
-    this.leaves.update(elapsed);
+  update(src) {
+    this.leaves.update(src.getElapsed());
+  }
+  dispose() {
+    this.colliders.forEach((col) => {
+      this.physics.world.removeCollider(col);
+    });
+    this.scene.remove(this.mesh);
+    this.leaves.dispose();
+    this.geometry.dispose();
+    this.material.dispose();
+    this.mesh.dispose();
   }
 }

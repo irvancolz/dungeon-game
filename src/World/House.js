@@ -15,6 +15,8 @@ export default class House extends WorldObject {
     this.material = new THREE.MeshStandardMaterial({
       map: this.texture,
     });
+    this.colliders = [];
+    this.groups = [];
   }
 
   addDebug() {
@@ -45,6 +47,7 @@ export default class House extends WorldObject {
 
       group.position.copy(this.position[i]);
       group.quaternion.copy(this.quaternion[i]);
+      this.groups.push(group);
       this.scene.add(group);
 
       this._addPhysics(
@@ -69,6 +72,16 @@ export default class House extends WorldObject {
     )
       .setTranslation(x, houseHeight, z)
       .setRotation(quaternion);
-    this.physics.world.createCollider(colliderDesc);
+    const colider = this.physics.world.createCollider(colliderDesc);
+    this.colliders.push(colider);
+  }
+  dispose() {
+    this.material.dispose();
+    this.groups.forEach((el) => {
+      this.scene.remove(el);
+    });
+    this.colliders.forEach((col) => {
+      this.physics.world.removeCollider(col);
+    });
   }
 }

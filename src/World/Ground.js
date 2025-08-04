@@ -123,5 +123,6 @@ export default class Ground extends WorldObject {
     this.scene.remove(this.mesh);
     this.material.dispose();
     this.geometry.dispose();
+    this.physics.world.removeCollider(this.collider);
   }
 }

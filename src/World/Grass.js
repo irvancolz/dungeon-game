@@ -143,7 +143,8 @@ export default class Grass extends WorldObject {
     this.init(false);
   }
 
-  update(playerPos) {
+  update(src) {
+    const playerPos = src.getPlayerPosition();
     this.states.updateUniforms(this.material.uniforms);
     this.mesh.position.set(playerPos.x, 0, playerPos.z);
   }

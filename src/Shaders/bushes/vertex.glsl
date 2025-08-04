@@ -17,7 +17,7 @@ void main() {
     // maybe add randomness in future
     #include ../includes/wind_vertex.glsl
     float noise = simplexNoise2d(modelPosition.xz);
-    modelPosition.xz += wind * noise * .1;
+    modelPosition.xz += wind * noise * .2;
 
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;

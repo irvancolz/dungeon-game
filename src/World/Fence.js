@@ -9,6 +9,7 @@ export default class Fence extends WorldObject {
     this.model = model;
     this.position = position;
     this.quaternion = quaternion;
+    this.colliders = [];
   }
 
   addDebug() {
@@ -67,6 +68,15 @@ export default class Fence extends WorldObject {
     )
       .setTranslation(x, fenceHeight, z)
       .setRotation(quaternion);
-    this.physics.world.createCollider(colliderDesc);
+    const collider = this.physics.world.createCollider(colliderDesc);
+    this.colliders.push(collider);
+  }
+  dispose() {
+    this.scene.remove(this.mesh);
+    this.material.dispose();
+    this.geometry.dispose();
+    this.colliders.forEach((col) => {
+      this.physics.world.removeCollider(col);
+    });
   }
 }

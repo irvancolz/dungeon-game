@@ -63,7 +63,7 @@ export default class World {
     }
   }
 
-  getPlayerPos() {
+  getPlayerPosition() {
     return this.states.playerPosition.getState();
   }
 
@@ -99,7 +99,7 @@ export default class World {
 
   update() {
     this.environments.forEach((obj) => {
-      obj.update();
+      obj.update(this);
     });
     // const playerPosition = this.states.playerPosition.getState();
     // const playerDirection = this.states.playerDirection.getState();
@@ -127,6 +127,7 @@ export default class World {
   }
 
   dispose() {
+    this.floor.dispose();
     this.environments.forEach((obj) => {
       obj.dispose();
     });

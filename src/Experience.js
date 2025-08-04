@@ -68,7 +68,7 @@ export default class Experience {
 
   _initDebug() {
     this.debugOpt = {
-      showPhysics: true,
+      showPhysics: false,
       showAxes: true,
       fogColor: "#565f67",
     };

@@ -41,12 +41,6 @@ class NPCManager {
     }
   }
 
-  update(delta) {
-    this.members.forEach((el) => {
-      el.update(delta);
-    });
-  }
-
   removeNPC(npc) {
     const reff = this.refferences.find(
       (el) => el.name.toLowerCase() == npc.name.toLowerCase()

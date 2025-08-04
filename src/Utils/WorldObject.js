@@ -16,6 +16,8 @@ class WorldObject {
   }
 
   init() {}
+  update(src) {}
+  dispose() {}
 }
 
 export default WorldObject;

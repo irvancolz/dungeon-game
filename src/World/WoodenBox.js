@@ -11,6 +11,7 @@ export default class WoodenBox extends WorldObject {
     this.position = position;
     this.quaternion = quaternion;
     this.alphaTexture = alpha;
+    this.colliders = [];
   }
 
   addDebug() {
@@ -64,7 +65,8 @@ export default class WoodenBox extends WorldObject {
       const colliderDesc = RAPIER.ColliderDesc.cuboid(0.5, 0.5, 0.5)
         .setTranslation(position.x, position.y, position.z)
         .setRotation(quaternion);
-      this.physics.world.createCollider(colliderDesc);
+      const collider = this.physics.world.createCollider(colliderDesc);
+      this.colliders.push(collider);
     }
   }
 
@@ -79,5 +81,8 @@ export default class WoodenBox extends WorldObject {
     this.scene.remove(this.mesh);
     this.material.dispose();
     this.geometry.dispose();
+    this.colliders.forEach((col) => {
+      this.physics.world.removeCollider(col);
+    });
   }
 }

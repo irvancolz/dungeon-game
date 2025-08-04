@@ -1,5 +1,4 @@
 import RAPIER from "@dimforge/rapier3d";
-import * as THREE from "three";
 /**
  * Reference : https://github.com/Lunakepio/mario-3D-controller/blob/main/src/PlayerController.jsx#L67
  */
@@ -58,5 +57,7 @@ export default class PlayerPhysics {
 
     this.floating = hit == null;
   }
-  dispose() {}
+  dispose() {
+    this.world.removeCollider(this.collider);
+  }
 }

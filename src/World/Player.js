@@ -20,12 +20,17 @@ export default class Player extends WorldObject {
     this.jumpPower = 9;
     this.state = null;
     this.setPosition(position);
+    this.enableControls = true;
+  }
 
+  _initControls() {
     this.controls.on("idle", () => {
       this.updateState(this.#STATE_IDLE);
     });
 
     this.controls.on("forward", () => {
+      if (!this.enableControls) return;
+
       this.move();
     });
 
@@ -48,6 +53,8 @@ export default class Player extends WorldObject {
     });
 
     this.controls.on("backward", () => {
+      if (!this.enableControls) return;
+
       if (!this.moveBackward) {
         this.turn(-Math.PI);
       }
@@ -55,11 +62,15 @@ export default class Player extends WorldObject {
     });
 
     this.controls.on("jump", () => {
+      if (!this.enableControls) return;
+
       this.jump();
     });
   }
 
   init() {
+    this.enableControls = true;
+    this._initControls();
     //character
     this.character = this.model.scene.children[0];
     this.character.traverse((el) => {
@@ -122,6 +133,7 @@ export default class Player extends WorldObject {
   }
 
   update() {
+    if (!this.enableControls) return;
     this.physicsReff.update();
     this.moveBackward = this.controls.actions.backward;
 
@@ -222,7 +234,9 @@ export default class Player extends WorldObject {
   }
 
   dispose() {
-    console.log("Player : dispose method not implemented");
+    this.enableControls = false;
+    this.scene.remove(this.character);
+    this.physicsReff.dispose();
   }
 
   setPosition(pos) {

@@ -141,7 +141,7 @@ export default class Bushes extends WorldObject {
     this.initMesh();
     this.addDebug();
   }
-  update(elapsed) {
+  update(src) {
     this.states.updateUniforms(this.material.uniforms);
   }
 
