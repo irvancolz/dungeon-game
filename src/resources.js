@@ -103,4 +103,9 @@ export default [
     type: "gltfModel",
     name: "model_captrorik",
   },
+  {
+    path: "/model/model_apple.glb",
+    type: "gltfModel",
+    name: "model_apple",
+  },
 ];

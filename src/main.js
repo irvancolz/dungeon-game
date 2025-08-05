@@ -44,11 +44,11 @@ function startGame() {
     world.add(player);
 
     // floor
-    const floor = new Ground({
-      texture: refferencesAssets.resources.ground_texture,
-      width: 124,
-    });
-    // const floor = new DebugFloor({ width: 124 });
+    // const floor = new Ground({
+    //   texture: refferencesAssets.resources.ground_texture,
+    //   width: 124,
+    // });
+    const floor = new DebugFloor({ width: 124 });
     world.setFloor(floor);
 
     // fences
@@ -68,7 +68,7 @@ function startGame() {
       position: houseReff.map((e) => e.position),
       quaternion: houseReff.map((e) => e.quaternion),
     });
-    world.add(house);
+    // world.add(house);
 
     // // bushes
     // const bushReff = refferencesProvider.getRefferences("Bushes");
@@ -89,7 +89,7 @@ function startGame() {
       leaves: refferencesAssets.resources.leaves_texture,
       model: refferencesAssets.resources.model_tree,
     });
-    world.add(tree);
+    // world.add(tree);
 
     //lamppost
     const lamppostReff = refferencesProvider.getRefferences("LampPost");
@@ -99,14 +99,14 @@ function startGame() {
       position: lamppostReff.map((e) => e.position),
       quaternion: lamppostReff.map((e) => e.quaternion),
     });
-    world.add(lampPost);
+    // world.add(lampPost);
 
     // grass
     const grass = new Grass({
       density: 10,
       width: 10,
     });
-    world.add(grass);
+    // world.add(grass);
 
     // wooden box
     const woodBoxReff = refferencesProvider.getRefferences("ModelWoode");
@@ -116,16 +116,16 @@ function startGame() {
       position: woodBoxReff.map((e) => e.position),
       quaternion: woodBoxReff.map((e) => e.quaternion),
     });
-    world.add(woodBox);
+    // world.add(woodBox);
 
     const experience = new Experience(canvas, world);
     experience.setResources(assets.resources);
     experience.setNPCAnimations(assets.resources.model_elandor.animations);
 
     const npcReffs = refferencesProvider.getRefferences("NPC");
-    npcReffs.forEach((npc) => {
-      experience.setNPC(npc);
-    });
+    // npcReffs.forEach((npc) => {
+    //   experience.setNPC(npc);
+    // });
 
     // quest
     experience.addQuest(hello_world);

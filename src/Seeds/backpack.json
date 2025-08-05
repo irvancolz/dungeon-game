@@ -46,6 +46,7 @@
     "name": "Apples",
     "img": "/img/apple.png",
     "description": "Just Ordinary Apples",
-    "count": 1
+    "count": 1,
+    "model": "model_apple"
   }
 ]

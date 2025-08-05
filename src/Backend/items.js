@@ -2,7 +2,7 @@ import data from "../Seeds/backpack.json";
 import BackpackItem from "../Interface/BackpackItem/BackpackItem";
 import DropItem from "../Utils/DropItem";
 
-function toBackpackItem(name, count) {
+function toBackpackItem(name, count, model) {
   const data = get(name);
   return new BackpackItem({
     name: data.name,
@@ -10,6 +10,7 @@ function toBackpackItem(name, count) {
     description: data.description,
     count: count,
     id: data.id,
+    model: model ?? data.model,
   });
 }
 

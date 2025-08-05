@@ -1,13 +1,13 @@
 import EventEmitter from "../../Utils/EventEmitter";
 class BackpackItem extends EventEmitter {
-  constructor({ name, img, description, count = 0, id }) {
+  constructor({ name, img, description, count = 0, id, model }) {
     super();
     this.id = id;
     this.name = name;
     this.img = img;
     this.description = description;
     this.count = count;
-
+    this.model = model;
     this.initUI();
   }
 

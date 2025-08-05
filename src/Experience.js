@@ -23,6 +23,7 @@ import ConversationManager from "./Interface/ConversationManager/ConversationMan
 import DropItemManager from "./Interface/DropItemManager";
 import MarkersManager from "./Interface/MarkersManager";
 import NPCManager from "./World/NPCManager";
+import ItemDetail from "./Interface/ItemDetail/ItemDetail";
 export default class Experience {
   constructor(canvas, world, quests = []) {
     this.canvas = canvas;
@@ -184,6 +185,7 @@ export default class Experience {
     this.backpack = new Backpack();
     this.lootExplog = new LootExpLlog();
     this.itemReceiver = new ItemReceiver();
+    this.itemDetal = new ItemDetail();
     this.controlsLegend = new ControlsLegend();
     this.informationPanel = new InformationPanel();
   }
@@ -239,6 +241,7 @@ export default class Experience {
   init() {
     this.npc.setResources(this.resources);
     this.npc.init();
+    this.itemDetal.setResources(this.resources);
 
     // setup world
     this.world.setPhysics(this.physics);

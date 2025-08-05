@@ -22,6 +22,10 @@ class ItemDetail {
     this.updateUI();
   }
 
+  setResources(src) {
+    this.resources = src;
+  }
+
   updateUI() {
     if (!this.item) {
       this.$ui.innerHTML = `<p class="empty">select any item to see detail </p>`;
@@ -81,6 +85,7 @@ class ItemDetail {
 
   drop() {
     this.item.deselect();
+    let model;
     const drop = {
       id: this.item.id,
       count: this.item.count,
@@ -88,8 +93,12 @@ class ItemDetail {
       name: this.item.name,
     };
 
+    if (this.item.model) {
+      model = this.resources[this.item.model].scene;
+    }
+
     this.item.delete();
-    this.dropMgr.add(drop);
+    this.dropMgr.add(drop, model);
     this.reset();
   }
 }

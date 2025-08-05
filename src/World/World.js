@@ -54,6 +54,8 @@ export default class World {
   }
 
   add(item) {
+    if (!item) return;
+
     if (arguments.length > 1) {
       for (let i = 0; i < arguments.length; i++) {
         this.add(arguments[i]);

@@ -42,8 +42,11 @@ class DropItemManager {
     }
   }
 
-  add(i) {
+  add(i, model) {
     const item = itemsUtils.toDropsItem(i.name, i.count, i.position);
+    if (model) {
+      item.setMesh(model);
+    }
     this.items.push(item);
     this.scene.add(item.mesh);
 

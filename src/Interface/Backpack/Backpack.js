@@ -31,7 +31,11 @@ class Backpack {
   }
 
   _addNewItem(item) {
-    const newItem = itemsUtils.toBackpackItem(item.name, item.count);
+    const newItem = itemsUtils.toBackpackItem(
+      item.name,
+      item.count,
+      item.model
+    );
     this.$ui.append(newItem.$ui);
     newItem.on("select", (id) => {
       this.secondaryInterface.updateSelected(newItem);
