@@ -86,8 +86,8 @@ export default class Player extends WorldObject {
     const box3 = new THREE.Box3();
 
     box3.expandByObject(this.character);
-    const dimension = new THREE.Vector3();
-    box3.getSize(dimension);
+    this.dimension = new THREE.Vector3();
+    box3.getSize(this.dimension);
 
     this.scene.add(this.character);
 
@@ -95,7 +95,7 @@ export default class Player extends WorldObject {
     this.physicsReff = new PlayerPhysics({
       world: this.physics.world,
       position: this.position,
-      height: dimension.y,
+      height: this.dimension.y,
     });
 
     this.initAnimation();
@@ -158,7 +158,14 @@ export default class Player extends WorldObject {
 
     this.character.position.copy(newPos);
     this.character.rotation.setFromVector3(this.direction);
-    this.states.playerPosition.setState(this.character.position);
+
+    /**
+     * character foot position, rn the character origin is at chest
+     */
+    const playerFootPos = new THREE.Vector3()
+      .copy(newPos)
+      .add({ x: 0, y: this.dimension.y * -1 * 0.5, z: 0 });
+    this.states.playerPosition.setState(playerFootPos);
   }
 
   turn(degree) {

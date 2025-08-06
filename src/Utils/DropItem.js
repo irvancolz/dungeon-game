@@ -20,14 +20,14 @@ class DropItem extends EventEmitter {
 
   setMesh(mesh) {
     this.mesh = new THREE.Object3D().copy(mesh, true);
-    this.mesh.position.copy(this.position).setY(0);
+    this.mesh.position.copy(this.position);
   }
   init() {
     this.mesh = new THREE.Mesh(
       new THREE.IcosahedronGeometry(0.25),
       new THREE.MeshBasicMaterial()
     );
-    this.mesh.position.copy(this.position).setY(0.25);
+    this.mesh.position.copy(this.position);
   }
 
   initButton() {
