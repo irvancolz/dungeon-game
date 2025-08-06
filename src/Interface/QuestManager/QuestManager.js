@@ -81,7 +81,9 @@ class QuestManager {
 
   _setCurrentQuest(quest) {
     this.currentQuest = quest;
-    this.currentQuest.start();
+    if (quest) {
+      this.currentQuest.start();
+    }
     this._updateOnProgressQuestsUI();
     this._updatePinnedMissionUI();
   }
