@@ -123,9 +123,9 @@ function startGame() {
     experience.setNPCAnimations(assets.resources.model_elandor.animations);
 
     const npcReffs = refferencesProvider.getRefferences("NPC");
-    // npcReffs.forEach((npc) => {
-    //   experience.setNPC(npc);
-    // });
+    npcReffs.forEach((npc) => {
+      experience.setNPC(npc);
+    });
 
     // quest
     experience.addQuest(hello_world);

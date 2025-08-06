@@ -1,18 +1,18 @@
+import BackpackSecondInterface from "../../Utils/BackpakSecondInterface";
 import EventManager from "../../World/EventManager";
 import PlayerEvent from "../../World/PlayerEvent";
 import Backpack from "../Backpack/Backpack";
 
-class ItemReceiver {
+class ItemReceiver extends BackpackSecondInterface {
   static instance;
   static getInstance() {
     return ItemReceiver.instance;
   }
   constructor() {
+    super();
     if (ItemReceiver.instance) return ItemReceiver.instance;
 
     ItemReceiver.instance = this;
-
-    this.requirements = [];
     this.items = [];
     this.initUI();
     this.source = new Backpack();
@@ -90,10 +90,6 @@ class ItemReceiver {
     } else {
       this.$confirmBtn.classList.add("disabled");
     }
-  }
-  setRequirements(items) {
-    this.requirements = items;
-    this.source.setFilter(this.requirements);
   }
 
   reset() {

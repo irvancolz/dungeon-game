@@ -48,5 +48,13 @@
     "description": "Just Ordinary Apples",
     "count": 1,
     "model": "model_apple"
+  },
+  {
+    "id": "item008",
+    "name": "Forest Herb",
+    "img": "/img/herbs.png",
+    "description": "Plant from the magic forest with mysterious power.",
+    "count": 1,
+    "model": "model_herbs"
   }
 ]

@@ -98,6 +98,7 @@ class Backpack {
       return;
     }
 
+    this.setFilter(newInterface.requirements);
     this.$content.removeChild(this.secondaryInterface.$ui);
     this.$content.appendChild(newInterface.$ui);
     this.secondaryInterface = newInterface;

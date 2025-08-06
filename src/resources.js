@@ -108,4 +108,9 @@ export default [
     type: "gltfModel",
     name: "model_apple",
   },
+  {
+    path: "/model/model_herbs.glb",
+    type: "gltfModel",
+    name: "model_herbs",
+  },
 ];
