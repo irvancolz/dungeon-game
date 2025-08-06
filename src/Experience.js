@@ -263,4 +263,15 @@ export default class Experience {
   fillBackpack(items) {
     this.backpack.init(items);
   }
+
+  addDrops(drops = []) {
+    for (let i = 0; i < drops.length; i++) {
+      let model;
+      const reff = drops[i].model;
+      if (reff) {
+        model = this.resources[reff].scene;
+      }
+      this.dropManager.add(drops[i], model);
+    }
+  }
 }

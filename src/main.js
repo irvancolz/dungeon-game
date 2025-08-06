@@ -16,6 +16,7 @@ import WoodenBox from "./World/WoodenBox";
 import Player from "./World/Player";
 import hello_world from "./Seeds/quests/hello_world";
 import backpack_seeds from "./Seeds/backpack.json";
+import { itemsUtils } from "./Backend/items";
 
 const canvas = document.getElementById("canvas");
 
@@ -127,6 +128,28 @@ function startGame() {
       experience.setNPC(npc);
     });
 
+    const dropsReff = refferencesProvider.getRefferences("Drop");
+    const drops = dropsReff.map((el) => {
+      const splited = el.name.split("_");
+      splited.splice(0, 1);
+      const reffName = splited.join("_");
+      let name = "";
+
+      if (reffName.startsWith("apple")) {
+        name = "Apples";
+      } else if (reffName.startsWith("herbs")) {
+        name = "Forest Herb";
+      }
+      const item = itemsUtils.get(name);
+
+      return {
+        ...el,
+        ...item,
+        position: el.position,
+        count: 1,
+      };
+    });
+    experience.addDrops(drops);
     // quest
     experience.addQuest(hello_world);
     experience.fillBackpack(backpack_seeds);
