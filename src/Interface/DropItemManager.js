@@ -24,18 +24,6 @@ class DropItemManager {
     }
   }
 
-  initItems(s) {
-    for (let i = 0; i < s.length; i++) {
-      const seed = s[i];
-
-      this.add(seed);
-    }
-  }
-
-  init(seed = []) {
-    this.initItems(seed);
-  }
-
   update(player) {
     for (let i = 0; i < this.items.length; i++) {
       this.items[i].update(player);

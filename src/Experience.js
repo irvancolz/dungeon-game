@@ -174,7 +174,6 @@ export default class Experience {
 
     this.dropManager = new DropItemManager();
     this.dropManager.setScene(this.scene);
-    this.dropManager.init([]);
 
     this.markers = new MarkersManager();
     this.npc = new NPCManager();
