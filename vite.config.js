@@ -11,5 +11,5 @@ export default defineConfig({
     wasm(),
     topLevelAwait(),
   ],
-  base: "/dungeon-game/",
+  base: "/dungeon-game",
 });
