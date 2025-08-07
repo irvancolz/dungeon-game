@@ -1,5 +1,6 @@
 {
   "name": "template-vite",
+  "homepage": "https://irvancolz.github.io/dungeon-game/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
