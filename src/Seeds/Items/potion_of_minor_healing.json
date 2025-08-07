@@ -1,6 +1,6 @@
 {
   "id": "item001",
   "name": "Potion of Minor Healing",
-  "img": "/img/potion.png",
+  "img": "./img/potion.png",
   "description": "Restores a small amount of health when consumed. Essential for surviving minor skirmishes."
 }

@@ -1,6 +1,6 @@
 {
   "id": "item004",
   "name": "Runestone of Light",
-  "img": "/img/rune.png",
+  "img": "./img/rune.png",
   "description": "A glowing stone used to light up dark dungeons or forests."
 }

@@ -1,6 +1,6 @@
 {
   "id": "item005",
   "name": "Map of Forgotten Lands",
-  "img": "/img/map.png",
+  "img": "./img/map.png",
   "description": "A detailed map revealing hidden paths and ancient ruins."
 }

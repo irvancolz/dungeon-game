@@ -1,6 +1,6 @@
 {
   "id": "item003",
   "name": "Elven Waybread",
-  "img": "/img/bread.png",
+  "img": "./img/bread.png",
   "description": "Magical bread that provides nourishment for an entire day with a single bite."
 }

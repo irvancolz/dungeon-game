@@ -1,7 +1,7 @@
 {
   "id": "item008",
   "name": "Forest Herb",
-  "img": "/img/herbs.png",
+  "img": ".img/herbs.png",
   "description": "Plant from the magic forest with mysterious power.",
   "model": "model_herbs"
 }

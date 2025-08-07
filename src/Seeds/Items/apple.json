@@ -1,7 +1,7 @@
 {
   "id": "item007",
   "name": "Apples",
-  "img": "/img/apple.png",
+  "img": "./img/apple.png",
   "description": "Just Ordinary Apples",
   "model": "model_apple"
 }
