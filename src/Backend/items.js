@@ -1,4 +1,4 @@
-import data from "../Seeds/backpack.json";
+import data from "../Seeds/Items/database";
 import BackpackItem from "../Interface/BackpackItem/BackpackItem";
 import DropItem from "../World/DropItem";
 

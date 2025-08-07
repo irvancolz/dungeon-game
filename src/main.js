@@ -15,8 +15,8 @@ import Grass from "./World/Grass";
 import WoodenBox from "./World/WoodenBox";
 import Player from "./World/Player";
 import hello_world from "./Seeds/quests/hello_world";
-import backpack_seeds from "./Seeds/backpack.json";
 import { itemsUtils } from "./Backend/items";
+import item_database from "./Seeds/Items/database";
 
 const canvas = document.getElementById("canvas");
 
@@ -151,8 +151,21 @@ function startGame() {
     });
     experience.addDrops(drops);
     // quest
+
+    const backpackSeed = item_database
+      .filter((el) => {
+        const filter = ["apples", "dagger", "potion"];
+        return !filter.includes(el.name.split(" ")[0].toLowerCase());
+      })
+      .map((el, i) => {
+        return {
+          ...el,
+          count: 1,
+        };
+      });
+
+    experience.fillBackpack(backpackSeed);
     experience.addQuest(hello_world);
-    experience.fillBackpack(backpack_seeds);
 
     experience.init();
 
