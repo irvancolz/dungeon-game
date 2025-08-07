@@ -4,7 +4,7 @@ class BackpackItem extends EventEmitter {
     super();
     this.id = id;
     this.name = name;
-    this.img = img;
+    this.img = import.meta.env.BASE_URL + img;
     this.description = description;
     this.count = count;
     this.model = model;

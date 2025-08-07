@@ -26,6 +26,7 @@ export default class ResourcesLoader extends EventEmitter {
 
   load() {
     for (const src of this.sources) {
+      src.path = import.meta.env.BASE_URL + src.path;
       if (src.type == "texture") {
         this.loader.textureLoader.load(src.path, (texture) => {
           this._loadSource(src, texture);
