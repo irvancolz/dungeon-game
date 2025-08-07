@@ -45,11 +45,11 @@ function startGame() {
     world.add(player);
 
     // floor
-    // const floor = new Ground({
-    //   texture: refferencesAssets.resources.ground_texture,
-    //   width: 124,
-    // });
-    const floor = new DebugFloor({ width: 124 });
+    const floor = new Ground({
+      texture: refferencesAssets.resources.ground_texture,
+      width: 124,
+    });
+    // const floor = new DebugFloor({ width: 124 });
     world.setFloor(floor);
 
     // fences
@@ -69,16 +69,16 @@ function startGame() {
       position: houseReff.map((e) => e.position),
       quaternion: houseReff.map((e) => e.quaternion),
     });
-    // world.add(house);
+    world.add(house);
 
-    // // bushes
-    // const bushReff = refferencesProvider.getRefferences("Bushes");
-    // const bush = new Bushes({
-    //   scales: bushReff.map((e) => e.scale),
-    //   position: bushReff.map((e) => e.position),
-    //   quaternion: bushReff.map((e) => e.quaternion),
-    //   texture: refferencesAssets.resources.leaves_texture,
-    // });
+    // bushes
+    const bushReff = refferencesProvider.getRefferences("Bushes");
+    const bush = new Bushes({
+      scales: bushReff.map((e) => e.scale),
+      position: bushReff.map((e) => e.position),
+      quaternion: bushReff.map((e) => e.quaternion),
+      texture: refferencesAssets.resources.leaves_texture,
+    });
     // world.add(bush);
 
     // tree
@@ -90,7 +90,7 @@ function startGame() {
       leaves: refferencesAssets.resources.leaves_texture,
       model: refferencesAssets.resources.model_tree,
     });
-    // world.add(tree);
+    world.add(tree);
 
     //lamppost
     const lamppostReff = refferencesProvider.getRefferences("LampPost");
@@ -117,7 +117,7 @@ function startGame() {
       position: woodBoxReff.map((e) => e.position),
       quaternion: woodBoxReff.map((e) => e.quaternion),
     });
-    // world.add(woodBox);
+    world.add(woodBox);
 
     const experience = new Experience(canvas, world);
     experience.setResources(assets.resources);

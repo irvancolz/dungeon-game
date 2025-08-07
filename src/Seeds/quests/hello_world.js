@@ -42,16 +42,15 @@ const detail = {
     },
     {
       type: PlayerEvent.EVENT_GIVE,
+      value: [
+        {
+          id: "item003",
+          name: "Apples",
+          count: 1,
+          receiver: "elandor",
+        },
+      ],
       onStart: () => {
-        itemReceiver.setRequirements([
-          {
-            id: "item003",
-            name: "Apples",
-            count: 1,
-          },
-        ]);
-        backpack.setSecondaryInterface(itemReceiver);
-
         const npc = npcManager.find("Elandor the Wise");
         npc.setMarker();
         npc.setConversation([
@@ -61,7 +60,17 @@ const detail = {
           },
         ]);
         npc.conversation.on("chat:start", () => {
-          backpack.open();
+          itemReceiver.setRequirements([
+            {
+              id: "item003",
+              name: "Apples",
+              count: 1,
+            },
+          ]);
+          backpack.setSecondaryInterface(itemReceiver);
+          setTimeout(() => {
+            backpack.open();
+          }, 1000);
         });
       },
       onComplete: () => {
@@ -73,22 +82,20 @@ const detail = {
         npc.setConversation([
           {
             author: "Elandor",
-            chat: "Thankyou now bring this to  mia",
+            chat: "Thankyou. here take this as gift, you can visit mia next",
           },
         ]);
         npc.talk();
+
+        // give potion
+        backpack.insert({ name: "Potion of Minor Healing" }, 2);
       },
-      value: [
-        {
-          id: "item003",
-          name: "Apples",
-          count: 1,
-          receiver: "elandor",
-        },
-      ],
     },
     {
       type: PlayerEvent.EVENT_TALK,
+      onComplete: () => {
+        backpack.insert({ name: "Dagger of the Silent Step" }, 1);
+      },
       value: {
         id: "npc002",
         name: "Mira Stoneshield",
@@ -102,20 +109,52 @@ const detail = {
       },
     },
     {
-      type: PlayerEvent.EVENT_TALK,
-      value: {
-        id: "npc005",
-        name: "Captain Rorik",
-        chat: [
+      type: PlayerEvent.EVENT_GIVE,
+      value: [
+        {
+          id: "item006",
+          name: "Dagger of the Silent Step",
+          count: 1,
+          receiver: "captain rorik",
+        },
+      ],
+      onStart: () => {
+        const captRorik = npcManager.find("Captain Rorik");
+        captRorik.setConversation([
           {
             author: "Player",
             chat: "Captain Rorik? Mira asked me to show you this sword.",
           },
+        ]);
+        captRorik.setMarker();
+
+        captRorik.conversation.on("chat:start", () => {
+          itemReceiver.setRequirements([
+            {
+              id: "item006",
+              name: "Dagger of the Silent Step",
+              count: 1,
+            },
+          ]);
+          backpack.setSecondaryInterface(itemReceiver);
+          setTimeout(() => {
+            backpack.open();
+          }, 1500);
+        });
+      },
+      onComplete: () => {
+        backpack.setSecondaryInterface(itemDetail);
+        backpack.close();
+
+        const npc = npcManager.find("Captain Rorik");
+        npc.disable();
+        npc.setConversation([
           {
             author: "Rorik",
             chat: "That scrap? Hah! At least Mira still has a sense of humor. You should visit Seren next, she’ll teach you something useful.",
           },
-        ],
+        ]);
+        npc.talk();
       },
     },
     {
