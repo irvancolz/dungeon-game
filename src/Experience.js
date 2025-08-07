@@ -20,7 +20,7 @@ import ItemReceiver from "./Interface/ItemReceiver/ItemReceiver";
 import ControlsLegend from "./Interface/ControlsLegend/ControlsLegend";
 import InformationPanel from "./Interface/InformationPanel/InformationPanel";
 import ConversationManager from "./Interface/ConversationManager/ConversationManager";
-import DropItemManager from "./Interface/DropItemManager";
+import DropItemManager from "./Utils/DropItemManager";
 import MarkersManager from "./Interface/MarkersManager";
 import NPCManager from "./World/NPCManager";
 import ItemDetail from "./Interface/ItemDetail/ItemDetail";

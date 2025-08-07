@@ -6,24 +6,9 @@ export default [
     name: "leaves_texture",
   },
   {
-    path: "/texture/noise_texture.webp",
-    type: "texture",
-    name: "noise_texture",
-  },
-  {
     path: "/texture/village_map.png",
     type: "texture",
     name: "ground_texture",
-  },
-  {
-    path: "/texture/bushes_matcap_texture.png",
-    type: "texture",
-    name: "bushes_matcap_texture",
-  },
-  {
-    path: "/texture/roof_texture.jpg",
-    type: "texture",
-    name: "roof_texture",
   },
   {
     path: "/texture/lamppost_texture.jpg",
@@ -40,14 +25,8 @@ export default [
     type: "texture",
     name: "wooden_box_alpha_texture",
   },
-  {
-    path: "/texture/drops_alpha_texture.jpg",
-    type: "texture",
-    name: "drops_alpha_texture",
-  },
   // Model
-  { path: "/player_2.glb", type: "gltfModel", name: "player" },
-  { path: "/model/trunk.glb", type: "gltfModel", name: "model_trunk" },
+  { path: "/model/player.glb", type: "gltfModel", name: "player" },
   {
     path: "/model/fence_wooden.glb",
     type: "gltfModel",
@@ -62,11 +41,6 @@ export default [
     path: "/model/tree.glb",
     type: "gltfModel",
     name: "model_tree",
-  },
-  {
-    path: "/model/bushes.glb",
-    type: "gltfModel",
-    name: "model_bushes",
   },
   {
     path: "/model/lamp_post.glb",

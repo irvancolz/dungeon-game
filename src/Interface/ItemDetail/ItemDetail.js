@@ -1,6 +1,6 @@
 import States from "../../States";
 import BackpackSecondInterface from "../../Utils/BackpakSecondInterface";
-import DropItemManager from "../DropItemManager";
+import DropItemManager from "../../Utils/DropItemManager";
 let instance = null;
 
 class ItemDetail extends BackpackSecondInterface {

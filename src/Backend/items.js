@@ -1,6 +1,6 @@
 import data from "../Seeds/backpack.json";
 import BackpackItem from "../Interface/BackpackItem/BackpackItem";
-import DropItem from "../Utils/DropItem";
+import DropItem from "../World/DropItem";
 
 function toBackpackItem(name, count, model) {
   const data = get(name);
